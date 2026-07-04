@@ -103,6 +103,8 @@
     white-space:nowrap;position:relative;
   }
   .btn:hover{transform:translateY(-2px)}
+  .btn svg{width:16px;height:16px;flex:none;transition:transform .25s ease}
+  .btn:hover svg{transform:translateX(3px)}
   .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);box-shadow:0 14px 30px -10px rgba(182,134,63,.55);overflow:hidden}
   .btn-gold::before{
     content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;
@@ -183,7 +185,11 @@
     display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;
     padding-bottom:70px;position:relative;z-index:2;
   }
-  .hero h1{font-size:clamp(32px,4.6vw,56px);color:var(--white);max-width:640px}
+  .hero h1{font-size:clamp(38px,6.4vw,84px);color:var(--white);max-width:760px;letter-spacing:-.035em;line-height:1.02}
+  .hero h1 .hl-gold{
+    background:linear-gradient(100deg,var(--gold-light) 20%,var(--gold) 60%,var(--gold-light));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
   .hero-sub{margin-top:22px;font-size:17px;color:#cdd6cb;max-width:560px;line-height:1.65}
   .hero-actions{margin-top:34px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
   .hero-microtext{font-size:13px;color:#9fae9c;padding-left:4px}
@@ -209,10 +215,30 @@
   .price-card-stats li{display:flex;justify-content:space-between;align-items:center;font-size:14px}
   .price-card-stats li span{color:var(--muted)}
   .price-card-stats li strong{color:var(--forest-800);font-size:15px}
-  .price-card-badge{
-    margin-top:22px;background:var(--forest-100);color:var(--forest-800);
-    font-size:13.5px;font-weight:700;text-align:center;padding:12px;border-radius:100px;
+  .price-card-perks{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .price-card-perks li{
+    display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:600;
+    color:var(--forest-800);line-height:1.4;
   }
+  .price-card-perks li svg{
+    flex:none;width:17px;height:17px;margin-top:1px;padding:3px;border-radius:50%;box-sizing:border-box;
+    background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
+  }
+  .price-card-badge{
+    margin-top:22px;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+    background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
+    font-size:13px;font-weight:800;text-align:center;padding:12px 16px;border-radius:100px;
+    box-shadow:0 10px 22px -10px rgba(182,134,63,.6);
+  }
+  .badge-live-dot{
+    position:relative;width:8px;height:8px;border-radius:50%;background:var(--forest-900);flex:none;
+  }
+  .badge-live-dot::after{
+    content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--forest-900);
+    animation:playPulse 1.8s ease-out infinite;
+  }
+  .badge-units{display:inline-flex;gap:4px}
+  .badge-units i{width:7px;height:7px;border-radius:2px;background:var(--forest-900);opacity:.85;display:inline-block}
   @media(max-width:900px){
     .hero-grid{grid-template-columns:1fr;padding-bottom:44px}
     .hero{padding-top:40px}
@@ -252,24 +278,72 @@
 
   /* ---------- PROOF (block 2) ---------- */
   .proof{background:var(--cream)}
-  .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:44px}
-  .proof-card{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow-sm);transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease;border:1px solid transparent}
+  .proof-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(150px,auto));
+    grid-template-areas:"a a b b" "a a c d";gap:20px;margin-top:44px;
+  }
+  .proof-card{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow-sm);transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease;border:1px solid transparent;display:flex;flex-direction:column;justify-content:center}
   .proof-card:hover{transform:translateY(-6px);box-shadow:0 26px 44px -20px rgba(19,32,24,.28);border-color:var(--line)}
   .proof-num{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;color:var(--gold-dark);font-weight:600}
   .proof-title{font-weight:700;margin-top:10px;font-size:15px;color:var(--forest-800)}
   .proof-desc{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.5}
-  @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:560px){.proof-grid{grid-template-columns:1fr}}
+  .proof-card:nth-of-type(1){grid-area:a}
+  .proof-card:nth-of-type(2){grid-area:b}
+  .proof-card:nth-of-type(3){grid-area:c}
+  .proof-card:nth-of-type(4){grid-area:d}
+  .proof-feature{background:var(--forest-900) !important;border:none !important}
+  .proof-feature .proof-num{font-size:clamp(48px,6vw,76px);color:var(--gold-light)}
+  .proof-feature .proof-title{color:#fff;font-size:17px}
+  .proof-feature .proof-desc{color:#c3ccc0}
+  @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b b" "c d"}}
+  @media(max-width:560px){.proof-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d"}}
 
   /* ---------- ADVANTAGES (block 3) ---------- */
   .adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
-  .adv-card{border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease, border-color .3s ease}
+  .adv-card{
+    position:relative;background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);
+    padding:32px;overflow:hidden;
+    transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .adv-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold-light),var(--gold))}
   .adv-card:hover{transform:translateY(-6px);box-shadow:0 26px 44px -22px rgba(19,32,24,.22);border-color:var(--gold-light)}
+  .adv-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .adv-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;color:var(--forest-800);letter-spacing:-.02em}
   .adv-num{font-family:'Bricolage Grotesque',sans-serif;color:var(--gold);font-size:20px;font-weight:700;margin-bottom:14px}
+
+  /* ---------- ADVANTAGES v2: hero-banner + list ---------- */
+  .adv-hero{
+    display:flex;align-items:center;gap:30px;margin-top:48px;position:relative;overflow:hidden;
+    background:var(--forest-900);color:#fff;border-radius:var(--radius);padding:38px 42px;
+  }
+  .adv-hero-icon{
+    flex:none;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 30% 25%, #fbeecb 0%, var(--gold-light) 38%, var(--gold) 72%, var(--gold-dark) 100%);
+    box-shadow:inset 0 2px 3px rgba(255,255,255,.75), inset 0 -6px 8px rgba(60,40,10,.28), 0 14px 26px -10px rgba(182,134,63,.65);
+    color:var(--forest-900);
+  }
+  .adv-hero-icon svg{width:34px;height:34px}
+  .adv-hero-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4vw,46px);color:var(--gold-light);letter-spacing:-.02em;line-height:1}
+  .adv-hero h4{color:#fff;font-size:19px;margin:8px 0 8px;line-height:1.3}
+  .adv-hero p{color:#c9d2c8;font-size:14.5px;line-height:1.6;max-width:540px}
+  .adv-list{margin-top:6px;border-top:1px solid var(--line)}
+  .adv-list-item{display:flex;align-items:flex-start;gap:20px;padding:26px 6px;border-bottom:1px solid var(--line);transition:background .25s ease}
+  .adv-list-item:hover{background:var(--cream)}
+  .adv-list-item .adv-icon{width:46px;height:46px}
+  .adv-list-item .adv-icon svg{width:20px;height:20px}
+  .adv-list-text{flex:1;min-width:0}
+  .adv-list-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .adv-list-head h4{font-size:16.5px;color:var(--forest-800);margin:0;line-height:1.3}
+  .adv-list-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:21px;color:var(--gold-dark);flex:none;white-space:nowrap}
+  .adv-list-item p{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.6}
+  @media(max-width:640px){
+    .adv-hero{flex-direction:column;align-items:flex-start;padding:30px 26px}
+    .adv-list-item{gap:14px}
+  }
   .adv-icon{
     position:relative;width:58px;height:58px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;color:var(--forest-900);
-    margin-bottom:20px;overflow:hidden;
+    flex:none;overflow:hidden;
     background:radial-gradient(circle at 30% 25%, #fbeecb 0%, var(--gold-light) 38%, var(--gold) 72%, var(--gold-dark) 100%);
     box-shadow:
       inset 0 2px 3px rgba(255,255,255,.75),
@@ -316,7 +390,16 @@
   .scn-card:hover{transform:translateY(-6px);box-shadow:0 26px 46px -22px rgba(19,32,24,.22)}
   .scn-card.featured:hover{box-shadow:0 26px 50px -20px rgba(182,134,63,.55)}
   .scn-card.featured{border-color:var(--gold);box-shadow:0 20px 46px -22px rgba(182,134,63,.45);position:relative}
-  .scn-badge{position:absolute;top:-13px;left:24px;background:var(--gold);color:var(--forest-900);font-size:12px;font-weight:800;padding:6px 14px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em}
+  .scn-badge,.scn-badge-alt{
+    display:inline-block;max-width:100%;font-size:11px;font-weight:800;
+    padding:7px 13px;border-radius:8px;text-transform:uppercase;letter-spacing:.02em;
+    line-height:1.35;margin-bottom:14px;
+  }
+  .scn-badge{background:var(--gold);color:var(--forest-900)}
+  .scn-badge-alt{background:var(--forest-700);color:#fff}
+  .scn-card.featured-alt{border-color:var(--forest-600);box-shadow:0 20px 46px -22px rgba(60,90,70,.4)}
+  .scn-card.featured-alt:hover{box-shadow:0 26px 50px -20px rgba(60,90,70,.55)}
+  .scn-card.featured-alt .chart-fill{background:linear-gradient(90deg,var(--forest-700),var(--forest-500))}
   .scn-tag{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;display:block}
   .scn-name{font-size:15px;font-weight:700;color:var(--forest-800);min-height:44px}
   .scn-entry{font-size:13px;color:var(--muted);margin-top:8px}
@@ -327,6 +410,9 @@
   .chart-fill{height:100%;width:0;border-radius:8px;background:var(--forest-600);transition:width 1s cubic-bezier(.22,.9,.3,1)}
   .scn-card.in .chart-fill{width:var(--w)}
   .scn-card.featured .chart-fill{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+  .chart-fill.split{display:flex;background:none}
+  .chart-fill.split .fill-base{width:78%;height:100%;background:var(--gold-dark);border-radius:8px 0 0 8px}
+  .chart-fill.split .fill-bonus{width:22%;height:100%;background:linear-gradient(90deg,#fff8e8,#ffe066);border-radius:0 8px 8px 0;box-shadow:inset 0 0 0 1.5px var(--gold-dark)}
   .chart-row .val{font-size:12px;font-weight:700;color:var(--forest-800);text-align:right}
   .scn-total{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
   .scn-total-num{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;color:var(--forest-800);font-weight:600}
@@ -377,17 +463,31 @@
 
   /* ---------- OBJECTIONS TABLE (block 7) ---------- */
   .table-wrap{margin-top:44px;overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line)}
-  table{width:100%;border-collapse:collapse;min-width:680px}
+  table{width:100%;border-collapse:collapse;min-width:920px}
   th,td{padding:16px 18px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line)}
   thead th{background:var(--cream);color:var(--forest-800);font-size:12.5px;text-transform:uppercase;letter-spacing:.03em}
   tbody td:first-child{color:var(--muted);font-weight:600}
   tbody tr:last-child td{border-bottom:none}
   td.wood-col,th.wood-col{background:#f6efdf;color:var(--gold-dark);font-weight:700}
 
-  .obj-verdict{margin-top:36px;background:var(--forest-900);border-radius:var(--radius);padding:40px;text-align:center;color:var(--white)}
-  .obj-verdict .kicker{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#c3ccc0;font-weight:700}
-  .obj-verdict .big{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(40px,6vw,64px);color:var(--gold-light);margin:14px 0;font-weight:600}
-  .obj-verdict p{max-width:640px;margin:0 auto;font-size:14.5px;color:#c3ccc0;line-height:1.7}
+  .obj-verdict{
+    position:relative;overflow:hidden;margin-top:36px;background:var(--forest-900);
+    border-radius:var(--radius);padding:64px 40px;text-align:center;color:var(--white);
+  }
+  .obj-verdict::before{
+    content:"";position:absolute;left:50%;top:50%;width:520px;height:520px;
+    transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle, rgba(164,72,59,.35), transparent 70%);
+  }
+  .obj-verdict .kicker{position:relative;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#c3ccc0;font-weight:700}
+  .obj-verdict .big{
+    position:relative;font-family:'Bricolage Grotesque',sans-serif;
+    font-size:clamp(56px,10vw,116px);letter-spacing:-.03em;line-height:.95;
+    background:linear-gradient(100deg,#e8907f,var(--red) 55%,#c85d4a);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    margin:18px 0;font-weight:800;
+  }
+  .obj-verdict p{position:relative;max-width:640px;margin:0 auto;font-size:14.5px;color:#c3ccc0;line-height:1.7}
 
   /* ---------- DEFICIT (block 8) ---------- */
   .deficit{background:var(--cream)}
@@ -481,6 +581,29 @@
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
   .reveal.in{opacity:1;transform:translateY(0)}
 
+  /* ---------- GROWTH RAIL (наскрізний мотив зростання) ---------- */
+  .growth-rail{
+    position:fixed;left:26px;top:50%;transform:translateY(-50%);width:3px;height:34vh;
+    z-index:150;display:none;border-radius:3px;
+    background:rgba(120,120,110,.18);box-shadow:0 0 0 1px rgba(255,255,255,.15);
+  }
+  @media(min-width:1180px){.growth-rail{display:block}}
+  .growth-rail-fill{
+    position:absolute;bottom:0;left:0;width:100%;height:0%;border-radius:3px;
+    background:linear-gradient(180deg,var(--gold-light),var(--gold));
+    transition:height .08s linear;
+  }
+  .growth-rail-dot{
+    position:absolute;left:50%;bottom:0;transform:translate(-50%,50%);
+    width:10px;height:10px;border-radius:50%;background:var(--gold-light);
+    box-shadow:0 0 12px 4px rgba(217,184,119,.75);transition:bottom .08s linear;
+  }
+  .growth-rail-label{
+    position:absolute;left:14px;bottom:0;transform:translate(0,50%);
+    font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:800;color:var(--gold-light);
+    white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.5);
+  }
+
   /* ---------- STICKY CTA ---------- */
   .sticky-cta{
     position:fixed;right:24px;bottom:24px;z-index:200;
@@ -508,6 +631,12 @@
 </style>
 </head>
 <body>
+
+<div class="growth-rail" aria-hidden="true">
+  <div class="growth-rail-fill" id="growthFill"></div>
+  <div class="growth-rail-dot" id="growthDot"></div>
+  <span class="growth-rail-label" id="growthLabel">0%</span>
+</div>
 
 <header id="site-header">
   <div class="header-topbar">
@@ -540,24 +669,29 @@
     </div>
     <div class="container hero-grid">
       <div>
-        <h1>Інвестуйте в комлекс, що вже заробляє — і отримайте актив, захищений керуючою компанією і Карпатами</h1>
-        <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, постійних гостей і вже виплачує дохід інвесторам.</p>
-        <p class="hero-highlight">Залишилось 4 флагманські апартаменти 60 м² — дохід нараховується з першого місяця після оплати.</p>
+        <h1>Інвестиція, що вже <span class="hl-gold">приносить прибуток з 1-го місяця</span></h1>
+        <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
         <div class="hero-actions">
-          <a href="#apply" class="btn btn-gold">Залишити заявку на розрахунок</a>
+          <a href="#apply" class="btn btn-gold" id="magneticCta">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
         </div>
       </div>
 
       <div class="price-card">
-        <div class="price-card-label">Флагманські перміальні 3-кімнатні апартаменти</div>
-        <div class="price-card-amount">240 000$</div>
-        <div class="price-card-caption">60 м² · 3 кімнати · преміальний відпочинок для родини</div>
+        <div class="price-card-label">Флагманські преміальні 3-кімнатні апартаменти</div>
+        <div class="price-card-amount">900$/міс</div>
         <ul class="price-card-stats">
-          <li><span>Гарантований дохід</span><strong>900$/міс</strong></li>
           <li><span>Цільовий дохід (після добудови)</span><strong>до 12% річних</strong></li>
           <li><span>Дохід нараховується</span><strong>з 1-го місяця після оплати</strong></li>
         </ul>
-        <div class="price-card-badge">Доступні лише 4 номери на цих умовах</div>
+        <ul class="price-card-perks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Унікальний пакет гарантій Investor Care</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Ремонт після 5 років — за рахунок КК</li>
+        </ul>
+        <div class="price-card-badge">
+          <span class="badge-live-dot"></span>
+          <span>4 апартаменти в наявності</span>
+          <span class="badge-units"><i></i><i></i><i></i><i></i></span>
+        </div>
       </div>
     </div>
   </section>
@@ -578,7 +712,7 @@
         <h2 class="h-title">Ви інвестуєте не в обіцянку. Ви інвестуєте в підтверджений бізнес</h2>
       </div>
       <div class="proof-grid">
-        <div class="proof-card reveal">
+        <div class="proof-card proof-feature reveal">
           <div class="proof-num count">70%</div>
           <div class="proof-title">Завантаженість 2025</div>
           <div class="proof-desc">Не прогноз, підтверджений факт минулого року</div>
@@ -589,14 +723,14 @@
           <div class="proof-desc">Вже виплачено дивідендів інвесторам</div>
         </div>
         <div class="proof-card reveal">
-          <div class="proof-num count">70 осіб</div>
+          <div class="proof-num count">70+ осіб</div>
           <div class="proof-title">Команда і процеси</div>
           <div class="proof-desc">З відлагодженою операційною моделлю</div>
         </div>
         <div class="proof-card reveal">
           <div class="proof-num count">365 днів/рік</div>
-          <div class="proof-title">SPA · Ресторан · Басейн · SKI room</div>
-          <div class="proof-desc">Вся інфраструктура працює кругорічно</div>
+          <div class="proof-title">Об'єкт що працює без сезонів</div>
+          <div class="proof-desc">SPA, ресторан, басейн, додаткові активності та SKI room працюють цілий рік — це і дає стабільний дохід, а не сезонні провали</div>
         </div>
       </div>
     </div>
@@ -629,26 +763,36 @@
         <h2 class="h-title center">Власники 60 м² отримуватимуть більше, тому що:</h2>
         <p class="h-sub center">Флагманський формат — це не про метраж. Це про умови, які доступні тільки цьому формату і більше нікому на ринку.</p>
       </div>
-      <div class="adv-grid">
-        <div class="adv-card reveal">
-          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+      <div class="adv-hero reveal">
+        <div class="adv-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+        <div>
+          <div class="adv-hero-stat">900$/міс</div>
           <h4>Гарантований дохід з першого місяця від керуючої компанії</h4>
           <p>Інвестор 60 м² отримуватиме фіксований мінімум до 900$/міс незалежно від сезону і заповненості.</p>
         </div>
-        <div class="adv-card reveal">
+      </div>
+
+      <div class="adv-list">
+        <div class="adv-list-item reveal">
           <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"></path><path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"></path></svg></div>
-          <h4>Дохідність на 1–2% вища за інші номери</h4>
-          <p>Для даної інвестиції діють унікальні умови, гарантовані додатково керуючою компанією.</p>
+          <div class="adv-list-text">
+            <div class="adv-list-head"><h4>Дохідність на 1–2% вища за інші номери</h4><span class="adv-list-stat">+1–2%</span></div>
+            <p>Для даної інвестиції діють унікальні умови, гарантовані додатково керуючою компанією.</p>
+          </div>
         </div>
-        <div class="adv-card reveal">
+        <div class="adv-list-item reveal">
           <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></div>
-          <h4>Гарантований вихід протягом 3 місяців</h4>
-          <p>За необхідності вийти з активу, керуюча компанія Wood Hotel зобов'язана продати (або викупити) ваш актив протягом 3 місяців на першу вимогу. Жоден інший комплекс або формат інвестування в інші номери в компплексі цього не гарантує.</p>
+          <div class="adv-list-text">
+            <div class="adv-list-head"><h4>Гарантований вихід протягом 3 місяців</h4><span class="adv-list-stat">3 міс.</span></div>
+            <p>За необхідності вийти з активу, керуюча компанія Wood Hotel зобов'язана продати (або викупити) ваш актив протягом 3 місяців на першу вимогу. Жоден інший комплекс або формат інвестування в інші номери в компплексі цього не гарантує.</p>
+          </div>
         </div>
-        <div class="adv-card reveal">
-          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11 2c.4 2.6 1.1 4.4 2.2 5.5C14.3 8.6 16.1 9.3 18.7 9.7c-2.6.4-4.4 1.1-5.5 2.2-1.1 1.1-1.8 2.9-2.2 5.5-.4-2.6-1.1-4.4-2.2-5.5C7.7 10.8 5.9 10.1 3.3 9.7c2.6-.4 4.4-1.1 5.5-2.2C9.9 6.4 10.6 4.6 11 2z"></path><path d="M19 14.5c.2 1.3.6 2.2 1.2 2.8.6.6 1.5 1 2.8 1.2-1.3.2-2.2.6-2.8 1.2-.6.6-1 1.5-1.2 2.8-.2-1.3-.6-2.2-1.2-2.8-.6-.6-1.5-1-2.8-1.2 1.3-.2 2.2-.6 2.8-1.2.6-.6 1-1.5 1.2-2.8z"></path></svg></div>
-          <h4>Оновлений ремонт за рахунок компанії після 5 років</h4>
-          <p>На перші 5 років, керуюча компанія бере апартаменти під власне управління і цільові потреби. Після 5 років ви отримуєте преміальний ремонт апартаментів повністю за рахунок керуючої компанії і готовий номер для проживання. Ваші додаткові витрати — нульові.</p>
+        <div class="adv-list-item reveal">
+          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="6" rx="1.5"></rect><line x1="8" y1="10" x2="8" y2="13"></line><path d="M8 13h5a2 2 0 0 1 2 2v5"></path></svg></div>
+          <div class="adv-list-text">
+            <div class="adv-list-head"><h4>Оновлений ремонт за рахунок компанії після 5 років</h4><span class="adv-list-stat">0$</span></div>
+            <p>На перші 5 років, керуюча компанія бере апартаменти під власне управління і цільові потреби. Після 5 років ви отримуєте преміальний ремонт апартаментів повністю за рахунок керуючої компанії і готовий номер для проживання. Ваші додаткові витрати — нульові.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -739,12 +883,12 @@
           <div class="t-item"><div class="t-badge">01</div><div><h5>День покупки</h5><p>Готель вже працює. Гості вже є. Команда налагоджена. Репутація сформована за 3 роки роботи.</p></div></div>
           <div class="t-item"><div class="t-badge">02</div><div><h5>Місяць 1</h5><p>Перші нарахування. 900$/міс гарантованого доходу починають працювати одразу після оплати.</p></div></div>
           <div class="t-item"><div class="t-badge">03</div><div><h5>Роки 1–2</h5><p>Завершення нових етапів інфраструктури. Зростання вартості активу. Інвестор отримує дохід, котрий все активніше зростає і наближається до 12%. Готель розвивається.</p></div></div>
-          <div class="t-item"><div class="t-badge">04</div><div><h5>Роки 3–5 · стабільний прибуток</h5><p>Інвестор вже заробив та окупив більше ніж вартість 25 м² номера, та може реінвестувати зароблені кошти.</p></div></div>
+          <div class="t-item"><div class="t-badge">04</div><div><h5>Роки 3–5 · стабільний прибуток</h5><p>Інвестор вже заробив та окупив більше ніж на $93 750 (вартість номера 25 м²), та може реінвестувати зароблені кошти.</p></div></div>
         </div>
       </div>
 
       <div class="verdict-box reveal">
-        <p>За 5 років інвестор Wood Hotel заробить <strong>108 000$</strong> при поточній дохідності 9% — поки власник іншого комплексу тільки виходить на планові показники. Різниця між сценаріями: <strong>+80 000$</strong> на користь Wood.</p>
+        <p>За 5 років інвестор Wood Hotel заробить <strong>108 000$</strong> при поточній дохідності 9% — власник двох номерів 25 м² в іншому комплексі за той самий період отримає лише <strong>~16 125$</strong>, адже перші 2 роки без доходу, а далі — поступовий вихід на потужність. Різниця: <strong>+91 875$</strong> на користь Wood.</p>
         <div class="quote">«Коли один інвестор тільки починає заробляти, інший вже збільшив свій капітал та може займатись новими інвестиціями»</div>
       </div>
       <div class="two-cta reveal">
@@ -770,19 +914,21 @@
           <div class="chart">
             <div class="chart-row"><span class="yr">Рік 1</span><div class="chart-track"><div class="chart-fill" style="--w:0%"></div></div><span class="val">0$</span></div>
             <div class="chart-row"><span class="yr">Рік 2</span><div class="chart-track"><div class="chart-fill" style="--w:0%"></div></div><span class="val">0$</span></div>
-            <div class="chart-row"><span class="yr">Рік 3</span><div class="chart-track"><div class="chart-fill" style="--w:43%"></div></div><span class="val">9 375$</span></div>
-            <div class="chart-row"><span class="yr">Рік 4</span><div class="chart-track"><div class="chart-fill" style="--w:43%"></div></div><span class="val">9 375$</span></div>
+            <div class="chart-row"><span class="yr">Рік 3</span><div class="chart-track"><div class="chart-fill" style="--w:6%"></div></div><span class="val">1 375$</span></div>
+            <div class="chart-row"><span class="yr">Рік 4</span><div class="chart-track"><div class="chart-fill" style="--w:25%"></div></div><span class="val">5 375$</span></div>
             <div class="chart-row"><span class="yr">Рік 5</span><div class="chart-track"><div class="chart-fill" style="--w:43%"></div></div><span class="val">9 375$</span></div>
           </div>
           <div class="scn-total">
-            <div class="scn-total-num count">~28 000$</div>
+            <div class="scn-total-num count">~16 125$</div>
             <div class="scn-total-label">Разом за 5 років</div>
           </div>
-          <div class="scn-note">Дохід тільки з 3-го року. Без гарантій на мінімум.</div>
-          <p class="scn-desc">Ви хочете диференціювати ризики і вкладаєтесь у 2 номери по 25 м², які добудуються приблизно через рік. Вхід орієнтовно по ринку — ~187 500$ (3 750$/м²). Поки комплекс набирає впізнаваність, дохідність складатиме до 5%/рік, починаючи з 3-го року після запуску.</p>
+          <div class="scn-note">Дохід тільки з 3-го року, поступовий вихід на потужність. Без гарантій на мінімум.</div>
+          <p class="scn-desc">Ви хочете диференціювати ризики і вкладаєтесь у 2 номери по 25 м², які добудуються приблизно через рік. Вхід орієнтовно по ринку — ~187 500$ (3 750$/м²). Дохід з'являється тільки з 3-го року і поступово виходить на потужність — саме цю поетапність зазвичай не показують нові комплекси. У середньому за 3 роки з моменту відкриття це ~5 375$/рік, або ≈2,9% річних від суми входу.</p>
+          <p style="margin-top:10px;font-size:11.5px;color:var(--muted-2);line-height:1.5">*Середня дохідність порахована за 3 роки з моменту відкриття комплексу (роки 1–2 — період будівництва, коли доходу ще немає).</p>
         </div>
 
-        <div class="scn-card reveal">
+        <div class="scn-card featured-alt reveal">
+          <span class="scn-badge-alt">Гарантований сценарій з Wood Investor Care</span>
           <span class="scn-tag">Сценарій 2</span>
           <div class="scn-name">Апартамент 60 м² Wood Hotel · гарантований мінімум</div>
           <div class="scn-entry">Вхід: 240 000$</div>
@@ -802,16 +948,20 @@
         </div>
 
         <div class="scn-card featured reveal">
-          <span class="scn-badge">Реалістичний сценарій</span>
+          <span class="scn-badge">Реалістичний сценарій з Wood Investor Care</span>
           <span class="scn-tag">Сценарій 3</span>
           <div class="scn-name">Апартамент 60 м² Wood Hotel · з середньою дохідністю 9%</div>
           <div class="scn-entry">Вхід: 240 000$</div>
           <div class="chart">
-            <div class="chart-row"><span class="yr">Рік 1</span><div class="chart-track"><div class="chart-fill" style="--w:100%"></div></div><span class="val">21 600$</span></div>
-            <div class="chart-row"><span class="yr">Рік 2</span><div class="chart-track"><div class="chart-fill" style="--w:100%"></div></div><span class="val">21 600$</span></div>
-            <div class="chart-row"><span class="yr">Рік 3</span><div class="chart-track"><div class="chart-fill" style="--w:100%"></div></div><span class="val">21 600$</span></div>
-            <div class="chart-row"><span class="yr">Рік 4</span><div class="chart-track"><div class="chart-fill" style="--w:100%"></div></div><span class="val">21 600$</span></div>
-            <div class="chart-row"><span class="yr">Рік 5</span><div class="chart-track"><div class="chart-fill" style="--w:100%"></div></div><span class="val">21 600$</span></div>
+            <div class="chart-row"><span class="yr">Рік 1</span><div class="chart-track"><div class="chart-fill split" style="--w:100%"><span class="fill-base"></span><span class="fill-bonus"></span></div></div><span class="val">21 600$</span></div>
+            <div class="chart-row"><span class="yr">Рік 2</span><div class="chart-track"><div class="chart-fill split" style="--w:100%"><span class="fill-base"></span><span class="fill-bonus"></span></div></div><span class="val">21 600$</span></div>
+            <div class="chart-row"><span class="yr">Рік 3</span><div class="chart-track"><div class="chart-fill split" style="--w:100%"><span class="fill-base"></span><span class="fill-bonus"></span></div></div><span class="val">21 600$</span></div>
+            <div class="chart-row"><span class="yr">Рік 4</span><div class="chart-track"><div class="chart-fill split" style="--w:100%"><span class="fill-base"></span><span class="fill-bonus"></span></div></div><span class="val">21 600$</span></div>
+            <div class="chart-row"><span class="yr">Рік 5</span><div class="chart-track"><div class="chart-fill split" style="--w:100%"><span class="fill-base"></span><span class="fill-bonus"></span></div></div><span class="val">21 600$</span></div>
+          </div>
+          <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--muted)">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:var(--gold-dark);display:inline-block"></span>база ~7%</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:linear-gradient(90deg,#fff8e8,#ffe066);box-shadow:inset 0 0 0 1px var(--gold-dark);display:inline-block"></span>+2% від КК</span>
           </div>
           <div class="scn-total">
             <div class="scn-total-num count">108 000$</div>
@@ -819,10 +969,15 @@
           </div>
           <div class="scn-note">+ капіталізація ~36 000$ + 20 діб відпочинку щороку</div>
           <p class="scn-desc">Поточна дохідність комплексу — 9%/рік з 1-го місяця. Капіталізація ~36 000$ = 15% від суми входу після завершення інфраструктури Wood Hotel + капіталізація + гарантія виходу за 3 місяці + додаткові бонуси.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">−50% на послуги в готелі*</span>
+            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">20 діб відпочинку щороку</span>
+            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">Ремонт після 5 років — за рахунок КК</span>
+          </div>
         </div>
       </div>
 
-      <div class="scn4-standalone reveal"><b>Ідеальний сценарій 4</b>, коли інвестиція приноситиме 10+%/рік + капіталізація + гарантія виходу за 3 місяці + додаткові бонуси.</div>
+      <div class="scn4-standalone reveal"><b>Ідеальний сценарій 4</b>, коли інвестиція приноситиме 10+%/рік (від $24 000/рік) — від 120 000$+ за 5 років + підвищена капіталізація + гарантія виходу за 3 місяці + додаткові бонуси.</div>
     </div>
   </section>
 
@@ -841,29 +996,31 @@
           <thead>
             <tr>
               <th>Критерій</th>
-              <th>1 номер 25 м² (~93 750$)</th>
-              <th>2 номери 25 м² (~187 500$)</th>
+              <th>1 номер 25 м² в іншому комплексі на етапі будівництва (~62 500$)*</th>
+              <th>1 номер 25 м² в іншому комплексі (~93 750$)</th>
+              <th>2 номери 25 м² в іншому комплексі (~187 500$)</th>
               <th class="wood-col">Апартамент 60 м² Wood Hotel</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>Сума входу</td><td>~93 750$</td><td>~187 500$</td><td class="wood-col">240 000$</td></tr>
-            <tr><td>Дохід з першого місяця</td><td>Немає — 2–3 роки очікування</td><td>Немає — 2–3 роки очікування</td><td class="wood-col">Так — з місяця оплати</td></tr>
-            <tr><td>Дохід за перші 2 роки (поки альтернативи ще будуються)</td><td>0$</td><td>0$</td><td class="wood-col">21 600$–43 200$</td></tr>
-            <tr><td>Гарантований мінімум</td><td>індивідуально</td><td>Індивідуально</td><td class="wood-col">~900$/міс · 4,5% річних</td></tr>
-            <tr><td>Гарантований швидкий вихід</td><td>Немає</td><td>Немає</td><td class="wood-col">3 місяці від КК</td></tr>
-            <tr><td>Цільова дохідність</td><td>індивідуальна</td><td>Індивідуальна</td><td class="wood-col">До 12% річних</td></tr>
-            <tr><td>Дохід за 5 років</td><td>~14 000$ (з 3-го року)</td><td>~28 000$ (з 3-го року)</td><td class="wood-col">54 000$–108 000$</td></tr>
-            <tr><td>Wood Investor Care</td><td>Немає</td><td>Немає</td><td class="wood-col">Включено</td></tr>
-            <tr><td>Оновлення після 5 років</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td class="wood-col">За рахунок компанії</td></tr>
+            <tr><td>Сума входу</td><td>~62 500$</td><td>~93 750$</td><td>~187 500$</td><td class="wood-col">240 000$</td></tr>
+            <tr><td>Дохід з першого місяця</td><td>Немає — 3–4 роки очікування</td><td>Немає — 2–3 роки очікування</td><td>Немає — 2–3 роки очікування</td><td class="wood-col">Так — з місяця оплати</td></tr>
+            <tr><td>Дохід за перші 2 роки (поки альтернативи ще будуються)</td><td>0$</td><td>0$</td><td>0$</td><td class="wood-col">21 600$–43 200$</td></tr>
+            <tr><td>Гарантований мінімум</td><td>Немає</td><td>індивідуально</td><td>Індивідуально</td><td class="wood-col">~900$/міс · 4,5% річних</td></tr>
+            <tr><td>Гарантований швидкий вихід</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">3 місяці від КК</td></tr>
+            <tr><td>Цільова дохідність</td><td>індивідуальна</td><td>індивідуальна</td><td>Індивідуальна</td><td class="wood-col">До 12% річних</td></tr>
+            <tr><td>Дохід за 5 років</td><td>~1 500$ (лише 1-й рік роботи)*</td><td>~8 060$ (з 3-го року)</td><td>~16 125$ (з 3-го року)</td><td class="wood-col">54 000$–108 000$</td></tr>
+            <tr><td>Wood Investor Care</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">Включено</td></tr>
+            <tr><td>Оновлення після 5 років</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td class="wood-col">За рахунок компанії</td></tr>
           </tbody>
         </table>
       </div>
+      <p style="margin-top:12px;font-size:11.5px;color:var(--muted-2)">*Орієнтовні цифри для комплексу на ранній стадії будівництва — уточнити перед публікацією.</p>
 
       <div class="obj-verdict reveal">
         <div class="kicker">Гроші мають працювати з 1 хвилини</div>
-        <div class="big count">+80 000$</div>
-        <p>Саме настільки більше заробить інвестор Wood Hotel порівняно з власником двох малих номерів у новому комплексі — за 5-річний горизонт при дохідності 9%. І це лише різниця в доході. Без урахування 20 діб відпочинку щороку, оновлення апартаментів і гарантованого виходу за 3 місяці.</p>
+        <div class="big count">+91 875$</div>
+        <p>Саме настільки більше заробить інвестор Wood Hotel (108 000$) порівняно з власником двох малих номерів у новому комплексі (~16 125$) — за 5-річний горизонт при дохідності 9%. І це лише різниця в доході. Без урахування 20 діб відпочинку щороку, оновлення апартаментів і гарантованого виходу за 3 місяці.</p>
       </div>
     </div>
   </section>
@@ -1019,6 +1176,35 @@
 </footer>
 
 <script>
+  // Магнітна кнопка — тягнеться до курсора у невеликому радіусі
+  const magneticCta = document.getElementById('magneticCta');
+  if (magneticCta && window.matchMedia('(hover: hover)').matches) {
+    magneticCta.addEventListener('mousemove', (e) => {
+      const r = magneticCta.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      magneticCta.style.transform = `translate(${x * 0.25}px, ${y * 0.4 - 2}px)`;
+    });
+    magneticCta.addEventListener('mouseleave', () => {
+      magneticCta.style.transform = '';
+    });
+  }
+
+  // Growth rail — індикатор прогресу читання у вигляді "лінії зростання"
+  const growthFill = document.getElementById('growthFill');
+  const growthDot = document.getElementById('growthDot');
+  const growthLabel = document.getElementById('growthLabel');
+  if (growthFill) {
+    window.addEventListener('scroll', () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
+      growthFill.style.height = pct + '%';
+      growthDot.style.bottom = pct + '%';
+      growthLabel.style.bottom = pct + '%';
+      growthLabel.textContent = Math.round(pct) + '%';
+    }, { passive: true });
+  }
+
   // Header scroll shadow
   const header = document.getElementById('site-header');
   window.addEventListener('scroll', () => {
