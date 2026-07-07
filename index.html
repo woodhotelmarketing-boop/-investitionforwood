@@ -7,7 +7,7 @@
 <meta name="description" content="Wood Hotel Resort & Spa працює 3 роки та виплачує дохід інвесторам. Флагманський формат 60 м² з гарантованим мінімумом Wood Investor Care™.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,400;0,12..96,500;0,12..96,600;0,12..96,700;0,12..96,800;1,12..96,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,300;0,12..96,400;0,12..96,500;0,12..96,600;0,12..96,700;0,12..96,800;1,12..96,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --forest-900:#132018;
@@ -105,7 +105,7 @@
   .btn:hover{transform:translateY(-2px)}
   .btn svg{width:16px;height:16px;flex:none;transition:transform .25s ease}
   .btn:hover svg{transform:translateX(3px)}
-  .btn-gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);box-shadow:0 14px 30px -10px rgba(182,134,63,.55);overflow:hidden}
+  .btn-gold{background:var(--gold);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.25), 0 0 0 1px rgba(217,184,119,.25), 0 0 34px 6px rgba(217,184,119,.4);overflow:hidden}
   .btn-gold::before{
     content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;
     background:linear-gradient(115deg, transparent, rgba(255,255,255,.65), transparent);
@@ -155,98 +155,166 @@
     .nav-cta .btn-gold-desktop{display:none}
   }
 
-  /* ---------- HERO ---------- */
+  /* ---------- HERO (editorial: light-weight display type + single glow accent) ---------- */
   .hero{
     background:var(--forest-900);
     color:var(--white);
-    padding:64px 0 0;
+    padding:0;
     overflow:hidden;
     position:relative;
-  }
-  .hero-bg-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
-  .hero-bg-img{width:100%;height:130%;object-fit:cover;object-position:center 30%;opacity:.5;filter:saturate(.85) brightness(.7);will-change:transform}
-  .hero-bg-wrap::after{
-    content:"";position:absolute;inset:0;
-    background:
-      linear-gradient(180deg, rgba(15,25,19,.35) 0%, rgba(15,25,19,.55) 45%, var(--forest-900) 96%),
-      radial-gradient(1100px 560px at 12% -10%, rgba(43,68,54,.55), transparent 60%);
   }
   .hero::before{
     content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     background-size:140px 140px;
   }
-  .hero::after{
-    content:"";position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
-    background:linear-gradient(to top, rgba(0,0,0,.25), transparent);
-    pointer-events:none;
-  }
   .hero-grid{
-    display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;
-    padding-bottom:70px;position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:132px 24px 96px;position:relative;z-index:2;
   }
-  .hero h1{font-size:clamp(38px,6.4vw,84px);color:var(--white);max-width:760px;letter-spacing:-.035em;line-height:1.02}
-  .hero h1 .hl-gold{
-    background:linear-gradient(100deg,var(--gold-light) 20%,var(--gold) 60%,var(--gold-light));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+  .hero-eyebrow-pill{
+    display:inline-flex;align-items:center;gap:7px;
+    background:var(--cream);color:var(--forest-900);
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    text-transform:uppercase;letter-spacing:.08em;
+    padding:8px 15px;border-radius:24px;
   }
-  .hero-sub{margin-top:22px;font-size:17px;color:#cdd6cb;max-width:560px;line-height:1.65}
-  .hero-actions{margin-top:34px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
-  .hero-microtext{font-size:13px;color:#9fae9c;padding-left:4px}
-  .hero-highlight{
-    margin-top:16px;font-size:16px;font-weight:700;color:var(--gold-light);
-    padding-left:14px;border-left:2px solid var(--gold);line-height:1.5;max-width:520px;
+  .hero-eyebrow-pill svg{width:11px;height:11px;flex:none}
+  .hero h1{
+    margin-top:32px;font-weight:300;
+    font-size:clamp(40px,7.6vw,100px);line-height:1.06;letter-spacing:-.02em;
+    color:var(--white);max-width:920px;
   }
+  .hero-sub{margin:26px auto 0;font-size:20px;font-weight:400;color:#a7b5a3;max-width:560px;line-height:1.5}
+  .hero-actions{margin-top:38px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .hero-microtext{font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;color:#8a9a8d}
 
   .price-card{
-    background:var(--white);border-radius:var(--radius);padding:30px;color:var(--ink);
-    box-shadow:var(--shadow);position:relative;
+    margin:60px auto 0;max-width:440px;width:100%;text-align:left;
+    background:var(--forest-800);border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;padding:30px;color:var(--white);
+    box-shadow:0 8px 28px rgba(0,0,0,.4);
+    position:relative;
     animation:cardIn .9s cubic-bezier(.22,.9,.3,1) .15s both;
   }
-  .price-card::before{
-    content:"";position:absolute;inset:-40px;z-index:-1;filter:blur(38px);
-    background:radial-gradient(circle at 28% 15%, rgba(217,184,119,.45), transparent 62%);
+  @keyframes cardIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  .price-card-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#8a9a8d;
+    text-transform:uppercase;letter-spacing:.06em;
   }
-  @keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-  .price-card-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-  .price-card-amount{font-family:'Bricolage Grotesque',sans-serif;font-size:44px;font-weight:600;margin-top:10px;color:var(--forest-800)}
-  .price-card-caption{font-size:14px;color:var(--muted);margin-top:6px}
-  .price-card-stats{margin-top:22px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:14px}
+  .price-card-amount{font-family:'Bricolage Grotesque',sans-serif;font-size:52px;font-weight:300;margin-top:12px;color:var(--white);letter-spacing:-.02em}
+  .price-card-caption{font-size:14px;color:#8a9a8d;margin-top:6px}
+  .price-card-stats{margin-top:24px;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;display:flex;flex-direction:column;gap:14px}
   .price-card-stats li{display:flex;justify-content:space-between;align-items:center;font-size:14px}
-  .price-card-stats li span{color:var(--muted)}
-  .price-card-stats li strong{color:var(--forest-800);font-size:15px}
-  .price-card-perks{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .price-card-stats li span{color:#8a9a8d}
+  .price-card-stats li strong{color:var(--white);font-weight:500;font-size:15px}
+  .price-card-perks{margin-top:18px;display:flex;flex-direction:column;gap:10px}
   .price-card-perks li{
-    display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:600;
-    color:var(--forest-800);line-height:1.4;
+    display:flex;align-items:flex-start;gap:9px;font-size:13px;font-weight:500;
+    color:#d5ddd2;line-height:1.4;
   }
   .price-card-perks li svg{
     flex:none;width:17px;height:17px;margin-top:1px;padding:3px;border-radius:50%;box-sizing:border-box;
-    background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
+    background:var(--gold);color:var(--forest-900);
   }
   .price-card-badge{
-    margin-top:22px;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
-    background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
-    font-size:13px;font-weight:800;text-align:center;padding:12px 16px;border-radius:100px;
-    box-shadow:0 10px 22px -10px rgba(182,134,63,.6);
+    margin-top:24px;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+    background:var(--cream);color:var(--forest-800);border:1px solid rgba(255,255,255,.12);
+    font-size:12.5px;font-weight:700;text-align:center;padding:11px 16px;border-radius:100px;
   }
   .badge-live-dot{
-    position:relative;width:8px;height:8px;border-radius:50%;background:var(--forest-900);flex:none;
+    position:relative;width:7px;height:7px;border-radius:50%;background:#3d7d4f;flex:none;
   }
   .badge-live-dot::after{
-    content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--forest-900);
+    content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid #3d7d4f;
     animation:playPulse 1.8s ease-out infinite;
   }
   .badge-units{display:inline-flex;gap:4px}
-  .badge-units i{width:7px;height:7px;border-radius:2px;background:var(--forest-900);opacity:.85;display:inline-block}
+  .badge-units i{width:6px;height:6px;border-radius:2px;background:var(--gold);opacity:.9;display:inline-block}
   @media(max-width:900px){
-    .hero-grid{grid-template-columns:1fr;padding-bottom:44px}
-    .hero{padding-top:40px}
+    .hero-grid{padding:96px 20px 64px}
   }
 
-  /* ---------- MOUNTAIN DIVIDER ---------- */
-  .mtn-divider{display:block;width:100%;height:64px;margin-top:-2px}
-  @media(max-width:768px){.mtn-divider{height:38px}}
+  /* ---------- HERO BACKDROP: єдиний фон (відео) на весь екран 1, мокап floating card поверх нього ---------- */
+  .hero-bg{position:absolute;top:-140px;left:0;right:0;bottom:-140px;z-index:0;overflow:hidden;background:var(--forest-900);will-change:transform}
+  .hero-bg-media{width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7);animation:heroBgZoom 26s ease-in-out infinite alternate}
+  @keyframes heroBgZoom{from{transform:scale(1)}to{transform:scale(1.09)}}
+  .hero-bg-overlay{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(180deg, rgba(13,23,18,.45) 0%, rgba(13,23,18,.6) 45%, rgba(11,19,15,.88) 100%),
+      radial-gradient(circle at 50% 22%, rgba(19,32,24,.05), rgba(11,19,15,.75) 78%);
+  }
+
+  /* ---------- HERO DEVICE MOCKUP (кабінет інвестора) — заміна .price-card на екрані 1 ---------- */
+  .wh-device-mock{margin:60px auto 0;max-width:720px;width:100%}
+  .wh-device-mock .device-frame{
+    position:relative;background:linear-gradient(160deg,#0e1712,#070b08);
+    border-radius:26px;padding:16px 16px 20px;
+    box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.04) inset;
+    animation:cardIn .9s cubic-bezier(.22,.9,.3,1) .15s both;
+  }
+  .wh-device-mock .device-frame::before{
+    content:"";position:absolute;top:0;left:20px;right:20px;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  }
+  .wh-device-mock .device-cam{
+    position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:7px;height:7px;border-radius:50%;background:#33453a;
+  }
+  .wh-device-mock .screen{background:var(--cream);border-radius:18px;overflow:hidden;text-align:left}
+  .wh-device-mock .topbar{background:var(--forest-800);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:13px 20px}
+  .wh-device-mock .topbar .title{font-size:13px;font-weight:600}
+  .wh-device-mock .app{display:flex}
+  .wh-device-mock .sidebar{width:54px;flex:none;background:var(--forest-900);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:9px}
+  .wh-device-mock .sidebar .logo-dot{
+    width:24px;height:24px;border-radius:7px;background:transparent;border:1px solid var(--gold-light);
+    margin-bottom:16px;display:flex;align-items:center;justify-content:center;
+    font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:600;color:var(--gold-light);
+  }
+  .wh-device-mock .sidebar .icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#93a695}
+  .wh-device-mock .sidebar .icon svg{width:15px;height:15px}
+  .wh-device-mock .sidebar .icon.active{background:var(--cream);color:var(--forest-800)}
+  .wh-device-mock .content{flex:1;min-width:0;padding:20px 22px 26px;background:var(--cream)}
+  .wh-device-mock .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+  .wh-device-mock .content-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:600;color:var(--forest-900);margin:0}
+  .wh-device-mock .header-actions{display:flex;gap:8px}
+  .wh-device-mock .btn-dark{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--forest-800);background:transparent;border:1px solid var(--forest-700);padding:7px 13px;border-radius:9px;flex:none}
+  .wh-device-mock .btn-dark svg{width:12px;height:12px}
+  .wh-device-mock .room-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+  .wh-device-mock .room-image{position:relative;border-radius:14px;overflow:hidden;background:#2a332c;box-shadow:0 16px 34px -22px rgba(19,32,24,.4)}
+  .wh-device-mock .room-image img{width:100%;height:100%;object-fit:cover;display:block;min-height:260px;filter:saturate(1.04) contrast(1.02)}
+  .wh-device-mock .room-image .tag{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--cream);background:rgba(19,32,24,.55);
+    padding:6px 11px;border-radius:999px;backdrop-filter:blur(2px);
+  }
+  .wh-device-mock .mock-price{background:#fff;border-radius:14px;padding:22px 22px 18px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 16px 34px -22px rgba(19,32,24,.28)}
+  .wh-device-mock .mock-price .label{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px;line-height:1.35}
+  .wh-device-mock .mock-price .price{font-family:'Bricolage Grotesque',sans-serif;font-size:38px;font-weight:600;color:var(--forest-900);line-height:1;margin-bottom:14px}
+  .wh-device-mock .mock-price .price span{font-size:15px;font-weight:600;color:var(--muted)}
+  .wh-device-mock .mock-price .divider{height:1px;background:var(--line);margin:12px 0}
+  .wh-device-mock .mock-price .row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:5px 0}
+  .wh-device-mock .mock-price .row .k{font-size:12px;color:var(--muted)}
+  .wh-device-mock .mock-price .row .v{font-size:13px;font-weight:700;color:var(--forest-800);white-space:nowrap}
+  .wh-device-mock .check-list{margin-top:2px}
+  .wh-device-mock .check-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:12px;color:var(--forest-900);font-weight:500}
+  .wh-device-mock .check-row svg{width:15px;height:15px;color:var(--gold-dark);flex-shrink:0;margin-top:1px}
+  .wh-device-mock .trigger-badge{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--cream);border:1px solid var(--gold);color:var(--forest-800);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600}
+  .wh-device-mock .trigger-badge .left{display:flex;align-items:center;gap:9px}
+  .wh-device-mock .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:heroPulse 2.4s ease-in-out infinite}
+  .wh-device-mock .trigger-badge .dots{letter-spacing:3px;font-size:9px;color:var(--gold-dark)}
+  @keyframes heroPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @media(max-width:640px){
+    .wh-device-mock .room-row{grid-template-columns:1fr}
+    .wh-device-mock .room-image img{min-height:200px}
+    .wh-device-mock .content{padding:16px 16px 20px}
+    .wh-device-mock .mock-price .price{font-size:32px}
+  }
+
+  /* Секції між блоками більше не мають декоративного розділювача —
+     чистий перехід кольору фону (edge-to-edge), без ліній/іконок/хвиль. */
 
   /* ---------- VIDEO BLOCK ---------- */
   .video-block{background:var(--forest-900)}
@@ -664,43 +732,109 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-bg-wrap">
-      <img src="https://picsum.photos/id/1018/1800/1400" alt="" class="hero-bg-img" id="heroBgImg" loading="eager">
+    <div class="hero-bg" id="heroBgLayer" aria-hidden="true">
+      <video class="hero-bg-media" id="heroBgVideo" autoplay muted loop playsinline poster="https://picsum.photos/id/1018/1800/1200">
+        <source src="WOOD%204K25%202.mp4" type="video/mp4">
+      </video>
+      <div class="hero-bg-overlay"></div>
     </div>
     <div class="container hero-grid">
-      <div>
-        <h1>Інвестиція, що вже <span class="hl-gold">приносить прибуток з 1-го місяця</span></h1>
-        <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
-        <div class="hero-actions">
-          <a href="#apply" class="btn btn-gold" id="magneticCta">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-        </div>
+      <span class="hero-eyebrow-pill">
+        Карпати · Буковель · діючий готель
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+      </span>
+      <h1>Інвестиція, що вже приносить прибуток з 1-го місяця</h1>
+      <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
+      <div class="hero-actions">
+        <a href="#apply" class="btn btn-gold" id="magneticCta">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+        <span class="hero-microtext">БЕЗ ЗОБОВ'ЯЗАНЬ · ВІДПОВІМО ПРОТЯГОМ ДНЯ</span>
       </div>
 
-      <div class="price-card">
-        <div class="price-card-label">Флагманські преміальні 3-кімнатні апартаменти</div>
-        <div class="price-card-amount">900$/міс</div>
-        <ul class="price-card-stats">
-          <li><span>Цільовий дохід (після добудови)</span><strong>до 12% річних</strong></li>
-          <li><span>Дохід нараховується</span><strong>з 1-го місяця після оплати</strong></li>
-        </ul>
-        <ul class="price-card-perks">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Унікальний пакет гарантій Investor Care</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Ремонт після 5 років — за рахунок КК</li>
-        </ul>
-        <div class="price-card-badge">
-          <span class="badge-live-dot"></span>
-          <span>4 апартаменти в наявності</span>
-          <span class="badge-units"><i></i><i></i><i></i><i></i></span>
+      <div class="wh-device-mock">
+        <div class="device-frame">
+          <span class="device-cam"></span>
+          <div class="screen">
+
+            <div class="topbar">
+              <div>
+                <span class="title">Кабінет інвестора Wood Hotel</span>
+              </div>
+            </div>
+
+            <div class="app">
+              <aside class="sidebar">
+                <div class="logo-dot">W</div>
+                <div class="icon active" title="Портфель">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+                </div>
+                <div class="icon" title="Виплати">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+                </div>
+                <div class="icon" title="Документи">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+                </div>
+                <div class="icon" style="margin-top:auto;" title="Профіль">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </div>
+              </aside>
+
+              <main class="content">
+                <div class="content-header">
+                  <h2>Ваш апартамент</h2>
+                  <div class="header-actions">
+                    <button class="btn-dark">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                      Договір
+                    </button>
+                  </div>
+                </div>
+
+                <div class="room-row">
+                  <div class="room-image">
+                    <img src="https://i.imgur.com/m6zZJj2_d.webp?maxwidth=1600&fidelity=grand" alt="Рендер номера 60 м²">
+                    <span class="tag">Апартамент №2 · 60 м²</span>
+                  </div>
+                  <div class="mock-price">
+                    <span class="label">Флагманські преміальні 3-кімнатні апартаменти</span>
+                    <div class="price">900$<span>/міс</span></div>
+                    <div class="divider"></div>
+                    <div class="row">
+                      <span class="k">Цільовий дохід (після добудови)</span>
+                      <span class="v">до 12% річних</span>
+                    </div>
+                    <div class="row">
+                      <span class="k">Дохід нараховується</span>
+                      <span class="v">з 1-го місяця після оплати</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="check-list">
+                      <div class="check-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                        Унікальний пакет гарантій Investor Care
+                      </div>
+                      <div class="check-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                        Ремонт після 5 років — за рахунок КК
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="trigger-badge">
+                  <span class="left">
+                    <span class="dot-pulse"></span>
+                    4 апартаменти в наявності
+                  </span>
+                  <span class="dots">● ● ● ●</span>
+                </div>
+              </main>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MOUNTAIN SILHOUETTE DIVIDER (Карпати — атмосфера без фото) -->
-  <svg class="mtn-divider" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,90 L0,55 L120,20 L230,50 L340,10 L430,45 L520,25 L620,60 L740,15 L860,48 L960,28 L1080,58 L1190,18 L1300,42 L1440,20 L1440,90 Z" fill="#f8f4ec"></path>
-    <path d="M0,90 L0,70 L150,42 L260,64 L380,35 L470,58 L590,40 L700,66 L820,38 L940,60 L1060,44 L1180,68 L1300,46 L1440,60 L1440,90 Z" fill="#f1ebdd"></path>
-  </svg>
 
   <!-- BLOCK 2 — PROOF -->
   <section class="proof section-pad">
@@ -748,7 +882,7 @@
         <img src="https://picsum.photos/id/1039/1400/788" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
         <button class="play-btn" id="playBtn" aria-label="Відтворити відео"></button>
         <video id="realVideo" preload="none" playsinline controls style="display:none;width:100%;height:100%;object-fit:cover;position:relative;z-index:3">
-          <source src="../uploads/WOOD%204K25%202.mp4" type="video/mp4">
+          <source src="WOOD%204K25%202.mp4" type="video/mp4">
         </video>
       </div>
       <div class="video-caption">Відео завантажене з вашого файлу — при переносі сайту на хостинг замініть посилання у джерелі &lt;source&gt; на постійне (файл на сервері, YouTube або Vimeo).</div>
@@ -797,11 +931,6 @@
       </div>
     </div>
   </section>
-
-  <!-- MOUNTAIN DIVIDER: білий → темний -->
-  <svg class="mtn-divider" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,90 L0,58 L130,24 L240,52 L350,14 L440,48 L540,26 L640,58 L750,18 L870,50 L970,30 L1090,56 L1200,20 L1310,44 L1440,22 L1440,90 Z" fill="#132018"></path>
-  </svg>
 
   <!-- BLOCK 4 — INVESTOR CARE -->
   <section id="investor-care" class="care section-pad on-dark grain shimmer">
@@ -853,11 +982,6 @@
       </div>
     </div>
   </section>
-
-  <!-- MOUNTAIN DIVIDER: темний → кремовий -->
-  <svg class="mtn-divider" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleY(-1)">
-    <path d="M0,90 L0,58 L130,24 L240,52 L350,14 L440,48 L540,26 L640,58 L750,18 L870,50 L970,30 L1090,56 L1200,20 L1310,44 L1440,22 L1440,90 Z" fill="#f1ebdd"></path>
-  </svg>
 
   <!-- BLOCK 6 — TWO SCENARIOS TIMELINE (тепер перед блоком 5) -->
   <section id="two-scenarios" class="section-pad" style="background:var(--cream)">
@@ -1285,13 +1409,15 @@
   }
 
   // Hero background parallax (фото)
-  const heroBgImg = document.getElementById('heroBgImg');
-  if (heroBgImg) {
+  const heroBgLayer = document.getElementById('heroBgLayer');
+  if (heroBgLayer) {
     window.addEventListener('scroll', () => {
       const offset = Math.min(window.scrollY, 700) * 0.18;
-      heroBgImg.style.transform = 'translateY(' + offset + 'px)';
+      heroBgLayer.style.transform = 'translateY(' + offset + 'px)';
     }, { passive: true });
   }
+  const heroBgVideo = document.getElementById('heroBgVideo');
+  if (heroBgVideo) { heroBgVideo.play().catch(() => {}); }
 
   // Count-up animation for key numbers
   function animateCount(el){
