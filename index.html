@@ -726,8 +726,8 @@
   <!-- HERO v3 — device mockup -->
   <section class="hero">
     <div class="hero-bg" id="heroBgLayer" aria-hidden="true">
-      <video class="hero-bg-media" id="heroBgVideo" autoplay muted loop playsinline preload="auto">
-        <source src="WOOD%204K25%202.mp4" type="video/mp4">
+      <video class="hero-bg-media" id="heroBgVideo" autoplay muted loop playsinline preload="auto" poster="wood-bg-poster.jpg">
+        <source src="wood-bg.mp4" type="video/mp4">
       </video>
       <div class="hero-bg-overlay"></div>
     </div>
@@ -872,10 +872,10 @@
         <p class="h-sub center" style="color:#c9d2c8">Коротке відео Wood Hotel Resort &amp; Spa — територія, номери, інфраструктура</p>
       </div>
       <div class="video-frame reveal" id="videoFrame">
-        <img src="https://placehold.co/1400x788/132018/f1ead8?text=Постер+відео" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
+        <img src="wood-bg-poster.jpg" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
         <button class="play-btn" id="playBtn" aria-label="Відтворити відео"></button>
-        <video id="realVideo" preload="none" playsinline controls style="display:none;width:100%;height:100%;object-fit:cover;position:relative;z-index:3">
-          <source src="WOOD%204K25%202.mp4" type="video/mp4">
+        <video id="realVideo" preload="none" playsinline controls poster="wood-bg-poster.jpg" style="display:none;width:100%;height:100%;object-fit:cover;position:relative;z-index:3">
+          <source src="wood-bg.mp4" type="video/mp4">
         </video>
       </div>
       <div class="video-caption">Відео завантажене з вашого файлу — при переносі сайту на хостинг замініть посилання у джерелі &lt;source&gt; на постійне (файл на сервері, YouTube або Vimeo).</div>
@@ -1418,8 +1418,10 @@
       const scale = MIN_SCALE + eased * (MAX_SCALE - MIN_SCALE);
       deviceScale.style.transform = `scale(${scale.toFixed(3)})`;
       deviceScale.style.opacity = (0.85 + eased * 0.15).toFixed(3);
-      const naturalHeight = rect.height / (parseFloat(deviceScale.dataset.prevScale || '1') || 1);
-      deviceScale.dataset.prevScale = scale;
+      // offsetHeight не залежить від transform:scale (тільки від реальної розмітки),
+      // тому це стабільне значення на кожному кадрі — без цього компенсація "гуляла"
+      // й тремтіла (глюк), бо рахувалась рекурсивно від попереднього кадру.
+      const naturalHeight = deviceScale.offsetHeight;
       const gap = naturalHeight * (1 - scale);
       deviceScale.style.marginBottom = (-gap).toFixed(1) + 'px';
       deviceTicking = false;
