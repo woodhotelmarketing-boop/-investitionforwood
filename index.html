@@ -19,9 +19,9 @@
     --cream:#f8f4ec;
     --cream-2:#f1ebdd;
     --white:#ffffff;
-    --gold:#b6863f;
-    --gold-light:#d9b877;
-    --gold-dark:#8f6a2f;
+    --gold:#cdbf9d;
+    --gold-light:#f1ead8;
+    --gold-dark:#a89877;
     --ink:#1a2019;
     --muted:#5f6b62;
     --muted-2:#8a9089;
@@ -46,7 +46,7 @@
   }
   h1,h2,h3,h4,h5,h6{
     font-family:'Bricolage Grotesque',system-ui,sans-serif;
-    font-weight:600;
+    font-weight:700;
     line-height:1.08;
     margin:0;
     letter-spacing:-.03em;
@@ -62,17 +62,10 @@
 
   /* ---------- ambient background orbs ---------- */
   .bg-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-  .bg-orb.gold{background:radial-gradient(circle, rgba(217,184,119,.5), transparent 70%)}
-  .bg-orb.green{background:radial-gradient(circle, rgba(60,90,70,.4), transparent 70%)}
-  .bg-orb.gold-dark{background:radial-gradient(circle, rgba(182,134,63,.35), transparent 70%)}
+  .bg-orb.gold{background:radial-gradient(circle, rgba(160,164,159,.45), transparent 70%)}
+  .bg-orb.green{background:radial-gradient(circle, rgba(160,164,159,.38), transparent 70%)}
+  .bg-orb.gold-dark{background:radial-gradient(circle, rgba(160,164,159,.32), transparent 70%)}
 
-  /* ---------- slow ambient shimmer on dark sections ---------- */
-  .shimmer::after{
-    content:"";position:absolute;inset:-20%;z-index:0;pointer-events:none;opacity:.5;
-    background:conic-gradient(from 0deg, transparent 0deg, rgba(182,134,63,.12) 60deg, transparent 140deg, rgba(60,90,70,.14) 220deg, transparent 300deg, transparent 360deg);
-    animation:shimmerSpin 50s linear infinite;
-  }
-  @keyframes shimmerSpin{to{transform:rotate(360deg)}}
   .section-pad{padding:96px 0}
   @media(max-width:768px){ .section-pad{padding:60px 0} }
 
@@ -105,7 +98,7 @@
   .btn:hover{transform:translateY(-2px)}
   .btn svg{width:16px;height:16px;flex:none;transition:transform .25s ease}
   .btn:hover svg{transform:translateX(3px)}
-  .btn-gold{background:var(--gold);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.25), 0 0 0 1px rgba(217,184,119,.25), 0 0 34px 6px rgba(217,184,119,.4);overflow:hidden}
+  .btn-gold{background:var(--gold);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.25), 0 0 0 1px rgba(241,234,216,.3), 0 0 30px 6px rgba(241,234,216,.35);overflow:hidden}
   .btn-gold::before{
     content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;
     background:linear-gradient(115deg, transparent, rgba(255,255,255,.65), transparent);
@@ -155,7 +148,7 @@
     .nav-cta .btn-gold-desktop{display:none}
   }
 
-  /* ---------- HERO (editorial: light-weight display type + single glow accent) ---------- */
+  /* ---------- HERO v3 (device-mockup, scroll-scale interaction) ---------- */
   .hero{
     background:var(--forest-900);
     color:var(--white);
@@ -168,153 +161,130 @@
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     background-size:140px 140px;
   }
+  .hero-bg{position:absolute;top:-140px;left:0;right:0;bottom:-140px;z-index:0;overflow:hidden;background:var(--forest-900);will-change:transform}
+  .hero-bg-media{width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7)}
+  .hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(15,22,18,.45) 0%, rgba(15,22,18,.6) 45%, rgba(13,18,15,.88) 100%),radial-gradient(circle at 50% 22%, rgba(20,23,20,.05), rgba(13,18,15,.75) 78%)}
   .hero-grid{
     display:flex;flex-direction:column;align-items:center;text-align:center;
-    padding:132px 24px 96px;position:relative;z-index:2;
+    padding:132px 24px 0;position:relative;z-index:2;
   }
-  .hero-eyebrow-pill{
-    display:inline-flex;align-items:center;gap:7px;
-    background:var(--cream);color:var(--forest-900);
-    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
-    text-transform:uppercase;letter-spacing:.08em;
-    padding:8px 15px;border-radius:24px;
-  }
-  .hero-eyebrow-pill svg{width:11px;height:11px;flex:none}
   .hero h1{
-    margin-top:32px;font-weight:300;
-    font-size:clamp(40px,7.6vw,100px);line-height:1.06;letter-spacing:-.02em;
-    color:var(--white);max-width:920px;
+    margin-top:0;font-weight:700;text-transform:uppercase;
+    font-size:clamp(34px,5.6vw,72px);line-height:1.12;letter-spacing:-.01em;
+    color:#fff;max-width:960px;
   }
+  .hero h1 .accent{color:#f1ead8}
   .hero-sub{margin:26px auto 0;font-size:20px;font-weight:400;color:#a7b5a3;max-width:560px;line-height:1.5}
   .hero-actions{margin-top:38px;display:flex;flex-direction:column;align-items:center;gap:12px}
   .hero-microtext{font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;color:#8a9a8d}
+  .btn-halo-wrap{position:relative;display:inline-flex}
+  .btn-halo-wrap::before{
+    content:"";position:absolute;inset:-16px;z-index:0;pointer-events:none;
+    background:radial-gradient(circle, rgba(241,234,216,.55), rgba(241,234,216,.12) 55%, transparent 75%);
+    filter:blur(18px);
+  }
+  .hero .btn-gold{position:relative;z-index:1;background:linear-gradient(100deg,#a89877,#cdbf9d 45%,#f1ead8 60%,#a89877);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.3), 0 0 0 1px rgba(241,234,216,.3)}
+  .hero .btn-gold:hover{box-shadow:0 8px 26px rgba(0,0,0,.35), 0 0 0 1px rgba(241,234,216,.4), 0 0 44px 10px rgba(241,234,216,.6)}
 
-  .price-card{
-    margin:60px auto 0;max-width:440px;width:100%;text-align:left;
-    background:var(--forest-800);border:1px solid rgba(255,255,255,.12);
-    border-radius:16px;padding:30px;color:var(--white);
-    box-shadow:0 8px 28px rgba(0,0,0,.4);
+  /* ---- device mockup (продукт-мокап замість плоскої картки) ---- */
+  .wh-device-mock{position:relative;margin:64px auto 0;max-width:760px;width:100%;perspective:1400px}
+  .wh-device-mock::before{
+    content:"";position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
+    width:86%;height:78%;z-index:0;pointer-events:none;
+    background:radial-gradient(circle, rgba(160,164,159,.30), rgba(160,164,159,.07) 45%, transparent 70%);
+    filter:blur(75px);
+  }
+  .device-scale{will-change:transform, opacity;transform-origin:center top}
+  .device-float{position:relative;z-index:1;will-change:transform}
+  .device-crop{position:relative;overflow:hidden;max-height:540px;border-radius:34px 34px 0 0}
+  .device-fade{
+    position:absolute;left:0;right:0;bottom:0;height:56px;z-index:6;pointer-events:none;
+    background:linear-gradient(180deg, rgba(10,19,14,0) 0%, rgba(10,19,14,.25) 55%, var(--forest-900) 100%);
+  }
+  .device-frame{
     position:relative;
-    animation:cardIn .9s cubic-bezier(.22,.9,.3,1) .15s both;
+    background:linear-gradient(165deg,#3d3c3a 0%,#232220 55%,#131211 100%);
+    border-radius:34px;padding:14px;
+    box-shadow:
+      0 60px 100px -30px rgba(0,0,0,.65),
+      0 16px 40px -14px rgba(0,0,0,.55),
+      0 0 0 1px rgba(241,234,216,.14),
+      inset 0 1px 0 rgba(255,255,255,.1),
+      inset 0 -1px 0 rgba(0,0,0,.35);
+    transition:transform .35s cubic-bezier(.22,.9,.3,1);
+    transform-style:preserve-3d;
   }
-  @keyframes cardIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-  .price-card-label{
-    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#8a9a8d;
-    text-transform:uppercase;letter-spacing:.06em;
-  }
-  .price-card-amount{font-family:'Bricolage Grotesque',sans-serif;font-size:52px;font-weight:300;margin-top:12px;color:var(--white);letter-spacing:-.02em}
-  .price-card-caption{font-size:14px;color:#8a9a8d;margin-top:6px}
-  .price-card-stats{margin-top:24px;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;display:flex;flex-direction:column;gap:14px}
-  .price-card-stats li{display:flex;justify-content:space-between;align-items:center;font-size:14px}
-  .price-card-stats li span{color:#8a9a8d}
-  .price-card-stats li strong{color:var(--white);font-weight:500;font-size:15px}
-  .price-card-perks{margin-top:18px;display:flex;flex-direction:column;gap:10px}
-  .price-card-perks li{
-    display:flex;align-items:flex-start;gap:9px;font-size:13px;font-weight:500;
-    color:#d5ddd2;line-height:1.4;
-  }
-  .price-card-perks li svg{
-    flex:none;width:17px;height:17px;margin-top:1px;padding:3px;border-radius:50%;box-sizing:border-box;
-    background:var(--gold);color:var(--forest-900);
-  }
-  .price-card-badge{
-    margin-top:24px;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
-    background:var(--cream);color:var(--forest-800);border:1px solid rgba(255,255,255,.12);
-    font-size:12.5px;font-weight:700;text-align:center;padding:11px 16px;border-radius:100px;
-  }
-  .badge-live-dot{
-    position:relative;width:7px;height:7px;border-radius:50%;background:#3d7d4f;flex:none;
-  }
-  .badge-live-dot::after{
-    content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid #3d7d4f;
-    animation:playPulse 1.8s ease-out infinite;
-  }
-  .badge-units{display:inline-flex;gap:4px}
-  .badge-units i{width:6px;height:6px;border-radius:2px;background:var(--gold);opacity:.9;display:inline-block}
-  @media(max-width:900px){
-    .hero-grid{padding:96px 20px 64px}
-  }
-
-  /* ---------- HERO BACKDROP: єдиний фон (відео) на весь екран 1, мокап floating card поверх нього ---------- */
-  .hero-bg{position:absolute;top:-140px;left:0;right:0;bottom:-140px;z-index:0;overflow:hidden;background:var(--forest-900);will-change:transform}
-  .hero-bg-media{width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7);animation:heroBgZoom 26s ease-in-out infinite alternate}
-  @keyframes heroBgZoom{from{transform:scale(1)}to{transform:scale(1.09)}}
-  .hero-bg-overlay{
-    position:absolute;inset:0;
-    background:
-      linear-gradient(180deg, rgba(13,23,18,.45) 0%, rgba(13,23,18,.6) 45%, rgba(11,19,15,.88) 100%),
-      radial-gradient(circle at 50% 22%, rgba(19,32,24,.05), rgba(11,19,15,.75) 78%);
-  }
-
-  /* ---------- HERO DEVICE MOCKUP (кабінет інвестора) — заміна .price-card на екрані 1 ---------- */
-  .wh-device-mock{margin:60px auto 0;max-width:720px;width:100%}
-  .wh-device-mock .device-frame{
-    position:relative;background:linear-gradient(160deg,#0e1712,#070b08);
-    border-radius:26px;padding:16px 16px 20px;
-    box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.04) inset;
-    animation:cardIn .9s cubic-bezier(.22,.9,.3,1) .15s both;
-  }
-  .wh-device-mock .device-frame::before{
-    content:"";position:absolute;top:0;left:20px;right:20px;height:1px;
+  .device-frame::before{
+    content:"";position:absolute;top:0;left:40px;right:40px;height:1px;
     background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
   }
-  .wh-device-mock .device-cam{
-    position:absolute;top:8px;left:50%;transform:translateX(-50%);
-    width:7px;height:7px;border-radius:50%;background:#33453a;
+  .device-frame::after{
+    content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);
+    width:4px;height:4px;border-radius:50%;background:#0a0a0a;box-shadow:0 0 0 1px rgba(255,255,255,.05);
   }
-  .wh-device-mock .screen{background:var(--cream);border-radius:18px;overflow:hidden;text-align:left}
-  .wh-device-mock .topbar{background:var(--forest-800);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:13px 20px}
-  .wh-device-mock .topbar .title{font-size:13px;font-weight:600}
-  .wh-device-mock .app{display:flex}
-  .wh-device-mock .sidebar{width:54px;flex:none;background:var(--forest-900);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:9px}
-  .wh-device-mock .sidebar .logo-dot{
-    width:24px;height:24px;border-radius:7px;background:transparent;border:1px solid var(--gold-light);
-    margin-bottom:16px;display:flex;align-items:center;justify-content:center;
-    font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:600;color:var(--gold-light);
+  .screen{position:relative;background:var(--cream);border-radius:22px;overflow:hidden;text-align:left;box-shadow:inset 0 1px 3px rgba(0,0,0,.28), inset 0 0 0 1px rgba(0,0,0,.05)}
+  .screen::after{
+    content:"";position:absolute;inset:0;z-index:20;pointer-events:none;
+    background:linear-gradient(115deg, rgba(255,255,255,.06) 0%, transparent 22%, transparent 80%, rgba(255,255,255,.03) 100%);
+    mix-blend-mode:overlay;
   }
-  .wh-device-mock .sidebar .icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#93a695}
-  .wh-device-mock .sidebar .icon svg{width:15px;height:15px}
-  .wh-device-mock .sidebar .icon.active{background:var(--cream);color:var(--forest-800)}
-  .wh-device-mock .content{flex:1;min-width:0;padding:20px 22px 26px;background:var(--cream)}
-  .wh-device-mock .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
-  .wh-device-mock .content-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:600;color:var(--forest-900);margin:0}
-  .wh-device-mock .header-actions{display:flex;gap:8px}
-  .wh-device-mock .btn-dark{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--forest-800);background:transparent;border:1px solid var(--forest-700);padding:7px 13px;border-radius:9px;flex:none}
-  .wh-device-mock .btn-dark svg{width:12px;height:12px}
-  .wh-device-mock .room-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-  .wh-device-mock .room-image{position:relative;border-radius:14px;overflow:hidden;background:#2a332c;box-shadow:0 16px 34px -22px rgba(19,32,24,.4)}
-  .wh-device-mock .room-image img{width:100%;height:100%;object-fit:cover;display:block;min-height:260px;filter:saturate(1.04) contrast(1.02)}
-  .wh-device-mock .room-image .tag{
+  .app{display:flex}
+  .sidebar{width:56px;flex:none;background:var(--forest-900);display:flex;flex-direction:column;align-items:center;padding:18px 0;gap:10px}
+  .sidebar .logo-dot{width:26px;height:26px;border-radius:7px;background:transparent;border:1px solid #f1ead8;margin-bottom:18px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:600;color:#f1ead8}
+  .sidebar .icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#93a695;transition:background .2s ease, color .2s ease}
+  .sidebar .icon svg{width:15px;height:15px}
+  .sidebar .icon.active{background:rgba(241,234,216,.14);color:#f1ead8;box-shadow:inset 0 0 0 1px rgba(241,234,216,.35)}
+  .content{flex:1;min-width:0;padding:24px 26px 28px;background:var(--cream)}
+  .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px}
+  .content-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--forest-900);margin:0}
+  .header-actions{display:flex;gap:8px}
+  .btn-dark{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--forest-800);background:transparent;border:1px solid var(--forest-700);padding:7px 13px;border-radius:9px;flex:none}
+  .btn-dark svg{width:12px;height:12px}
+  .room-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px}
+  .room-image{position:relative;border-radius:14px;overflow:hidden;background:#2a332c;box-shadow:0 18px 36px -22px rgba(19,32,24,.45)}
+  .room-image img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.04) contrast(1.02)}
+  .room-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, transparent 52%, rgba(9,15,11,.7))}
+  .room-image .tag{
     position:absolute;top:12px;left:12px;z-index:2;
-    font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--cream);background:rgba(19,32,24,.55);
-    padding:6px 11px;border-radius:999px;backdrop-filter:blur(2px);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+    color:#f2f0e8;border:1px solid rgba(255,255,255,.4);padding:5px 10px;border-radius:3px;backdrop-filter:blur(3px);
   }
-  .wh-device-mock .mock-price{background:#fff;border-radius:14px;padding:22px 22px 18px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 16px 34px -22px rgba(19,32,24,.28)}
-  .wh-device-mock .mock-price .label{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px;line-height:1.35}
-  .wh-device-mock .mock-price .price{font-family:'Bricolage Grotesque',sans-serif;font-size:38px;font-weight:600;color:var(--forest-900);line-height:1;margin-bottom:14px}
-  .wh-device-mock .mock-price .price span{font-size:15px;font-weight:600;color:var(--muted)}
-  .wh-device-mock .mock-price .divider{height:1px;background:var(--line);margin:12px 0}
-  .wh-device-mock .mock-price .row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:5px 0}
-  .wh-device-mock .mock-price .row .k{font-size:12px;color:var(--muted)}
-  .wh-device-mock .mock-price .row .v{font-size:13px;font-weight:700;color:var(--forest-800);white-space:nowrap}
-  .wh-device-mock .check-list{margin-top:2px}
-  .wh-device-mock .check-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:12px;color:var(--forest-900);font-weight:500}
-  .wh-device-mock .check-row svg{width:15px;height:15px;color:var(--gold-dark);flex-shrink:0;margin-top:1px}
-  .wh-device-mock .trigger-badge{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--cream);border:1px solid var(--gold);color:var(--forest-800);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600}
-  .wh-device-mock .trigger-badge .left{display:flex;align-items:center;gap:9px}
-  .wh-device-mock .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:heroPulse 2.4s ease-in-out infinite}
-  .wh-device-mock .trigger-badge .dots{letter-spacing:3px;font-size:9px;color:var(--gold-dark)}
-  @keyframes heroPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .mock-price{background:#fff;border-radius:14px;padding:24px;display:flex;flex-direction:column;justify-content:flex-start;box-shadow:0 18px 36px -22px rgba(19,32,24,.3), 0 0 0 1px rgba(19,32,24,.04)}
+  .mock-price .label{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px;line-height:1.35}
+  .mock-price .price{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--forest-900);line-height:1;margin-bottom:16px;display:flex;align-items:baseline;gap:6px}
+  .mock-price .price .num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:-.02em}
+  .mock-price .price span.per{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;color:var(--muted)}
+  .mock-price .divider{height:1.5px;background:linear-gradient(90deg, transparent, rgba(205,191,157,.65) 15%, rgba(205,191,157,.65) 85%, transparent);margin:14px 0}
+  .mock-price .row{display:flex;flex-direction:column;gap:4px;padding:8px 0}
+  .mock-price .row .k{font-size:11px;letter-spacing:.02em;color:var(--muted)}
+  .mock-price .row .v{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:14.5px;font-weight:700;letter-spacing:-.005em;color:var(--forest-800)}
+  .check-list{margin-top:4px}
+  .check-row{display:flex;align-items:flex-start;gap:9px;padding:5px 0;font-size:12.5px;color:var(--forest-900);font-weight:600}
+  .check-row .ico{width:16px;height:16px;border-radius:50%;background:rgba(205,191,157,.13);display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .check-row .ico svg{width:9px;height:9px;color:var(--gold-dark)}
+  .trigger-badge{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid var(--gold);color:var(--forest-800);border-radius:10px;padding:12px 16px;font-size:12.5px;font-weight:600;box-shadow:0 12px 26px -18px rgba(19,32,24,.28)}
+  .trigger-badge .left{display:flex;align-items:center;gap:9px}
+  .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);position:relative;flex:none}
+  .dot-pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.3px solid var(--gold);animation:heroPulse 2.2s ease-out infinite}
+  @keyframes heroPulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+  .unit-dots{display:inline-flex;gap:4px}
+  .unit-dots i{width:6px;height:6px;border-radius:2px;background:var(--gold);opacity:.9;display:inline-block}
+  .next-hint{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted-2);font-weight:500}
+  @media(max-width:900px){.hero-grid{padding:96px 20px 0}}
   @media(max-width:640px){
-    .wh-device-mock .room-row{grid-template-columns:1fr}
-    .wh-device-mock .room-image img{min-height:200px}
-    .wh-device-mock .content{padding:16px 16px 20px}
-    .wh-device-mock .mock-price .price{font-size:32px}
+    .room-row{grid-template-columns:1fr}
+    .room-image{aspect-ratio:16/10}
+    .content{padding:18px 18px 22px}
+    .mock-price .price{font-size:30px}
+    .mock-price .divider{margin:8px 0}
+    .mock-price .row{padding:5px 0}
+    .device-crop{max-height:1000px;border-radius:24px 24px 0 0}
+    .device-frame{border-radius:24px;padding:11px}
+    .device-frame::before{left:22px;right:22px}
+    .screen{border-radius:15px}
   }
+  @media(max-width:400px){.wh-device-mock{margin-top:44px}}
 
-  /* Секції між блоками більше не мають декоративного розділювача —
-     чистий перехід кольору фону (edge-to-edge), без ліній/іконок/хвиль. */
 
   /* ---------- VIDEO BLOCK ---------- */
   .video-block{background:var(--forest-900)}
@@ -350,17 +320,27 @@
     display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(150px,auto));
     grid-template-areas:"a a b b" "a a c d";gap:20px;margin-top:44px;
   }
-  .proof-card{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow-sm);transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease;border:1px solid transparent;display:flex;flex-direction:column;justify-content:center}
-  .proof-card:hover{transform:translateY(-6px);box-shadow:0 26px 44px -20px rgba(19,32,24,.28);border-color:var(--line)}
-  .proof-num{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;color:var(--gold-dark);font-weight:600}
+  .proof-card{
+    position:relative;background:var(--white);border-radius:var(--radius);padding:30px 26px;
+    border:1px solid var(--line);transition:border-color .3s ease, background .3s ease;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .proof-card:hover{border-color:var(--gold-dark);background:var(--cream)}
+  .proof-idx{
+    position:absolute;top:22px;right:24px;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.08em;color:var(--muted-2);
+  }
+  .proof-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:32px;color:var(--gold-dark);font-weight:800;letter-spacing:-.01em}
   .proof-title{font-weight:700;margin-top:10px;font-size:15px;color:var(--forest-800)}
   .proof-desc{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.5}
   .proof-card:nth-of-type(1){grid-area:a}
   .proof-card:nth-of-type(2){grid-area:b}
   .proof-card:nth-of-type(3){grid-area:c}
   .proof-card:nth-of-type(4){grid-area:d}
-  .proof-feature{background:var(--forest-900) !important;border:none !important}
-  .proof-feature .proof-num{font-size:clamp(48px,6vw,76px);color:var(--gold-light)}
+  .proof-feature{background:var(--forest-900) !important;border:1px solid rgba(255,255,255,.14) !important}
+  .proof-feature:hover{background:var(--forest-800) !important;border-color:var(--gold) !important}
+  .proof-feature .proof-idx{color:#8a9a8d}
+  .proof-feature .proof-num{font-size:clamp(48px,6vw,76px);color:var(--gold-light);font-weight:800}
   .proof-feature .proof-title{color:#fff;font-size:17px}
   .proof-feature .proof-desc{color:#c3ccc0}
   @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b b" "c d"}}
@@ -385,12 +365,12 @@
     background:var(--forest-900);color:#fff;border-radius:var(--radius);padding:38px 42px;
   }
   .adv-hero-icon{
-    flex:none;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at 30% 25%, #fbeecb 0%, var(--gold-light) 38%, var(--gold) 72%, var(--gold-dark) 100%);
-    box-shadow:inset 0 2px 3px rgba(255,255,255,.75), inset 0 -6px 8px rgba(60,40,10,.28), 0 14px 26px -10px rgba(182,134,63,.65);
-    color:var(--forest-900);
+    position:relative;flex:none;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:rgba(241,234,216,.08);border:1.5px solid var(--gold-light);
+    color:var(--gold-light);
   }
-  .adv-hero-icon svg{width:34px;height:34px}
+  .adv-hero-icon::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(241,234,216,.35)}
+  .adv-hero-icon svg{width:32px;height:32px;position:relative}
   .adv-hero-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4vw,46px);color:var(--gold-light);letter-spacing:-.02em;line-height:1}
   .adv-hero h4{color:#fff;font-size:19px;margin:8px 0 8px;line-height:1.3}
   .adv-hero p{color:#c9d2c8;font-size:14.5px;line-height:1.6;max-width:540px}
@@ -409,55 +389,49 @@
     .adv-list-item{gap:14px}
   }
   .adv-icon{
-    position:relative;width:58px;height:58px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:var(--forest-900);
-    flex:none;overflow:hidden;
-    background:radial-gradient(circle at 30% 25%, #fbeecb 0%, var(--gold-light) 38%, var(--gold) 72%, var(--gold-dark) 100%);
-    box-shadow:
-      inset 0 2px 3px rgba(255,255,255,.75),
-      inset 0 -6px 8px rgba(60,40,10,.28),
-      0 12px 22px -10px rgba(182,134,63,.65);
-    transition:transform .35s cubic-bezier(.22,.9,.3,1), box-shadow .35s ease;
+    position:relative;width:52px;height:52px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--gold-dark);
+    flex:none;background:var(--cream);border:1.5px solid var(--gold);
+    transition:border-color .3s ease, background .3s ease;
   }
-  .adv-icon svg{width:26px;height:26px;position:relative;z-index:1;filter:drop-shadow(0 1px 0 rgba(255,255,255,.35))}
-  .adv-icon::after{
-    content:"";position:absolute;top:-40%;left:-40%;width:60%;height:60%;
-    background:radial-gradient(circle, rgba(255,255,255,.85), transparent 70%);
-    transform:rotate(20deg);pointer-events:none;
-  }
-  .adv-card:hover .adv-icon{
-    transform:translateY(-3px) scale(1.06);
-    box-shadow:
-      inset 0 2px 3px rgba(255,255,255,.85),
-      inset 0 -6px 8px rgba(60,40,10,.22),
-      0 18px 30px -10px rgba(182,134,63,.85);
-  }
+  .adv-icon::before{content:"";position:absolute;inset:4px;border-radius:50%;border:1px solid var(--line)}
+  .adv-icon svg{width:22px;height:22px;position:relative;z-index:1}
+  .adv-list-item:hover .adv-icon{background:#fff;border-color:var(--gold-dark)}
   .adv-card h4{font-size:18px;color:var(--forest-800);margin-bottom:10px;line-height:1.3}
   .adv-card p{font-size:14.5px;color:var(--muted);line-height:1.6}
   @media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
 
   /* ---------- INVESTOR CARE (block 4) ---------- */
   .care{background:var(--forest-900);color:var(--white)}
-  .care-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:46px}
-  .care-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:22px 18px;transition:transform .3s cubic-bezier(.22,.9,.3,1), background .3s ease, border-color .3s ease}
-  .care-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);border-color:var(--gold)}
+  .care-grid{
+    display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,minmax(150px,auto));
+    grid-template-areas:"a a b b c c" "a a d d e e";gap:16px;margin-top:46px;
+  }
+  .care-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);padding:22px 18px;transition:background .3s ease, border-color .3s ease;display:flex;flex-direction:column;justify-content:center}
+  .care-card:hover{background:rgba(255,255,255,.08);border-color:var(--gold)}
   .care-card h4{font-size:14.5px;color:var(--gold-light);margin-bottom:10px;line-height:1.3;font-weight:700}
   .care-card p{font-size:13px;color:#c3ccc0;line-height:1.55}
+  .care-card:nth-of-type(1){grid-area:a;background:rgba(241,234,216,.06);border-color:var(--gold)}
+  .care-card:nth-of-type(1) h4{font-size:19px}
+  .care-card:nth-of-type(1) p{font-size:14px}
+  .care-card:nth-of-type(2){grid-area:b}
+  .care-card:nth-of-type(3){grid-area:c}
+  .care-card:nth-of-type(4){grid-area:d}
+  .care-card:nth-of-type(5){grid-area:e}
   .care-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
-  .care-sum-card{border:1px solid var(--gold);border-radius:var(--radius);padding:26px;text-align:center;transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease}
-  .care-sum-card:hover{transform:translateY(-5px);box-shadow:0 22px 40px -20px rgba(217,184,119,.35)}
-  .care-sum-num{font-family:'Bricolage Grotesque',sans-serif;font-size:30px;color:var(--gold-light);font-weight:600}
+  .care-sum-card{border:1px solid var(--gold);border-radius:var(--radius);padding:26px;text-align:center;transition:background .3s ease}
+  .care-sum-card:hover{background:rgba(241,234,216,.06)}
+  .care-sum-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:30px;color:var(--gold-light);font-weight:800}
   .care-sum-label{font-size:13.5px;color:#c3ccc0;margin-top:8px}
-  @media(max-width:1024px){.care-grid{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:768px){.care-grid{grid-template-columns:1fr 1fr}.care-summary{grid-template-columns:1fr}}
-  @media(max-width:480px){.care-grid{grid-template-columns:1fr}}
+  @media(max-width:900px){.care-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b c" "d e"}.care-card:nth-of-type(1) h4{font-size:16px}}
+  @media(max-width:640px){.care-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d" "e"}.care-summary{grid-template-columns:1fr}}
 
   /* ---------- SCENARIOS 5y (block 5) ---------- */
   .scn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
-  .scn-card{border:1px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--white);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.22,.9,.3,1), box-shadow .3s ease}
-  .scn-card:hover{transform:translateY(-6px);box-shadow:0 26px 46px -22px rgba(19,32,24,.22)}
-  .scn-card.featured:hover{box-shadow:0 26px 50px -20px rgba(182,134,63,.55)}
-  .scn-card.featured{border-color:var(--gold);box-shadow:0 20px 46px -22px rgba(182,134,63,.45);position:relative}
+  .scn-card{border:1px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--white);display:flex;flex-direction:column;transition:border-color .3s ease, background .3s ease}
+  .scn-card:hover{border-color:var(--gold-dark);background:var(--cream)}
+  .scn-card.featured:hover{background:#fffdf9}
+  .scn-card.featured{border-color:var(--gold);border-width:1.5px;position:relative}
   .scn-badge,.scn-badge-alt{
     display:inline-block;max-width:100%;font-size:11px;font-weight:800;
     padding:7px 13px;border-radius:8px;text-transform:uppercase;letter-spacing:.02em;
@@ -465,8 +439,8 @@
   }
   .scn-badge{background:var(--gold);color:var(--forest-900)}
   .scn-badge-alt{background:var(--forest-700);color:#fff}
-  .scn-card.featured-alt{border-color:var(--forest-600);box-shadow:0 20px 46px -22px rgba(60,90,70,.4)}
-  .scn-card.featured-alt:hover{box-shadow:0 26px 50px -20px rgba(60,90,70,.55)}
+  .scn-card.featured-alt{border-color:var(--forest-600);border-width:1.5px}
+  .scn-card.featured-alt:hover{background:#f6f8f6}
   .scn-card.featured-alt .chart-fill{background:linear-gradient(90deg,var(--forest-700),var(--forest-500))}
   .scn-tag{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;display:block}
   .scn-name{font-size:15px;font-weight:700;color:var(--forest-800);min-height:44px}
@@ -480,10 +454,10 @@
   .scn-card.featured .chart-fill{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
   .chart-fill.split{display:flex;background:none}
   .chart-fill.split .fill-base{width:78%;height:100%;background:var(--gold-dark);border-radius:8px 0 0 8px}
-  .chart-fill.split .fill-bonus{width:22%;height:100%;background:linear-gradient(90deg,#fff8e8,#ffe066);border-radius:0 8px 8px 0;box-shadow:inset 0 0 0 1.5px var(--gold-dark)}
-  .chart-row .val{font-size:12px;font-weight:700;color:var(--forest-800);text-align:right}
+  .chart-fill.split .fill-bonus{width:22%;height:100%;background:linear-gradient(90deg,#fdfbf6,var(--gold-light));border-radius:0 8px 8px 0;box-shadow:inset 0 0 0 1.5px var(--gold-dark)}
+  .chart-row .val{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700;color:var(--forest-800);text-align:right}
   .scn-total{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
-  .scn-total-num{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;color:var(--forest-800);font-weight:600}
+  .scn-total-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:27px;color:var(--forest-800);font-weight:800;letter-spacing:-.01em}
   .scn-total-label{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
   .scn-note{font-size:12.5px;color:var(--muted-2);margin-top:10px;line-height:1.5}
   .scn-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
@@ -515,7 +489,7 @@
   .timeline-col.other .t-badge{background:var(--white);border:2px solid var(--line);color:var(--muted)}
   .timeline-col.wood .t-badge{
     background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
-    box-shadow:0 10px 20px -8px rgba(182,134,63,.6);
+    box-shadow:0 10px 20px -8px rgba(205,191,157,.6);
   }
   .t-item h5{font-size:14px;font-weight:700;margin-bottom:4px;padding-top:8px}
   .timeline-col.other .t-item h5{color:var(--forest-800)}
@@ -530,13 +504,27 @@
   .two-cta{margin-top:28px;text-align:center}
 
   /* ---------- OBJECTIONS TABLE (block 7) ---------- */
-  .table-wrap{margin-top:44px;overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line)}
+  .table-wrap{margin-top:44px;overflow-x:auto}
   table{width:100%;border-collapse:collapse;min-width:920px}
-  th,td{padding:16px 18px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line)}
-  thead th{background:var(--cream);color:var(--forest-800);font-size:12.5px;text-transform:uppercase;letter-spacing:.03em}
-  tbody td:first-child{color:var(--muted);font-weight:600}
+  th,td{padding:18px 20px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line);transition:background .2s ease}
+  thead th{
+    font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--muted);
+    font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    border-bottom:1.5px solid var(--forest-800);padding-bottom:16px;
+  }
+  tbody td:first-child{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+    letter-spacing:.01em;line-height:1.5;
+  }
   tbody tr:last-child td{border-bottom:none}
-  td.wood-col,th.wood-col{background:#f6efdf;color:var(--gold-dark);font-weight:700}
+  tbody tr:hover td{background:var(--cream)}
+  td.wood-col,th.wood-col{
+    position:relative;color:var(--forest-800);font-weight:700;
+    font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;
+    border-left:2px solid var(--gold);background:rgba(205,191,157,.08);
+  }
+  thead th.wood-col{font-family:'JetBrains Mono',monospace;color:var(--gold-dark);font-weight:600}
+  tbody tr:hover td.wood-col{background:rgba(205,191,157,.16)}
 
   .obj-verdict{
     position:relative;overflow:hidden;margin-top:36px;background:var(--forest-900);
@@ -562,12 +550,17 @@
   .deficit-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;margin-top:20px}
   .deficit-text p{font-size:15.5px;color:var(--muted);line-height:1.7;margin-top:18px}
   .deficit-cta{margin-top:30px}
-  .units{display:flex;flex-direction:column;gap:12px}
-  .unit-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border-radius:var(--radius-sm);padding:18px 22px;box-shadow:var(--shadow-sm);transition:transform .25s ease, box-shadow .25s ease}
-  .unit-row:hover{transform:translateX(4px);box-shadow:0 18px 34px -18px rgba(19,32,24,.3)}
+  .units{display:flex;flex-direction:column}
+  .unit-row{
+    display:flex;justify-content:space-between;align-items:center;background:transparent;
+    padding:20px 4px;border-bottom:1px solid var(--line);transition:padding-left .25s ease, border-color .25s ease;
+  }
+  .units .unit-row:first-child{border-top:1px solid var(--line)}
+  .unit-row:hover{padding-left:12px;border-color:var(--gold-dark)}
+  .unit-row .idx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted-2);margin-right:14px}
   .unit-row .name{font-weight:700;color:var(--forest-800);font-size:14.5px}
-  .status{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#3d7d4f}
-  .status::before{content:"";width:8px;height:8px;border-radius:50%;background:#3d7d4f}
+  .status{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+  .status::before{content:"";width:6px;height:6px;border-radius:50%;background:#3d7d4f}
   @media(max-width:900px){.deficit-grid{grid-template-columns:1fr}}
 
   /* ---------- GALLERY (плейсхолдер-фото — замінити на реальні кадри) ---------- */
@@ -664,7 +657,7 @@
   .growth-rail-dot{
     position:absolute;left:50%;bottom:0;transform:translate(-50%,50%);
     width:10px;height:10px;border-radius:50%;background:var(--gold-light);
-    box-shadow:0 0 12px 4px rgba(217,184,119,.75);transition:bottom .08s linear;
+    box-shadow:0 0 12px 4px rgba(241,234,216,.75);transition:bottom .08s linear;
   }
   .growth-rail-label{
     position:absolute;left:14px;bottom:0;transform:translate(0,50%);
@@ -678,7 +671,7 @@
     display:flex;align-items:center;gap:10px;
     background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--forest-900);
     padding:15px 20px;border-radius:100px;font-weight:700;font-size:14px;
-    box-shadow:0 16px 34px -12px rgba(182,134,63,.6);
+    box-shadow:0 16px 34px -12px rgba(205,191,157,.6);
     opacity:0;transform:translateY(16px) scale(.96);pointer-events:none;
     transition:opacity .3s ease, transform .3s ease;
   }
@@ -730,106 +723,102 @@
 
 <main id="top">
 
-  <!-- HERO -->
+  <!-- HERO v3 — device mockup -->
   <section class="hero">
     <div class="hero-bg" id="heroBgLayer" aria-hidden="true">
-      <video class="hero-bg-media" id="heroBgVideo" autoplay muted loop playsinline poster="https://picsum.photos/id/1018/1800/1200">
+      <video class="hero-bg-media" id="heroBgVideo" autoplay muted loop playsinline preload="auto">
         <source src="WOOD%204K25%202.mp4" type="video/mp4">
       </video>
       <div class="hero-bg-overlay"></div>
     </div>
     <div class="container hero-grid">
-      <span class="hero-eyebrow-pill">
-        Карпати · Буковель · діючий готель
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-      </span>
-      <h1>Інвестиція, що вже приносить прибуток з 1-го місяця</h1>
+      <h1>Інвестиція, що вже <span class="accent">приносить прибуток</span><br><span style="white-space:nowrap">з&nbsp;1‑го&nbsp;місяця</span></h1>
       <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
       <div class="hero-actions">
-        <a href="#apply" class="btn btn-gold" id="magneticCta">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-        <span class="hero-microtext">БЕЗ ЗОБОВ'ЯЗАНЬ · ВІДПОВІМО ПРОТЯГОМ ДНЯ</span>
+        <span class="btn-halo-wrap"><a href="#apply" class="btn btn-gold">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></span>
       </div>
 
       <div class="wh-device-mock">
-        <div class="device-frame">
-          <span class="device-cam"></span>
-          <div class="screen">
+        <div class="device-scale" id="deviceScale">
+        <div class="device-float" id="deviceFloat">
+          <div class="device-crop">
+          <div class="device-frame" id="deviceFrame">
+            <div class="screen">
+              <div class="app">
+                <aside class="sidebar">
+                  <div class="logo-dot">W</div>
+                  <div class="icon active" title="Портфель">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+                  </div>
+                  <div class="icon" title="Виплати">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+                  </div>
+                  <div class="icon" title="Документи">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+                  </div>
+                  <div class="icon" style="margin-top:auto;" title="Профіль">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  </div>
+                </aside>
 
-            <div class="topbar">
-              <div>
-                <span class="title">Кабінет інвестора Wood Hotel</span>
+                <main class="content">
+                  <div class="content-header">
+                    <h2>Ваш апартамент</h2>
+                    <div class="header-actions">
+                      <button class="btn-dark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        Договір
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="room-row">
+                    <div class="room-image">
+                      <img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Апартамент+60+м%C2%B2" alt="Апартамент 60 м²" loading="lazy">
+                      <span class="tag">Апартамент №2 · 60 м²</span>
+                    </div>
+                    <div class="mock-price">
+                      <span class="label">Флагманські преміальні 3-кімнатні апартаменти</span>
+                      <div class="price"><span class="num">900$</span><span class="per">/міс</span></div>
+                      <div class="divider"></div>
+                      <div class="row">
+                        <span class="k">Цільовий дохід (після&nbsp;добудови)</span>
+                        <span class="v">до 12% річних</span>
+                      </div>
+                      <div class="row">
+                        <span class="k">Дохід нараховується</span>
+                        <span class="v">з&nbsp;1‑го&nbsp;місяця</span>
+                      </div>
+                      <div class="divider"></div>
+                      <div class="check-list">
+                        <div class="check-row">
+                          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                          Унікальний пакет гарантій Investor Care
+                        </div>
+                        <div class="check-row">
+                          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                          Ремонт після 5 років — за рахунок КК
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="trigger-badge">
+                    <span class="left">
+                      <span class="dot-pulse"></span>
+                      4 апартаменти в наявності
+                    </span>
+                    <span class="unit-dots"><i></i><i></i><i></i><i></i></span>
+                  </div>
+
+                  <div class="next-hint">Наступна виплата · 1 серпня</div>
+                </main>
               </div>
             </div>
-
-            <div class="app">
-              <aside class="sidebar">
-                <div class="logo-dot">W</div>
-                <div class="icon active" title="Портфель">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
-                </div>
-                <div class="icon" title="Виплати">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
-                </div>
-                <div class="icon" title="Документи">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
-                </div>
-                <div class="icon" style="margin-top:auto;" title="Профіль">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                </div>
-              </aside>
-
-              <main class="content">
-                <div class="content-header">
-                  <h2>Ваш апартамент</h2>
-                  <div class="header-actions">
-                    <button class="btn-dark">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                      Договір
-                    </button>
-                  </div>
-                </div>
-
-                <div class="room-row">
-                  <div class="room-image">
-                    <img src="https://i.imgur.com/m6zZJj2_d.webp?maxwidth=1600&fidelity=grand" alt="Рендер номера 60 м²">
-                    <span class="tag">Апартамент №2 · 60 м²</span>
-                  </div>
-                  <div class="mock-price">
-                    <span class="label">Флагманські преміальні 3-кімнатні апартаменти</span>
-                    <div class="price">900$<span>/міс</span></div>
-                    <div class="divider"></div>
-                    <div class="row">
-                      <span class="k">Цільовий дохід (після добудови)</span>
-                      <span class="v">до 12% річних</span>
-                    </div>
-                    <div class="row">
-                      <span class="k">Дохід нараховується</span>
-                      <span class="v">з 1-го місяця після оплати</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="check-list">
-                      <div class="check-row">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                        Унікальний пакет гарантій Investor Care
-                      </div>
-                      <div class="check-row">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                        Ремонт після 5 років — за рахунок КК
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="trigger-badge">
-                  <span class="left">
-                    <span class="dot-pulse"></span>
-                    4 апартаменти в наявності
-                  </span>
-                  <span class="dots">● ● ● ●</span>
-                </div>
-              </main>
-            </div>
           </div>
+          <div class="device-fade"></div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -847,21 +836,25 @@
       </div>
       <div class="proof-grid">
         <div class="proof-card proof-feature reveal">
+          <span class="proof-idx">01 / 04</span>
           <div class="proof-num count">70%</div>
           <div class="proof-title">Завантаженість 2025</div>
           <div class="proof-desc">Не прогноз, підтверджений факт минулого року</div>
         </div>
         <div class="proof-card reveal">
+          <span class="proof-idx">02 / 04</span>
           <div class="proof-num count">55 млн грн</div>
           <div class="proof-title">Понад — виплачено дивідендів</div>
           <div class="proof-desc">Вже виплачено дивідендів інвесторам</div>
         </div>
         <div class="proof-card reveal">
+          <span class="proof-idx">03 / 04</span>
           <div class="proof-num count">70+ осіб</div>
           <div class="proof-title">Команда і процеси</div>
           <div class="proof-desc">З відлагодженою операційною моделлю</div>
         </div>
         <div class="proof-card reveal">
+          <span class="proof-idx">04 / 04</span>
           <div class="proof-num count">365 днів/рік</div>
           <div class="proof-title">Об'єкт що працює без сезонів</div>
           <div class="proof-desc">SPA, ресторан, басейн, додаткові активності та SKI room працюють цілий рік — це і дає стабільний дохід, а не сезонні провали</div>
@@ -879,7 +872,7 @@
         <p class="h-sub center" style="color:#c9d2c8">Коротке відео Wood Hotel Resort &amp; Spa — територія, номери, інфраструктура</p>
       </div>
       <div class="video-frame reveal" id="videoFrame">
-        <img src="https://picsum.photos/id/1039/1400/788" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
+        <img src="https://placehold.co/1400x788/132018/f1ead8?text=Постер+відео" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
         <button class="play-btn" id="playBtn" aria-label="Відтворити відео"></button>
         <video id="realVideo" preload="none" playsinline controls style="display:none;width:100%;height:100%;object-fit:cover;position:relative;z-index:3">
           <source src="WOOD%204K25%202.mp4" type="video/mp4">
@@ -932,8 +925,9 @@
     </div>
   </section>
 
+
   <!-- BLOCK 4 — INVESTOR CARE -->
-  <section id="investor-care" class="care section-pad on-dark grain shimmer">
+  <section id="investor-care" class="care section-pad on-dark grain">
     <div class="bg-orb gold" style="width:400px;height:400px;top:-120px;left:-140px;opacity:.5"></div>
     <div class="container">
       <div class="center reveal" style="max-width:720px">
@@ -982,6 +976,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- BLOCK 6 — TWO SCENARIOS TIMELINE (тепер перед блоком 5) -->
   <section id="two-scenarios" class="section-pad" style="background:var(--cream)">
@@ -1085,7 +1080,7 @@
           </div>
           <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--muted)">
             <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:var(--gold-dark);display:inline-block"></span>база ~7%</span>
-            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:linear-gradient(90deg,#fff8e8,#ffe066);box-shadow:inset 0 0 0 1px var(--gold-dark);display:inline-block"></span>+2% від КК</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:linear-gradient(90deg,#fdfbf6,var(--gold-light));box-shadow:inset 0 0 0 1px var(--gold-dark);display:inline-block"></span>+2% від КК</span>
           </div>
           <div class="scn-total">
             <div class="scn-total-num count">108 000$</div>
@@ -1151,7 +1146,7 @@
 
   <!-- PHOTO BAND (атмосферна панорама — плейсхолдер) -->
   <section class="photo-band">
-    <img src="https://picsum.photos/id/1043/1920/700" alt="" loading="lazy">
+    <img src="https://placehold.co/1920x700/1c2f24/f1ead8?text=Панорама+комплексу" alt="" loading="lazy">
     <div class="photo-band-overlay">
       <div class="container">
         <p class="photo-band-text">Карпати · Буковель — локація, що працює на дохідність цілий рік</p>
@@ -1172,10 +1167,10 @@
           </div>
         </div>
         <div class="units reveal">
-          <div class="unit-row"><span class="name">Апартамент 60 м² · №1</span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span class="name">Апартамент 60 м² · №2</span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span class="name">Апартамент 60 м² · №3</span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span class="name">Апартамент 60 м² · №4</span><span class="status">Доступний</span></div>
+          <div class="unit-row"><span><span class="idx">01</span><span class="name">Апартамент 60 м² · №1</span></span><span class="status">Доступний</span></div>
+          <div class="unit-row"><span><span class="idx">02</span><span class="name">Апартамент 60 м² · №2</span></span><span class="status">Доступний</span></div>
+          <div class="unit-row"><span><span class="idx">03</span><span class="name">Апартамент 60 м² · №3</span></span><span class="status">Доступний</span></div>
+          <div class="unit-row"><span><span class="idx">04</span><span class="name">Апартамент 60 м² · №4</span></span><span class="status">Доступний</span></div>
         </div>
       </div>
     </div>
@@ -1189,12 +1184,12 @@
         <h2 class="h-title">Готель у фото — розділ під заміну на реальні кадри</h2>
       </div>
       <div class="gallery-grid reveal">
-        <div class="gallery-item"><img src="https://picsum.photos/id/1018/900/1400" alt="Фото комплексу" loading="lazy"><span class="gallery-cap">Фото комплексу</span></div>
-        <div class="gallery-item"><img src="https://picsum.photos/id/1067/600/750" alt="Номер" loading="lazy"><span class="gallery-cap">Номер</span></div>
-        <div class="gallery-item"><img src="https://picsum.photos/id/1074/600/750" alt="SPA" loading="lazy"><span class="gallery-cap">SPA</span></div>
-        <div class="gallery-item"><img src="https://picsum.photos/id/1080/600/750" alt="Ресторан" loading="lazy"><span class="gallery-cap">Ресторан</span></div>
-        <div class="gallery-item"><img src="https://picsum.photos/id/1043/600/750" alt="Територія" loading="lazy"><span class="gallery-cap">Територія</span></div>
-        <div class="gallery-item"><img src="https://picsum.photos/id/1039/600/750" alt="Басейн" loading="lazy"><span class="gallery-cap">Басейн</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/900x1400/132018/f1ead8?text=Фото+комплексу" alt="Фото комплексу" loading="lazy"><span class="gallery-cap">Фото комплексу</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Номер" alt="Номер" loading="lazy"><span class="gallery-cap">Номер</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/600x750/2a4335/f1ead8?text=SPA" alt="SPA" loading="lazy"><span class="gallery-cap">SPA</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Ресторан" alt="Ресторан" loading="lazy"><span class="gallery-cap">Ресторан</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/600x750/2a4335/f1ead8?text=Територія" alt="Територія" loading="lazy"><span class="gallery-cap">Територія</span></div>
+        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Басейн" alt="Басейн" loading="lazy"><span class="gallery-cap">Басейн</span></div>
       </div>
       <p style="margin-top:16px;font-size:12px;color:var(--muted-2)">Фото — тимчасові приклади для макету, замінимо на реальні кадри комплексу.</p>
     </div>
@@ -1242,7 +1237,7 @@
   </section>
 
   <!-- BLOCK 11 — FORM -->
-  <section id="apply" class="apply section-pad grain shimmer">
+  <section id="apply" class="apply section-pad grain">
     <div class="container">
       <div class="apply-grid">
         <div class="apply-info reveal">
@@ -1300,19 +1295,6 @@
 </footer>
 
 <script>
-  // Магнітна кнопка — тягнеться до курсора у невеликому радіусі
-  const magneticCta = document.getElementById('magneticCta');
-  if (magneticCta && window.matchMedia('(hover: hover)').matches) {
-    magneticCta.addEventListener('mousemove', (e) => {
-      const r = magneticCta.getBoundingClientRect();
-      const x = e.clientX - r.left - r.width / 2;
-      const y = e.clientY - r.top - r.height / 2;
-      magneticCta.style.transform = `translate(${x * 0.25}px, ${y * 0.4 - 2}px)`;
-    });
-    magneticCta.addEventListener('mouseleave', () => {
-      magneticCta.style.transform = '';
-    });
-  }
 
   // Growth rail — індикатор прогресу читання у вигляді "лінії зростання"
   const growthFill = document.getElementById('growthFill');
@@ -1408,7 +1390,7 @@
     });
   }
 
-  // Hero background parallax (фото)
+  // Hero background parallax (відео)
   const heroBgLayer = document.getElementById('heroBgLayer');
   if (heroBgLayer) {
     window.addEventListener('scroll', () => {
@@ -1418,6 +1400,41 @@
   }
   const heroBgVideo = document.getElementById('heroBgVideo');
   if (heroBgVideo) { heroBgVideo.play().catch(() => {}); }
+
+  // Scroll-linked зростання device-мокапа — коли гортаєш вниз, екран "наближається" і стає більшим
+  const deviceScale = document.getElementById('deviceScale');
+  if (deviceScale) {
+    const MIN_SCALE = 0.688;
+    const MAX_SCALE = 0.944;
+    let deviceTicking = false;
+    function updateDeviceScale() {
+      const rect = deviceScale.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.95;
+      const end = vh * 0.28;
+      let progress = (start - rect.top) / (start - end);
+      progress = Math.min(1, Math.max(0, progress));
+      const eased = progress * progress * (3 - 2 * progress);
+      const scale = MIN_SCALE + eased * (MAX_SCALE - MIN_SCALE);
+      deviceScale.style.transform = `scale(${scale.toFixed(3)})`;
+      deviceScale.style.opacity = (0.85 + eased * 0.15).toFixed(3);
+      const naturalHeight = rect.height / (parseFloat(deviceScale.dataset.prevScale || '1') || 1);
+      deviceScale.dataset.prevScale = scale;
+      const gap = naturalHeight * (1 - scale);
+      deviceScale.style.marginBottom = (-gap).toFixed(1) + 'px';
+      deviceTicking = false;
+    }
+    function onDeviceScroll() {
+      if (!deviceTicking) {
+        requestAnimationFrame(updateDeviceScale);
+        deviceTicking = true;
+      }
+    }
+    window.addEventListener('scroll', onDeviceScroll, { passive: true });
+    window.addEventListener('resize', onDeviceScroll, { passive: true });
+    updateDeviceScale();
+  }
+
 
   // Count-up animation for key numbers
   function animateCount(el){
