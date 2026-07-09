@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,300;0,12..96,400;0,12..96,500;0,12..96,600;0,12..96,700;0,12..96,800;1,12..96,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
   :root{
     --forest-900:#132018;
@@ -315,34 +317,66 @@
   }
 
   /* ---------- PROOF (block 2) ---------- */
-  .proof{background:var(--cream)}
-  .proof-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(150px,auto));
-    grid-template-areas:"a a b b" "a a c d";gap:20px;margin-top:44px;
+  /* ---------- BLOCK 2 — CINE RIBBON (заміна .proof) ---------- */
+  .cine{
+    position:relative;height:100vh;overflow:hidden;
+    background:
+      linear-gradient(180deg, rgba(11,15,13,.35) 0%, rgba(11,15,13,.5) 55%, rgba(11,15,13,.8) 100%),
+      url('cine-bg.jpg') center 38%/cover no-repeat;
+    color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
-  .proof-card{
-    position:relative;background:var(--white);border-radius:var(--radius);padding:30px 26px;
-    border:1px solid var(--line);transition:border-color .3s ease, background .3s ease;
-    display:flex;flex-direction:column;justify-content:center;
+  .cine-head{position:relative;z-index:3;text-align:center;max-width:640px;padding:0 24px;margin-bottom:56px}
+  .cine .eyebrow{
+    display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--gold-light);
   }
-  .proof-card:hover{border-color:var(--gold-dark);background:var(--cream)}
-  .proof-idx{
-    position:absolute;top:22px;right:24px;font-family:'JetBrains Mono',monospace;font-size:10.5px;
-    letter-spacing:.08em;color:var(--muted-2);
+  .cine .eyebrow::before,.cine .eyebrow::after{content:"";width:26px;height:1px;background:var(--gold-light)}
+  .cine .h-title{
+    font-weight:700;font-size:clamp(26px,3.2vw,40px);line-height:1.22;letter-spacing:-.01em;color:#fff;
+    text-shadow:0 2px 16px rgba(0,0,0,.4);max-width:none;
   }
-  .proof-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:32px;color:var(--gold-dark);font-weight:800;letter-spacing:-.01em}
-  .proof-title{font-weight:700;margin-top:10px;font-size:15px;color:var(--forest-800)}
-  .proof-desc{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.5}
-  .proof-card:nth-of-type(1){grid-area:a}
-  .proof-card:nth-of-type(2){grid-area:b}
-  .proof-card:nth-of-type(3){grid-area:c}
-  .proof-card:nth-of-type(4){grid-area:d}
-  .proof-feature{background:var(--forest-900) !important;border:1px solid rgba(255,255,255,.14) !important}
-  .proof-feature:hover{background:var(--forest-800) !important;border-color:var(--gold) !important}
-  .proof-feature .proof-idx{color:#8a9a8d}
-  .proof-feature .proof-num{font-size:clamp(48px,6vw,76px);color:var(--gold-light);font-weight:800}
-  .proof-feature .proof-title{color:#fff;font-size:17px}
-  .proof-feature .proof-desc{color:#c3ccc0}
+  .cine .title-break{display:none}
+  @media(min-width:721px){.cine .title-break{display:inline}}
+
+  .cine-stage{position:relative;z-index:2;width:100%;max-width:1400px;height:330px;overflow:hidden}
+  .cine-track{position:relative;display:flex;align-items:center;gap:32px;height:100%;will-change:transform}
+  .cine-card{
+    position:relative;flex:none;width:420px;height:240px;
+    border-radius:18px;
+    background:linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), #101a14;
+    border:1px solid rgba(241,234,216,.16);
+    box-shadow:0 30px 60px -24px rgba(0,0,0,.6);
+    padding:0 28px 24px;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    will-change:transform, opacity;
+  }
+  .cine-num{
+    position:absolute;top:-22px;left:22px;z-index:2;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:147px;line-height:.86;letter-spacing:-.03em;
+    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 4px 24px rgba(0,0,0,.4);
+  }
+  .cine-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;margin-bottom:8px;letter-spacing:-.005em}
+  .cine-desc{font-size:13px;line-height:1.5;color:rgba(230,232,226,.72);font-weight:400}
+
+  .cine-hint{
+    position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    color:rgba(241,234,216,.45);display:flex;align-items:center;gap:8px;
+  }
+  .cine-hint svg{width:12px;height:12px;animation:hintBounce 1.8s ease-in-out infinite}
+  @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  @media(max-width:720px){
+    .cine-stage{height:260px}
+    .cine-card{width:280px;height:200px;padding:0 20px 18px}
+    .cine-num{font-size:96px;top:-16px;left:14px}
+    .cine-track{gap:20px}
+  }
   @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b b" "c d"}}
   @media(max-width:560px){.proof-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d"}}
 
@@ -826,40 +860,39 @@
 
 
   <!-- BLOCK 2 — PROOF -->
-  <section class="proof section-pad">
-    <div class="bg-orb gold" style="width:420px;height:420px;top:-140px;right:-120px"></div>
-    <div class="bg-orb green" style="width:320px;height:320px;bottom:-160px;left:-100px"></div>
-    <div class="container">
-      <div class="reveal">
-        <div class="eyebrow">Не рендер. Не план. Готель, що працює сьогодні</div>
-        <h2 class="h-title">Ви інвестуєте не в обіцянку. Ви інвестуєте в підтверджений бізнес</h2>
-      </div>
-      <div class="proof-grid">
-        <div class="proof-card proof-feature reveal">
-          <span class="proof-idx">01 / 04</span>
-          <div class="proof-num count">70%</div>
-          <div class="proof-title">Завантаженість 2025</div>
-          <div class="proof-desc">Не прогноз, підтверджений факт минулого року</div>
+  <section class="cine" id="cineSection">
+    <div class="cine-head">
+      <div class="eyebrow">Не рендер. Не план</div>
+      <h2 class="h-title">Ви інвестуєте не в обіцянку.<br class="title-break"> Ви інвестуєте в підтверджений бізнес</h2>
+    </div>
+
+    <div class="cine-stage" id="stage">
+      <div class="cine-track" id="track">
+        <div class="cine-card">
+          <div class="cine-num">70%</div>
+          <div class="cine-title">Завантаженість 2025</div>
+          <div class="cine-desc">Не прогноз, підтверджений факт минулого року</div>
         </div>
-        <div class="proof-card reveal">
-          <span class="proof-idx">02 / 04</span>
-          <div class="proof-num count">55 млн грн</div>
-          <div class="proof-title">Понад — виплачено дивідендів</div>
-          <div class="proof-desc">Вже виплачено дивідендів інвесторам</div>
+        <div class="cine-card">
+          <div class="cine-num">55М₴</div>
+          <div class="cine-title">Виплачено дивідендів</div>
+          <div class="cine-desc">Вже виплачено дивідендів інвесторам</div>
         </div>
-        <div class="proof-card reveal">
-          <span class="proof-idx">03 / 04</span>
-          <div class="proof-num count">70+ осіб</div>
-          <div class="proof-title">Команда і процеси</div>
-          <div class="proof-desc">З відлагодженою операційною моделлю</div>
+        <div class="cine-card">
+          <div class="cine-num">70+</div>
+          <div class="cine-title">Команда і процеси</div>
+          <div class="cine-desc">З відлагодженою операційною моделлю</div>
         </div>
-        <div class="proof-card reveal">
-          <span class="proof-idx">04 / 04</span>
-          <div class="proof-num count">365 днів/рік</div>
-          <div class="proof-title">Об'єкт що працює без сезонів</div>
-          <div class="proof-desc">SPA, ресторан, басейн, додаткові активності та SKI room працюють цілий рік — це і дає стабільний дохід, а не сезонні провали</div>
+        <div class="cine-card">
+          <div class="cine-num">365</div>
+          <div class="cine-title">Днів на рік без сезонів</div>
+          <div class="cine-desc">SPA, ресторан, басейн і SKI room працюють цілий рік — стабільний дохід без сезонних провалів</div>
         </div>
       </div>
+    </div>
+
+    <div class="cine-hint">
+      Скрольте <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
   </section>
 
@@ -1461,6 +1494,57 @@
     entries.forEach(e => { if(e.isIntersecting){ animateCount(e.target); countIo.unobserve(e.target); } });
   }, { threshold: 0.5 });
   document.querySelectorAll('.count').forEach(el => countIo.observe(el));
+
+  // ---------- БЛОК 2 — CINE RIBBON (горизонтальний скрол-пін) ----------
+  if (window.gsap && window.ScrollTrigger && document.getElementById('cineSection')) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const stage = document.getElementById('stage');
+    const track = document.getElementById('track');
+    const cineCards = Array.from(document.querySelectorAll('.cine-card'));
+
+    let cardWidth, gap, stageWidth, maxTranslate;
+
+    function measureCine() {
+      cardWidth = cineCards[0].getBoundingClientRect().width;
+      gap = parseFloat(getComputedStyle(track).gap) || 0;
+      stageWidth = stage.getBoundingClientRect().width;
+      const sidePad = (stageWidth - cardWidth) / 2;
+      track.style.paddingLeft = sidePad + 'px';
+      track.style.paddingRight = sidePad + 'px';
+      maxTranslate = (cineCards.length - 1) * (cardWidth + gap);
+      updateRibbon(0);
+    }
+
+    function updateRibbon(progress) {
+      const translateX = -progress * maxTranslate;
+      gsap.set(track, { x: translateX });
+
+      const stageCenter = stageWidth / 2;
+      const sidePad = (stageWidth - cardWidth) / 2;
+
+      cineCards.forEach((card, i) => {
+        const cardCenter = sidePad + i * (cardWidth + gap) + cardWidth / 2 + translateX;
+        const dist = Math.abs(cardCenter - stageCenter);
+        const t = Math.min(1, dist / (cardWidth + gap));
+        const scale = 1 - 0.10 * t;
+        const opacity = 1 - 0.40 * t;
+        gsap.set(card, { scale, opacity });
+      });
+    }
+
+    measureCine();
+    window.addEventListener('resize', measureCine);
+
+    ScrollTrigger.create({
+      trigger: '#cineSection',
+      start: 'top top',
+      end: '+=250%',
+      pin: true,
+      scrub: 1,
+      onUpdate: (self) => updateRibbon(self.progress)
+    });
+  }
 </script>
 
 </body>
