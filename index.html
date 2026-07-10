@@ -316,8 +316,8 @@
     border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
     border:1px solid rgba(255,255,255,.12);
   }
-  .video-frame img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.6)}
-  .video-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(15,25,19,.15), rgba(15,25,19,.55))}
+  .video-frame img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) brightness(.78)}
+  .video-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(15,25,19,.1), rgba(15,25,19,.4))}
   .play-btn{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     width:78px;height:78px;border-radius:50%;z-index:2;border:none;
@@ -924,17 +924,14 @@
   <section class="video-block section-pad grain">
     <div class="container">
       <div class="center reveal" style="max-width:700px">
-        <h2 class="h-title center" style="color:#fff">Погляньте на комплекс наживо</h2>
-        <p class="h-sub center" style="color:#c9d2c8">Коротке відео Wood Hotel Resort &amp; Spa — територія, номери, інфраструктура</p>
+        <h2 class="h-title center" style="color:#fff">Давайте познайомимось із вашою майбутньою інвестицією</h2>
+        <p class="h-sub center" style="color:#c9d2c8">Короткий огляд Wood Hotel Resort &amp; Spa — територія, номери, інфраструктура та те, що вже приносить дивіденди інвесторам</p>
       </div>
       <div class="video-frame reveal" id="videoFrame">
-        <img src="wood-bg-poster.jpg" alt="Відео комплексу Wood Hotel" loading="lazy" id="videoPoster">
-        <button class="play-btn" id="playBtn" aria-label="Відтворити відео"></button>
-        <video id="realVideo" preload="none" playsinline controls poster="wood-bg-poster.jpg" style="display:none;width:100%;height:100%;object-fit:cover;position:relative;z-index:3">
-          <source src="wood-bg.mp4" type="video/mp4">
-        </video>
+        <span class="video-badge">YouTube · огляд комплексу</span>
+        <img src="https://img.youtube.com/vi/BGlrXAA52rA/hqdefault.jpg" alt="Відео Wood Hotel Resort &amp; Spa" loading="lazy" id="videoPoster">
+        <button class="play-btn" id="playBtn" aria-label="Відтворити відео" data-yt-id="BGlrXAA52rA"></button>
       </div>
-      <div class="video-caption">Відео завантажене з вашого файлу — при переносі сайту на хостинг замініть посилання у джерелі &lt;source&gt; на постійне (файл на сервері, YouTube або Vimeo).</div>
     </div>
   </section>
 
@@ -1466,16 +1463,23 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Відео комплексу — по кліку ховаємо постер і запускаємо реальне відео
+  // Відео комплексу — lite-embed: YouTube iframe вставляється в DOM тільки по кліку
+  // (плеєр і трекери YouTube не вантажаться, поки гість сам не натисне play)
   const playBtn = document.getElementById('playBtn');
   const videoPoster = document.getElementById('videoPoster');
-  const realVideo = document.getElementById('realVideo');
-  if (playBtn && realVideo) {
+  const videoFrame = document.getElementById('videoFrame');
+  if (playBtn && videoFrame) {
     playBtn.addEventListener('click', () => {
+      const ytId = playBtn.dataset.ytId;
       playBtn.style.display = 'none';
       videoPoster.style.display = 'none';
-      realVideo.style.display = 'block';
-      realVideo.play().catch(() => {});
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1';
+      iframe.title = 'Wood Hotel Resort & Spa — відео огляд';
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'position:relative;z-index:3;width:100%;height:100%;border:0;display:block';
+      videoFrame.appendChild(iframe);
     });
   }
 
