@@ -381,6 +381,10 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;
     text-shadow:0 4px 24px rgba(0,0,0,.4);
   }
+  /* буква "М" (55М₴) на 25% менша за кегль цифр — інакше візуально переважує сусідні цифри */
+  .cine-num .unit-letter{
+    font-size:.75em;background:inherit;-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
   .cine-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;margin-bottom:8px;letter-spacing:-.005em}
   .cine-desc{font-size:13px;line-height:1.5;color:rgba(230,232,226,.72);font-weight:400}
 
@@ -898,7 +902,7 @@
           <div class="cine-desc">Не прогноз, підтверджений факт минулого року</div>
         </div>
         <div class="cine-card">
-          <div class="cine-num">55М₴</div>
+          <div class="cine-num">55<span class="unit-letter">М</span>₴</div>
           <div class="cine-title">Виплачено дивідендів</div>
           <div class="cine-desc">Вже виплачено дивідендів інвесторам</div>
         </div>
@@ -916,7 +920,7 @@
     </div>
 
     <div class="cine-hint">
-      Скрольте <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
     </div>
   </section>
 
@@ -1588,7 +1592,7 @@
         const dist = Math.abs(cardCenter - stageCenter);
         const t = Math.min(1, dist / (cardWidth + gap));
         const scale = 1 - 0.10 * t;
-        const opacity = 1 - 0.40 * t;
+        const opacity = 1 - 0.70 * t;
         gsap.set(card, { scale, opacity });
       });
     }
