@@ -310,7 +310,13 @@
 
 
   /* ---------- VIDEO BLOCK ---------- */
-  .video-block{background:var(--forest-900)}
+  /* єдиний фон для екранів 3 і 4 — той самий рецепт градієнта на обох,
+     тому шов між секціями не читається як стик двох різних фонів */
+  .deep-bg{
+    background:
+      radial-gradient(ellipse 900px 600px at 50% 42%, rgba(28,47,36,.9), transparent 68%),
+      radial-gradient(ellipse 1400px 900px at 50% 50%, #14201a 0%, #0b120e 55%, #060907 100%);
+  }
   .video-frame{
     position:relative;max-width:920px;margin:44px auto 0;aspect-ratio:16/9;
     border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
@@ -418,44 +424,73 @@
   .adv-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;color:var(--forest-800);letter-spacing:-.02em}
   .adv-num{font-family:'Bricolage Grotesque',sans-serif;color:var(--gold);font-size:20px;font-weight:700;margin-bottom:14px}
 
-  /* ---------- ADVANTAGES v2: hero-banner + list ---------- */
-  .adv-hero{
-    display:flex;align-items:center;gap:30px;margin-top:48px;position:relative;overflow:hidden;
-    background:var(--forest-900);color:#fff;border-radius:var(--radius);padding:38px 42px;
+  /* ---------- BLOCK 4 — FORMAT 60 M² v3: blueprint схема будинку ---------- */
+  #format-60{
+    --bp-muted:#a9b5a5;
+    --bp-line-soft:rgba(241,234,216,.85);
   }
-  .adv-hero-icon{
-    position:relative;flex:none;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    background:rgba(241,234,216,.08);border:1.5px solid var(--gold-light);
-    color:var(--gold-light);
+  #format-60 .h-title{color:#fff}
+  #format-60 .h-sub{color:var(--bp-muted)}
+
+  .blueprint{position:relative;width:100%;max-width:1100px;margin:48px auto 0;aspect-ratio:1200/720}
+  .blueprint svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+
+  /* невидима зона наведення точно по силуету будинку (не по всьому широкому блоку з текстом) */
+  .house-hover-zone{position:absolute;left:31%;top:9%;width:38%;height:67%;z-index:5;cursor:default}
+  .house-hover-zone:hover ~ svg #houseContent{transform:scale(1.05);filter:brightness(1.18)}
+  .house-hover-zone:hover ~ .bp-node .stat{filter:brightness(1.4)}
+  #houseContent{transform-box:fill-box;transform-origin:center;transition:transform .35s ease, filter .35s ease}
+
+  /* окрема іконка-вузол і leader-лінія підсвічуються разом при ховері на відповідний текстовий блок */
+  .house-node{transform-box:fill-box;transform-origin:center;transition:transform .3s ease, filter .3s ease}
+  .house-node.is-active{transform:scale(1.08);filter:brightness(1.3)}
+  .lead-line{transition:opacity .3s ease, stroke-width .3s ease}
+  .lead-line.is-active{opacity:1;stroke-width:2.2px}
+
+  .bp-node{position:absolute;width:250px;cursor:default;font-size:13.5px;line-height:1.55;color:var(--bp-muted);transition:transform .3s ease, filter .3s ease}
+  .bp-node:hover{filter:brightness(1.12)}
+  .bp-node.tl:hover{transform:translate(0,-50%) scale(1.035);transform-origin:right center}
+  .bp-node.tr:hover{transform:translate(-100%,-50%) scale(1.035);transform-origin:left center}
+  .bp-node.bl:hover{transform:translate(0,-50%) scale(1.035);transform-origin:right center}
+  .bp-node.br:hover{transform:translate(-100%,-50%) scale(1.035);transform-origin:left center}
+  .bp-node h4{font-size:15.5px;color:#fff;margin-bottom:6px}
+  .bp-node .stat{
+    display:inline-block;margin-bottom:8px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;
+    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    transition:filter .35s ease;
   }
-  .adv-hero-icon::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(241,234,216,.35)}
-  .adv-hero-icon svg{width:32px;height:32px;position:relative}
-  .adv-hero-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4vw,46px);color:var(--gold-light);letter-spacing:-.02em;line-height:1}
-  .adv-hero h4{color:#fff;font-size:19px;margin:8px 0 8px;line-height:1.3}
-  .adv-hero p{color:#c9d2c8;font-size:14.5px;line-height:1.6;max-width:540px}
-  .adv-list{margin-top:6px;border-top:1px solid var(--line)}
-  .adv-list-item{display:flex;align-items:flex-start;gap:20px;padding:26px 6px;border-bottom:1px solid var(--line);transition:background .25s ease}
-  .adv-list-item:hover{background:var(--cream)}
-  .adv-list-item .adv-icon{width:46px;height:46px}
-  .adv-list-item .adv-icon svg{width:20px;height:20px}
-  .adv-list-text{flex:1;min-width:0}
-  .adv-list-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .adv-list-head h4{font-size:16.5px;color:var(--forest-800);margin:0;line-height:1.3}
-  .adv-list-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:21px;color:var(--gold-dark);flex:none;white-space:nowrap}
-  .adv-list-item p{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.6}
-  @media(max-width:640px){
-    .adv-hero{flex-direction:column;align-items:flex-start;padding:30px 26px}
-    .adv-list-item{gap:14px}
+  .bp-node:hover .stat{filter:brightness(1.4)}
+  .bp-node.tl{left:0%;top:17%;transform:translate(0,-50%);text-align:right}
+  .bp-node.tr{left:100%;top:17%;transform:translate(-100%,-50%);text-align:left}
+  .bp-node.bl{left:0%;top:83%;transform:translate(0,-50%);text-align:right}
+  .bp-node.br{left:100%;top:83%;transform:translate(-100%,-50%);text-align:left}
+
+  @media(max-width:900px){
+    .blueprint{display:none}
+    .bp-mobile{display:flex !important}
   }
-  .adv-icon{
-    position:relative;width:52px;height:52px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:var(--gold-dark);
-    flex:none;background:var(--cream);border:1.5px solid var(--gold);
-    transition:border-color .3s ease, background .3s ease;
+  .bp-mobile{
+    display:none;flex-direction:column;gap:0;max-width:560px;margin:48px auto 0;
+    border-top:1px solid rgba(241,234,216,.16);
   }
-  .adv-icon::before{content:"";position:absolute;inset:4px;border-radius:50%;border:1px solid var(--line)}
-  .adv-icon svg{width:22px;height:22px;position:relative;z-index:1}
-  .adv-list-item:hover .adv-icon{background:#fff;border-color:var(--gold-dark)}
+  .bp-mobile-item{display:flex;align-items:flex-start;gap:20px;padding:26px 4px;border-bottom:1px solid rgba(241,234,216,.16)}
+  .bp-mobile-icon{position:relative;flex:none;width:44px;height:44px;color:var(--gold-light);display:flex;align-items:center;justify-content:center}
+  .bp-mobile-icon::before{
+    content:"";position:absolute;inset:-14px;z-index:-1;border-radius:50%;
+    background:radial-gradient(circle, rgba(241,234,216,.35), transparent 70%);
+    filter:blur(6px);
+  }
+  .bp-mobile-icon svg{width:26px;height:26px;position:relative}
+  .bp-mobile-text .stat{
+    display:block;margin-bottom:8px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;
+    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .bp-mobile-text h4{font-size:15.5px;color:#fff;margin-bottom:6px}
+  .bp-mobile-text p{font-size:13.5px;color:var(--bp-muted);line-height:1.55}
   .adv-card h4{font-size:18px;color:var(--forest-800);margin-bottom:10px;line-height:1.3}
   .adv-card p{font-size:14.5px;color:var(--muted);line-height:1.6}
   @media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
@@ -925,7 +960,7 @@
   </section>
 
   <!-- VIDEO BLOCK — сюди вставити реальне відео комплексу (замінити poster і додати <video>/<iframe>) -->
-  <section class="video-block section-pad grain">
+  <section class="video-block section-pad grain deep-bg">
     <div class="container">
       <div class="center reveal" style="max-width:700px">
         <h2 class="h-title center" style="color:#fff">Давайте познайомимось із вашою майбутньою інвестицією</h2>
@@ -940,42 +975,140 @@
   </section>
 
   <!-- BLOCK 3 — ADVANTAGES 60 M2 -->
-  <section id="format-60" class="section-pad">
-    <div class="bg-orb gold-dark" style="width:380px;height:380px;top:60px;left:-160px"></div>
+  <section id="format-60" class="section-pad grain deep-bg">
     <div class="container">
-      <div class="center reveal" style="max-width:700px">
-        <h2 class="h-title center">Власники 60 м² отримуватимуть більше, тому що:</h2>
+      <div class="center reveal" style="max-width:680px">
+        <h2 class="h-title center" style="color:#fff">Власники 60 м² отримуватимуть більше, тому що:</h2>
         <p class="h-sub center">Флагманський формат — це не про метраж. Це про умови, які доступні тільки цьому формату і більше нікому на ринку.</p>
       </div>
-      <div class="adv-hero reveal">
-        <div class="adv-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-        <div>
-          <div class="adv-hero-stat">900$/міс</div>
-          <h4>Гарантований дохід з першого місяця від керуючої компанії</h4>
-          <p>Інвестор 60 м² отримуватиме фіксований мінімум до 900$/міс незалежно від сезону і заповненості.</p>
+
+      <!-- ДЕСКТОП: схема будинку -->
+      <div class="blueprint reveal">
+        <div class="house-hover-zone"></div>
+        <svg viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="iconGlow" x="-150%" y="-150%" width="400%" height="400%">
+              <feGaussianBlur stdDeviation="14"/>
+            </filter>
+            <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--gold-dark)"/>
+              <stop offset="40%" stop-color="var(--gold-light)"/>
+              <stop offset="55%" stop-color="var(--gold-light)"/>
+              <stop offset="72%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="var(--gold-dark)"/>
+            </linearGradient>
+          </defs>
+
+          <!-- м'яке світіння позаду кожного значка -->
+          <circle cx="515" cy="331" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
+          <circle cx="685" cy="331" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
+          <circle cx="515" cy="471" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
+          <circle cx="685" cy="471" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
+
+          <!-- силует будинку -->
+          <g id="houseContent">
+          <path d="M600 78 L815 262 L770 262 L770 540 L430 540 L430 262 L385 262 Z"
+                fill="none" stroke="var(--bp-line-soft)" stroke-width="6" stroke-linejoin="miter" stroke-linecap="square" opacity=".6"/>
+
+          <line x1="600" y1="262" x2="600" y2="540" stroke="var(--bp-line-soft)" stroke-width="2" opacity=".15"/>
+          <line x1="430" y1="401" x2="770" y2="401" stroke="var(--bp-line-soft)" stroke-width="2" opacity=".15"/>
+
+          <g id="node-tl" class="house-node">
+            <rect x="481" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
+            <g transform="translate(495,311) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </g>
+          </g>
+
+          <g id="node-tr" class="house-node">
+            <rect x="651" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
+            <g transform="translate(665,311) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"/>
+              <path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"/>
+            </g>
+          </g>
+
+          <g id="node-bl" class="house-node">
+            <rect x="481" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
+            <g transform="translate(495,451) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </g>
+          </g>
+
+          <g id="node-br" class="house-node">
+            <rect x="651" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
+            <g transform="translate(665,451) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="14" height="6" rx="1.5"/>
+              <line x1="8" y1="10" x2="8" y2="13"/>
+              <path d="M8 13h5a2 2 0 0 1 2 2v5"/>
+            </g>
+          </g>
+
+          <!-- leader-лінії — тепер ортогональні (blueprint-стиль), кожна підсвічується окремо при ховері на свій текстовий блок -->
+          <path id="line-tl" class="lead-line" d="M420 331 L200 331 L200 281" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
+          <path id="line-tr" class="lead-line" d="M780 331 L1000 331 L1000 281" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
+          <path id="line-bl" class="lead-line" d="M420 471 L200 471 L200 521" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
+          <path id="line-br" class="lead-line" d="M780 471 L1000 471 L1000 521" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
+          </g><!-- /houseContent -->
+        </svg>
+
+        <div class="bp-node tl">
+          <span class="stat">900$/міс</span>
+          <h4>Гарантований дохід з першого місяця</h4>
+          <p>Фіксований мінімум незалежно від сезону і заповненості — виплачує керуюча компанія.</p>
+        </div>
+        <div class="bp-node tr">
+          <span class="stat">+1–2%</span>
+          <h4>Дохідність вища за інші номери</h4>
+          <p>Унікальні умови саме для цього формату, гарантовані додатково керуючою компанією.</p>
+        </div>
+        <div class="bp-node bl">
+          <span class="stat">3 міс.</span>
+          <h4>Гарантований вихід з активу</h4>
+          <p>КК зобов'язана продати або викупити ваш актив протягом 3 місяців на першу вимогу.</p>
+        </div>
+        <div class="bp-node br">
+          <span class="stat">0$</span>
+          <h4>Ремонт за рахунок компанії</h4>
+          <p>Після 5 років — преміальний ремонт повністю за рахунок КК і готовий номер. Ваші витрати нульові.</p>
         </div>
       </div>
 
-      <div class="adv-list">
-        <div class="adv-list-item reveal">
-          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"></path><path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"></path></svg></div>
-          <div class="adv-list-text">
-            <div class="adv-list-head"><h4>Дохідність на 1–2% вища за інші номери</h4><span class="adv-list-stat">+1–2%</span></div>
-            <p>Для даної інвестиції діють унікальні умови, гарантовані додатково керуючою компанією.</p>
+      <!-- МОБІЛЬНА ВЕРСІЯ: проста вертикальна стрічка -->
+      <div class="bp-mobile reveal">
+        <div class="bp-mobile-item">
+          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div class="bp-mobile-text">
+            <span class="stat">900$/міс</span>
+            <h4>Гарантований дохід з першого місяця</h4>
+            <p>Фіксований мінімум незалежно від сезону і заповненості.</p>
           </div>
         </div>
-        <div class="adv-list-item reveal">
-          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></div>
-          <div class="adv-list-text">
-            <div class="adv-list-head"><h4>Гарантований вихід протягом 3 місяців</h4><span class="adv-list-stat">3 міс.</span></div>
-            <p>За необхідності вийти з активу, керуюча компанія Wood Hotel зобов'язана продати (або викупити) ваш актив протягом 3 місяців на першу вимогу. Жоден інший комплекс або формат інвестування в інші номери в компплексі цього не гарантує.</p>
+        <div class="bp-mobile-item">
+          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"/><path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"/></svg></div>
+          <div class="bp-mobile-text">
+            <span class="stat">+1–2%</span>
+            <h4>Дохідність вища за інші номери</h4>
+            <p>Унікальні умови саме для цього формату.</p>
           </div>
         </div>
-        <div class="adv-list-item reveal">
-          <div class="adv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="6" rx="1.5"></rect><line x1="8" y1="10" x2="8" y2="13"></line><path d="M8 13h5a2 2 0 0 1 2 2v5"></path></svg></div>
-          <div class="adv-list-text">
-            <div class="adv-list-head"><h4>Оновлений ремонт за рахунок компанії після 5 років</h4><span class="adv-list-stat">0$</span></div>
-            <p>На перші 5 років, керуюча компанія бере апартаменти під власне управління і цільові потреби. Після 5 років ви отримуєте преміальний ремонт апартаментів повністю за рахунок керуючої компанії і готовий номер для проживання. Ваші додаткові витрати — нульові.</p>
+        <div class="bp-mobile-item">
+          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+          <div class="bp-mobile-text">
+            <span class="stat">3 міс.</span>
+            <h4>Гарантований вихід з активу</h4>
+            <p>КК зобов'язана продати або викупити актив протягом 3 місяців.</p>
+          </div>
+        </div>
+        <div class="bp-mobile-item">
+          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="6" rx="1.5"/><line x1="8" y1="10" x2="8" y2="13"/><path d="M8 13h5a2 2 0 0 1 2 2v5"/></svg></div>
+          <div class="bp-mobile-text">
+            <span class="stat">0$</span>
+            <h4>Ремонт за рахунок компанії</h4>
+            <p>Після 5 років — преміальний ремонт повністю за рахунок КК.</p>
           </div>
         </div>
       </div>
@@ -1609,6 +1742,20 @@
       onUpdate: (self) => updateRibbon(self.progress)
     });
   }
+
+  // ---------- БЛОК 4 — BLUEPRINT: ховер на текстовий блок підсвічує його іконку і leader-лінію ----------
+  (function () {
+    const map = { tl: 'node-tl', tr: 'node-tr', bl: 'node-bl', br: 'node-br' };
+    const lineMap = { tl: 'line-tl', tr: 'line-tr', bl: 'line-bl', br: 'line-br' };
+    document.querySelectorAll('.bp-node').forEach(node => {
+      const key = ['tl', 'tr', 'bl', 'br'].find(k => node.classList.contains(k));
+      if (!key) return;
+      const iconEl = document.getElementById(map[key]);
+      const lineEl = document.getElementById(lineMap[key]);
+      node.addEventListener('mouseenter', () => { if (iconEl) iconEl.classList.add('is-active'); if (lineEl) lineEl.classList.add('is-active'); });
+      node.addEventListener('mouseleave', () => { if (iconEl) iconEl.classList.remove('is-active'); if (lineEl) lineEl.classList.remove('is-active'); });
+    });
+  })();
 </script>
 
 </body>
