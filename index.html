@@ -402,11 +402,23 @@
   .cine-hint svg{width:12px;height:12px;animation:hintBounce 1.8s ease-in-out infinite}
   @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
-  @media(max-width:720px){
-    .cine-stage{height:260px}
-    .cine-card{width:280px;height:200px;padding:0 20px 18px}
-    .cine-num{font-size:96px;top:-16px;left:14px}
-    .cine-track{gap:20px}
+  /* МОБІЛЬНА ВЕРСІЯ — без GSAP-піну й горизонтального scroll-hijack (на тачскріні це відчувається
+     ривками й конфліктує з нативним скролом). Замість цього — проста вертикальна стрічка карток,
+     той самий принцип, що й у блоці 4 (.bp-mobile). */
+  .cine-mobile{display:none;flex-direction:column;gap:14px;width:100%;max-width:480px;padding:0 24px;position:relative;z-index:2}
+  .cine-mobile-card{
+    position:relative;border-radius:16px;padding:20px 22px 18px;
+    background:linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), #101a14;
+    border:1px solid rgba(241,234,216,.16);
+    box-shadow:0 16px 32px -20px rgba(0,0,0,.6);
+  }
+  .cine-mobile-card .cine-num{position:static;font-size:52px;text-shadow:none}
+  .cine-mobile-card .cine-title{margin-top:6px}
+
+  @media(max-width:900px){
+    .cine{height:auto;padding:64px 0}
+    .cine-stage,.cine-hint{display:none}
+    .cine-mobile{display:flex}
   }
   @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b b" "c d"}}
   @media(max-width:560px){.proof-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d"}}
@@ -441,9 +453,16 @@
   .house-hover-zone:hover ~ .bp-node .stat{filter:brightness(1.4)}
   #houseContent{transform-box:fill-box;transform-origin:center;transition:transform .35s ease, filter .35s ease}
 
-  /* окрема іконка-вузол і leader-лінія підсвічуються разом при ховері на відповідний текстовий блок */
-  .house-node{transform-box:fill-box;transform-origin:center;transition:transform .3s ease, filter .3s ease}
+  /* окрема іконка-вузол і leader-лінія підсвічуються разом при ховері на відповідний текстовий блок.
+     transform-origin заданий точними SVG-координатами центру рамки (а не fill-box:center) —
+     fill-box на вкладених <g> з власним transform="translate() scale()" рахується по-різному
+     в Safari/Chrome і може зсувати або спотворювати іконку при ховері. */
+  .house-node{transition:transform .3s ease, filter .3s ease}
   .house-node.is-active{transform:scale(1.08);filter:brightness(1.3)}
+  #node-tl{transform-box:view-box;transform-origin:515px 331px}
+  #node-tr{transform-box:view-box;transform-origin:685px 331px}
+  #node-bl{transform-box:view-box;transform-origin:515px 471px}
+  #node-br{transform-box:view-box;transform-origin:685px 471px}
   .lead-line{transition:opacity .3s ease, stroke-width .3s ease}
   .lead-line.is-active{opacity:1;stroke-width:2.2px}
 
@@ -872,7 +891,7 @@
 
                   <div class="room-row">
                     <div class="room-image">
-                      <img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Апартамент+60+м%C2%B2" alt="Апартамент 60 м²" loading="lazy">
+                      <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м²" loading="lazy">
                       <span class="tag">Апартамент №2 · 60 м²</span>
                     </div>
                     <div class="mock-price">
@@ -956,6 +975,30 @@
 
     <div class="cine-hint">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+
+    <!-- МОБІЛЬНА ВЕРСІЯ: без scroll-pin, проста вертикальна стрічка -->
+    <div class="cine-mobile">
+      <div class="cine-mobile-card">
+        <div class="cine-num">70%</div>
+        <div class="cine-title">Завантаженість 2025</div>
+        <div class="cine-desc">Не прогноз, підтверджений факт минулого року</div>
+      </div>
+      <div class="cine-mobile-card">
+        <div class="cine-num">55<span class="unit-letter">М</span>₴</div>
+        <div class="cine-title">Виплачено дивідендів</div>
+        <div class="cine-desc">Вже виплачено дивідендів інвесторам</div>
+      </div>
+      <div class="cine-mobile-card">
+        <div class="cine-num">70+</div>
+        <div class="cine-title">Команда і процеси</div>
+        <div class="cine-desc">З відлагодженою операційною моделлю</div>
+      </div>
+      <div class="cine-mobile-card">
+        <div class="cine-num">365</div>
+        <div class="cine-title">Днів на рік без сезонів</div>
+        <div class="cine-desc">SPA, ресторан, басейн і SKI room працюють цілий рік — стабільний дохід без сезонних провалів</div>
+      </div>
     </div>
   </section>
 
@@ -1692,7 +1735,11 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('.count').forEach(el => countIo.observe(el));
 
-  // ---------- БЛОК 2 — CINE RIBBON (горизонтальний скрол-пін) ----------
+  // ---------- БЛОК 2 — CINE RIBBON (горизонтальний скрол-пін ТІЛЬКИ на десктопі) ----------
+  // На мобайлі (<=900px) пін-скрол не активується взагалі — замість нього показується
+  // .cine-mobile (проста вертикальна стрічка, без залежності від GSAP). gsap.matchMedia
+  // сам коректно знімає ScrollTrigger/пін, якщо вікно перетне межу 900px (напр. поворот екрана
+  // або зміна розміру вікна на десктопі) — без цього пін міг лишитись "зависти" активним.
   if (window.gsap && window.ScrollTrigger && document.getElementById('cineSection')) {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -1730,16 +1777,21 @@
       });
     }
 
-    measureCine();
-    window.addEventListener('resize', measureCine);
+    const cineMM = gsap.matchMedia();
+    cineMM.add('(min-width: 901px)', () => {
+      measureCine();
+      window.addEventListener('resize', measureCine);
 
-    ScrollTrigger.create({
-      trigger: '#cineSection',
-      start: 'top top',
-      end: '+=250%',
-      pin: true,
-      scrub: 1,
-      onUpdate: (self) => updateRibbon(self.progress)
+      ScrollTrigger.create({
+        trigger: '#cineSection',
+        start: 'top top',
+        end: '+=250%',
+        pin: true,
+        scrub: 1,
+        onUpdate: (self) => updateRibbon(self.progress)
+      });
+
+      return () => window.removeEventListener('resize', measureCine);
     });
   }
 
