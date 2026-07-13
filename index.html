@@ -312,10 +312,14 @@
   /* ---------- VIDEO BLOCK ---------- */
   /* єдиний фон для екранів 3 і 4 — той самий рецепт градієнта на обох,
      тому шов між секціями не читається як стик двох різних фонів */
+  /* background-attachment:fixed прив'язує градієнт до вікна перегляду, а не до кожної секції
+     окремо — тому дві секції з .deep-bg показують один суцільний візерунок "глибини" без шва,
+     незалежно від висоти секції (критично для мобайла, де секції набагато нижчі за десктопні). */
   .deep-bg{
     background:
       radial-gradient(ellipse 900px 600px at 50% 42%, rgba(28,47,36,.9), transparent 68%),
       radial-gradient(ellipse 1400px 900px at 50% 50%, #14201a 0%, #0b120e 55%, #060907 100%);
+    background-attachment:fixed, fixed;
   }
   .video-frame{
     position:relative;max-width:920px;margin:44px auto 0;aspect-ratio:16/9;
@@ -458,7 +462,7 @@
      fill-box на вкладених <g> з власним transform="translate() scale()" рахується по-різному
      в Safari/Chrome і може зсувати або спотворювати іконку при ховері. */
   .house-node{transition:transform .3s ease, filter .3s ease}
-  .house-node.is-active{transform:scale(1.08);filter:brightness(1.3)}
+  .house-node.is-active{transform:scale(1.4);filter:brightness(1.3)}
   #node-tl{transform-box:view-box;transform-origin:515px 331px}
   #node-tr{transform-box:view-box;transform-origin:685px 331px}
   #node-bl{transform-box:view-box;transform-origin:515px 471px}
@@ -467,11 +471,11 @@
   .lead-line.is-active{opacity:1;stroke-width:2.2px}
 
   .bp-node{position:absolute;width:250px;cursor:default;font-size:13.5px;line-height:1.55;color:var(--bp-muted);transition:transform .3s ease, filter .3s ease}
-  .bp-node:hover{filter:brightness(1.12)}
-  .bp-node.tl:hover{transform:translate(0,-50%) scale(1.035);transform-origin:right center}
-  .bp-node.tr:hover{transform:translate(-100%,-50%) scale(1.035);transform-origin:left center}
-  .bp-node.bl:hover{transform:translate(0,-50%) scale(1.035);transform-origin:right center}
-  .bp-node.br:hover{transform:translate(-100%,-50%) scale(1.035);transform-origin:left center}
+  .bp-node:hover{filter:brightness(1.12);z-index:10}
+  .bp-node.tl:hover{transform:translate(0,-50%) scale(1.15);transform-origin:right center}
+  .bp-node.tr:hover{transform:translate(-100%,-50%) scale(1.15);transform-origin:left center}
+  .bp-node.bl:hover{transform:translate(0,-50%) scale(1.15);transform-origin:right center}
+  .bp-node.br:hover{transform:translate(-100%,-50%) scale(1.15);transform-origin:left center}
   .bp-node h4{font-size:15.5px;color:#fff;margin-bottom:6px}
   .bp-node .stat{
     display:inline-block;margin-bottom:8px;
@@ -514,30 +518,49 @@
   .adv-card p{font-size:14.5px;color:var(--muted);line-height:1.6}
   @media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
 
-  /* ---------- INVESTOR CARE (block 4) ---------- */
-  .care{background:var(--forest-900);color:var(--white)}
-  .care-grid{
-    display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,minmax(150px,auto));
-    grid-template-areas:"a a b b c c" "a a d d e e";gap:16px;margin-top:46px;
+  /* ---------- BLOCK 5 — WOOD INVESTOR CARE™ v3 (5 окремих карток, світлий фон) ---------- */
+  #investor-care .accent-text{color:var(--forest-800);font-weight:600}
+
+  .care-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:48px}
+  .care-card{
+    position:relative;flex:1 1 320px;max-width:360px;overflow:hidden;
+    background:
+      linear-gradient(155deg, rgba(255,255,255,.07), transparent 55%),
+      linear-gradient(175deg, var(--forest-800) 0%, var(--forest-900) 65%, #0a120d 100%);
+    border:1px solid rgba(241,234,216,.14);
+    border-radius:20px;
+    padding:32px 28px 28px;
+    box-shadow:
+      0 40px 70px -36px rgba(10,18,13,.55),
+      0 10px 24px -14px rgba(10,18,13,.4),
+      inset 0 1px 0 rgba(255,255,255,.06);
   }
-  .care-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);padding:22px 18px;transition:background .3s ease, border-color .3s ease;display:flex;flex-direction:column;justify-content:center}
-  .care-card:hover{background:rgba(255,255,255,.08);border-color:var(--gold)}
-  .care-card h4{font-size:14.5px;color:var(--gold-light);margin-bottom:10px;line-height:1.3;font-weight:700}
-  .care-card p{font-size:13px;color:#c3ccc0;line-height:1.55}
-  .care-card:nth-of-type(1){grid-area:a;background:rgba(241,234,216,.06);border-color:var(--gold)}
-  .care-card:nth-of-type(1) h4{font-size:19px}
-  .care-card:nth-of-type(1) p{font-size:14px}
-  .care-card:nth-of-type(2){grid-area:b}
-  .care-card:nth-of-type(3){grid-area:c}
-  .care-card:nth-of-type(4){grid-area:d}
-  .care-card:nth-of-type(5){grid-area:e}
-  .care-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
-  .care-sum-card{border:1px solid var(--gold);border-radius:var(--radius);padding:26px;text-align:center;transition:background .3s ease}
-  .care-sum-card:hover{background:rgba(241,234,216,.06)}
-  .care-sum-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:30px;color:var(--gold-light);font-weight:800}
-  .care-sum-label{font-size:13.5px;color:#c3ccc0;margin-top:8px}
-  @media(max-width:900px){.care-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b c" "d e"}.care-card:nth-of-type(1) h4{font-size:16px}}
-  @media(max-width:640px){.care-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d" "e"}.care-summary{grid-template-columns:1fr}}
+  /* м'яке світіння в кутку картки — та сама "глибина", що й в інших блоках сайту */
+  .care-card::before{
+    content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle, rgba(241,234,216,.16), transparent 70%);
+    pointer-events:none;
+  }
+  .care-stat{
+    position:relative;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.02em;
+    font-size:40px;line-height:1;margin-bottom:14px;
+    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .care-stat .unit{font-size:.4em;font-weight:700;color:var(--muted-2);-webkit-text-fill-color:var(--muted-2);margin-left:6px}
+  .care-card h4{position:relative;font-size:16px;color:#fff;margin-bottom:14px;line-height:1.35}
+  .care-divider{position:relative;height:1px;margin-bottom:14px;background:linear-gradient(90deg, rgba(241,234,216,.4), transparent)}
+  .care-card p{position:relative;font-size:13.5px;color:#c3ccc0;line-height:1.6}
+  .care-card .note{display:block;margin-top:8px;font-size:11.5px;color:#7d8c80}
+
+  @media(max-width:720px){
+    .care-grid{flex-direction:column;align-items:stretch;gap:14px;margin-top:36px}
+    .care-card{flex:none;max-width:100%;padding:22px 20px 20px;border-radius:16px}
+    .care-stat{font-size:30px;margin-bottom:10px}
+    .care-card h4{font-size:14.5px;margin-bottom:10px}
+    .care-divider{margin-bottom:10px}
+    .care-card p{font-size:12.5px}
+  }
 
   /* ---------- SCENARIOS 5y (block 5) ---------- */
   .scn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
@@ -1040,6 +1063,17 @@
               <stop offset="72%" stop-color="var(--gold)"/>
               <stop offset="100%" stop-color="var(--gold-dark)"/>
             </linearGradient>
+            <!-- окремий градієнт для самих іконок: userSpaceOnUse з фіксованими координатами (0,0 → 24,24),
+                 а не objectBoundingBox. Проблема була саме тут — у долара й "виходу" є одиночні прямі
+                 лінії (чисто вертикальна/горизонтальна), і objectBoundingBox для такого елемента має
+                 нульову ширину або висоту, через що градієнт "ламався" й лінія виглядала обрізаною/зіпсованою. -->
+            <linearGradient id="iconGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="var(--gold-dark)"/>
+              <stop offset="40%" stop-color="var(--gold-light)"/>
+              <stop offset="55%" stop-color="var(--gold-light)"/>
+              <stop offset="72%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="var(--gold-dark)"/>
+            </linearGradient>
           </defs>
 
           <!-- м'яке світіння позаду кожного значка -->
@@ -1058,7 +1092,7 @@
 
           <g id="node-tl" class="house-node">
             <rect x="481" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(495,311) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(495,311) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="1" x2="12" y2="23"/>
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
             </g>
@@ -1066,7 +1100,7 @@
 
           <g id="node-tr" class="house-node">
             <rect x="651" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(665,311) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(665,311) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"/>
               <path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"/>
             </g>
@@ -1074,7 +1108,7 @@
 
           <g id="node-bl" class="house-node">
             <rect x="481" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(495,451) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(495,451) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/>
               <line x1="21" y1="12" x2="9" y2="12"/>
@@ -1083,7 +1117,7 @@
 
           <g id="node-br" class="house-node">
             <rect x="651" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(665,451) scale(1.55)" stroke="url(#metalGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(665,451) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="14" height="6" rx="1.5"/>
               <line x1="8" y1="10" x2="8" y2="13"/>
               <path d="M8 13h5a2 2 0 0 1 2 2v5"/>
@@ -1159,51 +1193,50 @@
   </section>
 
 
-  <!-- BLOCK 4 — INVESTOR CARE -->
-  <section id="investor-care" class="care section-pad on-dark grain">
-    <div class="bg-orb gold" style="width:400px;height:400px;top:-120px;left:-140px;opacity:.5"></div>
+  <!-- BLOCK 5 — WOOD INVESTOR CARE™ v3 (5 окремих карток) -->
+  <section id="investor-care" class="section-pad grain" style="background:var(--white)">
     <div class="container">
       <div class="center reveal" style="max-width:720px">
-        <h2 class="h-title center">Гарантія котру отримає власник 60 м² і не отримають інші</h2>
-        <p class="h-sub center">Investor Care — це пакет закріплених зобов'язань керуючої компанії перед власником флагманського апартаменту. <span class="accent-text">Не бонуси. Не знижки.</span> Умови, за котрих керуюча компанія на 5 років бере в управління актив під потреби комплексу і гарантовано надає максимально вигідні умови прописані в договорі — і вони діють з першого місяця після оплати.</p>
+        <h2 class="h-title center">Гарантія, котру отримає власник 60&nbsp;м² — і не отримають інші</h2>
+        <p class="h-sub center">Investor Care — це пакет закріплених зобов'язань керуючої компанії перед власником флагманського апартаменту. <span class="accent-text">Не бонуси. Не знижки.</span> Умови, за яких керуюча компанія на 5 років бере в управління актив під потреби комплексу і гарантовано надає максимально вигідні умови, прописані в договорі — і вони діють з першого місяця після оплати.</p>
       </div>
 
       <div class="care-grid">
         <div class="care-card reveal">
+          <div class="care-stat">10 800$<span class="unit">/рік</span></div>
           <h4>Гарантований мінімальний дохід</h4>
-          <p>До 900$/міс · ~10 800$/рік · річних незалежно від сезону і заповненості.</p>
+          <div class="care-divider"></div>
+          <p>900$/міс незалежно від сезону і заповненості готелю.</p>
         </div>
-        <div class="care-card reveal">
-          <h4>Дохідність вища за інші номери</h4>
-          <p>Окрема формула розподілу прибутку для формату 60 м². До 2% річних вище, ніж по стандартних номерах готелю.</p>
-          <p style="margin-top:10px;font-size:12px;color:#93a091">(Сума % залежить від обраних умов входу)</p>
-        </div>
-        <div class="care-card reveal">
-          <h4>20 діб відпочинку щороку</h4>
-          <p>Безкоштовне проживання в комплексі для власника та його родини.</p>
-        </div>
-        <div class="care-card reveal">
-          <h4>Гарантований вихід за 3 місяці</h4>
-          <p>Ваш капітал не заблокований. Керуюча компанія зобов'язана перепродати або викупити апартамент протягом 3 місяців на першу вимогу.</p>
-        </div>
-        <div class="care-card reveal">
-          <h4>Преміальне оновлення після 5 років</h4>
-          <p>Повний ремонт за рахунок керуючої компанії після 5 років управління. Без додаткових витрат для власника.</p>
-        </div>
-      </div>
 
-      <div class="care-summary">
-        <div class="care-sum-card reveal">
-          <div class="care-sum-num count">10 800$/рік</div>
-          <div class="care-sum-label">Гарантований мінімум · 4,5% річних</div>
+        <div class="care-card reveal">
+          <div class="care-stat">+2<span class="unit">% річних</span></div>
+          <h4>Дохідність вища за інші номери</h4>
+          <div class="care-divider"></div>
+          <p>Окрема формула розподілу прибутку саме для формату 60 м².
+            <span class="note">Сума % залежить від обраних умов входу</span>
+          </p>
         </div>
-        <div class="care-sum-card reveal">
-          <div class="care-sum-num count">20 діб</div>
-          <div class="care-sum-label">Безкоштовного відпочинку щороку</div>
+
+        <div class="care-card reveal">
+          <div class="care-stat">20<span class="unit">діб щороку</span></div>
+          <h4>Безкоштовний відпочинок</h4>
+          <div class="care-divider"></div>
+          <p>Проживання в комплексі для власника та його родини — за рахунок керуючої компанії.</p>
         </div>
-        <div class="care-sum-card reveal">
-          <div class="care-sum-num count">3 місяці</div>
-          <div class="care-sum-label">Гарантований строк виходу з інвестиції</div>
+
+        <div class="care-card reveal">
+          <div class="care-stat">3<span class="unit">місяці макс.</span></div>
+          <h4>Гарантований вихід з активу</h4>
+          <div class="care-divider"></div>
+          <p>Капітал не заблокований — КК зобов'язана перепродати або викупити апартамент на першу вимогу.</p>
+        </div>
+
+        <div class="care-card reveal">
+          <div class="care-stat">5<span class="unit">років і ремонт</span></div>
+          <h4>Преміальне оновлення апартаменту</h4>
+          <div class="care-divider"></div>
+          <p>Повний ремонт за рахунок керуючої компанії, без додаткових витрат для власника.</p>
         </div>
       </div>
     </div>
