@@ -620,6 +620,9 @@
   @media(max-width:900px){#two-scenarios.section-pad{padding:64px 0}}
 
   #two-scenarios .head{max-width:760px;margin:0 auto 8px;text-align:center}
+  /* .h-sub має власний max-width (640px), вужчий за .head (760px) — без auto-марджинів
+     його бокс притискається до лівого краю, і текст в ньому центрується "не там", де треба */
+  #two-scenarios .head .h-sub{margin-left:auto;margin-right:auto}
 
   /* градієнтне світіння від ганта в кольорах поточних плашок: сіро-мутний зліва
      (колір "іншого комплексу"), золотий справа (Wood) */
@@ -631,12 +634,25 @@
   }
   #two-scenarios .container{position:relative;z-index:1}
 
+  /* підписи над колонками — показують, що саме з чим порівнюємо */
+  .gantt-labels{
+    display:grid;grid-template-columns:1fr 90px 1fr;column-gap:22px;
+    margin-top:48px;
+  }
+  .gantt-label{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
+    letter-spacing:.07em;text-transform:uppercase;
+  }
+  .gantt-label.other{grid-column:1;text-align:right;color:var(--muted);display:flex;align-items:center;justify-content:flex-end}
+  .gantt-label.wood{grid-column:3;text-align:left;color:var(--gold-dark);display:flex;align-items:center}
+  .gantt-label.wood img{height:18px;width:auto;display:block}
+
   .gantt-wrap{
     display:grid;
     grid-template-columns:1fr 90px 1fr;
     grid-template-rows:repeat(5, 148px);
     column-gap:22px;
-    margin-top:56px;
+    margin-top:14px;
   }
 
   .gantt-axis{grid-column:2;grid-row:1/6;position:relative}
@@ -722,10 +738,13 @@
   .two-cta{margin-top:28px;text-align:center}
 
   @media(max-width:860px){
+    .gantt-labels{grid-template-columns:1fr 34px 1fr;column-gap:10px;margin-top:32px}
+    .gantt-label{font-size:10.5px}
+    .gantt-label.wood img{height:14px}
     .gantt-wrap{
       grid-template-columns:1fr 34px 1fr;
       grid-template-rows:repeat(5, auto);
-      column-gap:10px;row-gap:0;margin-top:32px;
+      column-gap:10px;row-gap:0;margin-top:10px;
     }
     .gantt-axis::before{width:2px}
     .gantt-year .dot{
@@ -743,6 +762,8 @@
     .g-quote{font-size:16px}
   }
   @media(max-width:420px){
+    .gantt-labels{grid-template-columns:1fr 26px 1fr;column-gap:6px}
+    .gantt-label{font-size:9.5px;letter-spacing:.05em}
     .gantt-wrap{grid-template-columns:1fr 26px 1fr;column-gap:6px}
     .gantt-year .dot{width:22px;height:22px;font-size:9.5px}
     .g-item h5{font-size:11.5px}
@@ -1360,6 +1381,11 @@
       <div class="head reveal">
         <h2 class="h-title">Поки інші комплекси "стають на ноги", Wood Hotel з першого місяця окуповуватиме актив та нарощуватиме капіталізацію</h2>
         <p class="h-sub">Порівняємо, що відбувається з капіталом в обох випадках — рік за роком:</p>
+      </div>
+
+      <div class="gantt-labels reveal">
+        <span class="gantt-label other">Інший комплекс</span>
+        <span class="gantt-label wood"><img src="logo-black.png" alt="Wood Hotel" width="88" height="18"></span>
       </div>
 
       <div class="gantt-wrap reveal">
