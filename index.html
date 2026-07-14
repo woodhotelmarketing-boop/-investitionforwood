@@ -643,9 +643,16 @@
     font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
     letter-spacing:.07em;text-transform:uppercase;
   }
-  .gantt-label.other{grid-column:1;text-align:right;color:var(--muted);display:flex;align-items:center;justify-content:flex-end}
+  /* акцентна назва лівої колонки — тепер повна фраза, а не коротка технічна мітка,
+     тому: більший кегль, жирніше, без uppercase (речення капсом важко читати),
+     колір темніший для більшої присутності */
+  .gantt-label.other{
+    grid-column:1;text-align:right;color:var(--forest-800);display:flex;align-items:center;justify-content:flex-end;
+    font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.005em;
+    text-transform:none;line-height:1.3;
+  }
   .gantt-label.wood{grid-column:3;text-align:left;color:var(--gold-dark);display:flex;align-items:center}
-  .gantt-label.wood img{height:18px;width:auto;display:block}
+  .gantt-label.wood img{height:36px;width:auto;display:block}
 
   .gantt-wrap{
     display:grid;
@@ -667,7 +674,7 @@
   }
   .gantt-year .dot{
     position:relative;width:52px;height:52px;border-radius:50%;flex:none;
-    display:flex;align-items:center;justify-content:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;color:var(--forest-900);
     background:linear-gradient(155deg,var(--gold-light) 0%,var(--gold-light) 45%,var(--gold) 100%);
     box-shadow:0 10px 22px -8px rgba(168,152,119,.55), inset 0 1px 1px rgba(255,255,255,.7), 0 0 0 4px var(--cream);
@@ -677,6 +684,9 @@
     background:radial-gradient(circle, rgba(205,191,157,.45), transparent 70%);
     filter:blur(4px);
   }
+  /* цифра й слово "рік/роки/років" стеком в одному кружку, а не окремо зовні */
+  .dot-num{font-size:17px;line-height:1;font-weight:800}
+  .dot-yr{font-size:8px;line-height:1;font-weight:500;letter-spacing:.01em;margin-top:2px}
 
   .g-item{position:relative;display:flex;flex-direction:column;justify-content:center;padding:18px 0}
   .g-item h5{font-size:15px;margin-bottom:6px;line-height:1.3}
@@ -688,10 +698,16 @@
   .g-item.wood{grid-column:3;text-align:left;align-items:flex-start}
   .g-item.wood h5{color:var(--forest-900)}
   .g-item.wood p{position:relative;color:#6b7770}
+  /* раніше цифри були золотим градієнтом-текстом (background-clip:text) — на світлому
+     кремовому фоні контраст був занадто слабкий і не зчитувався. Тепер це темна
+     градієнтна "плашка" з непрозорим світло-золотим текстом поверх — читається чітко. */
   .g-item.wood .figure{
+    display:inline-block;
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.01em;
-    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+    color:var(--gold-light);
+    background:linear-gradient(135deg, var(--forest-800), var(--forest-900));
+    padding:2px 9px;border-radius:7px;
+    box-shadow:0 3px 8px -3px rgba(19,32,24,.4);
   }
 
   .g-item.wood.y1{grid-row:1}
@@ -740,7 +756,8 @@
   @media(max-width:860px){
     .gantt-labels{grid-template-columns:1fr 34px 1fr;column-gap:10px;margin-top:32px}
     .gantt-label{font-size:10.5px}
-    .gantt-label.wood img{height:14px}
+    .gantt-label.other{font-size:13px;line-height:1.25}
+    .gantt-label.wood img{height:28px}
     .gantt-wrap{
       grid-template-columns:1fr 34px 1fr;
       grid-template-rows:repeat(5, auto);
@@ -752,6 +769,9 @@
       box-shadow:0 4px 10px -4px rgba(168,152,119,.55), inset 0 1px 1px rgba(255,255,255,.7), 0 0 0 3px var(--cream);
     }
     .gantt-year .dot::after{inset:-8px;filter:blur(3px)}
+    /* "рік/роки/років" не влазить у вузьку колонку осі на мобайлі — ховаємо, лишається сама цифра */
+    .dot-yr{display:none}
+    .dot-num{font-size:10.5px}
 
     .g-item{padding:16px 0;gap:0}
     .g-item h5{font-size:12.5px;margin-bottom:4px;line-height:1.25}
@@ -764,8 +784,11 @@
   @media(max-width:420px){
     .gantt-labels{grid-template-columns:1fr 26px 1fr;column-gap:6px}
     .gantt-label{font-size:9.5px;letter-spacing:.05em}
+    .gantt-label.other{font-size:12px}
+    .gantt-label.wood img{height:24px}
     .gantt-wrap{grid-template-columns:1fr 26px 1fr;column-gap:6px}
-    .gantt-year .dot{width:22px;height:22px;font-size:9.5px}
+    .gantt-year .dot{width:22px;height:22px}
+    .dot-num{font-size:9.5px}
     .g-item h5{font-size:11.5px}
     .g-item p{font-size:10.5px}
   }
@@ -1384,8 +1407,8 @@
       </div>
 
       <div class="gantt-labels reveal">
-        <span class="gantt-label other">Інший комплекс</span>
-        <span class="gantt-label wood"><img src="logo-black.png" alt="Wood Hotel" width="88" height="18"></span>
+        <span class="gantt-label other">Комплекс, що відкриється найближчим роком</span>
+        <span class="gantt-label wood"><img src="logo-black.png" alt="Wood Hotel" width="176" height="36"></span>
       </div>
 
       <div class="gantt-wrap reveal">
@@ -1411,11 +1434,11 @@
         </div>
 
         <div class="gantt-axis"></div>
-        <div class="gantt-year" style="grid-row:1"><div class="dot">01</div></div>
-        <div class="gantt-year" style="grid-row:2"><div class="dot">02</div></div>
-        <div class="gantt-year" style="grid-row:3"><div class="dot">03</div></div>
-        <div class="gantt-year" style="grid-row:4"><div class="dot">04</div></div>
-        <div class="gantt-year" style="grid-row:5"><div class="dot">05</div></div>
+        <div class="gantt-year" style="grid-row:1"><div class="dot"><span class="dot-num">1</span><span class="dot-yr">рік</span></div></div>
+        <div class="gantt-year" style="grid-row:2"><div class="dot"><span class="dot-num">2</span><span class="dot-yr">роки</span></div></div>
+        <div class="gantt-year" style="grid-row:3"><div class="dot"><span class="dot-num">3</span><span class="dot-yr">роки</span></div></div>
+        <div class="gantt-year" style="grid-row:4"><div class="dot"><span class="dot-num">4</span><span class="dot-yr">роки</span></div></div>
+        <div class="gantt-year" style="grid-row:5"><div class="dot"><span class="dot-num">5</span><span class="dot-yr">років</span></div></div>
 
         <div class="g-item wood y1">
           <h5>Дохід з першого дня</h5>
