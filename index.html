@@ -2025,23 +2025,45 @@
     });
   }
 
-  // Hero background parallax (відео)
+  // Hero background parallax (відео) — раніше слухач працював на КОЖЕН скрол по всій
+  // сторінці, навіть коли hero давно проскрольний. IntersectionObserver вмикає роботу
+  // тільки поки hero справді може бути видимий (з запасом в 1 екран знизу), а поза цим
+  // діапазоном слухач взагалі не викликається — менше зайвої роботи й тремтіння сусідніх
+  // блоків (зокрема запіненої секції екрана 2, яка раніше "плавала" через це).
   const heroBgLayer = document.getElementById('heroBgLayer');
-  if (heroBgLayer) {
-    window.addEventListener('scroll', () => {
+  const heroSection = document.querySelector('.hero');
+  if (heroBgLayer && heroSection) {
+    let heroNearViewport = true;
+    let heroTicking = false;
+    function updateHeroParallax() {
       const offset = Math.min(window.scrollY, 700) * 0.18;
       heroBgLayer.style.transform = 'translateY(' + offset + 'px)';
-    }, { passive: true });
+      heroTicking = false;
+    }
+    function onHeroScroll() {
+      if (!heroNearViewport || heroTicking) return;
+      heroTicking = true;
+      requestAnimationFrame(updateHeroParallax);
+    }
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { heroNearViewport = e.isIntersecting; });
+    }, { rootMargin: '100% 0px 100% 0px' }).observe(heroSection);
+    window.addEventListener('scroll', onHeroScroll, { passive: true });
   }
   const heroBgVideo = document.getElementById('heroBgVideo');
   if (heroBgVideo) { heroBgVideo.play().catch(() => {}); }
 
-  // Scroll-linked зростання device-мокапа — коли гортаєш вниз, екран "наближається" і стає більшим
+  // Scroll-linked зростання device-мокапа — та сама оптимізація: IntersectionObserver
+  // вимикає обробник повністю, як тільки блок з мокапом виходить за межі (з запасом),
+  // замість того щоб рахувати getBoundingClientRect() і переписувати margin-bottom
+  // на кожен скрол по всій сторінці (це й "трясло" сусідні секції).
   const deviceScale = document.getElementById('deviceScale');
   if (deviceScale) {
     const MIN_SCALE = 0.688;
     const MAX_SCALE = 0.944;
     let deviceTicking = false;
+    let deviceNearViewport = true;
+    let lastScale = null;
     function updateDeviceScale() {
       const rect = deviceScale.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -2051,6 +2073,11 @@
       progress = Math.min(1, Math.max(0, progress));
       const eased = progress * progress * (3 - 2 * progress);
       const scale = MIN_SCALE + eased * (MAX_SCALE - MIN_SCALE);
+      deviceTicking = false;
+      // якщо масштаб не змінився з минулого кадру (найчастіше — крайні 0 або 1 стани),
+      // не чіпаємо стилі/розмітку взагалі — нема сенсу переписувати ті самі значення
+      if (lastScale !== null && Math.abs(scale - lastScale) < 0.0005) return;
+      lastScale = scale;
       deviceScale.style.transform = `scale(${scale.toFixed(3)})`;
       deviceScale.style.opacity = (0.85 + eased * 0.15).toFixed(3);
       // offsetHeight не залежить від transform:scale (тільки від реальної розмітки),
@@ -2059,14 +2086,15 @@
       const naturalHeight = deviceScale.offsetHeight;
       const gap = naturalHeight * (1 - scale);
       deviceScale.style.marginBottom = (-gap).toFixed(1) + 'px';
-      deviceTicking = false;
     }
     function onDeviceScroll() {
-      if (!deviceTicking) {
-        requestAnimationFrame(updateDeviceScale);
-        deviceTicking = true;
-      }
+      if (!deviceNearViewport || deviceTicking) return;
+      deviceTicking = true;
+      requestAnimationFrame(updateDeviceScale);
     }
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { deviceNearViewport = e.isIntersecting; });
+    }, { rootMargin: '100% 0px 100% 0px' }).observe(deviceScale);
     window.addEventListener('scroll', onDeviceScroll, { passive: true });
     window.addEventListener('resize', onDeviceScroll, { passive: true });
     updateDeviceScale();
@@ -2154,6 +2182,16 @@
       });
 
       return () => window.removeEventListener('resize', measureCine);
+    });
+
+    // Позиція запіненої секції рахується один раз при ініціалізації GSAP. Якщо шрифти/фото/
+    // відео вище (в hero) довантажуються пізніше й трохи змінюють висоту сторінки, пін
+    // "з'їжджає" відносно фактичного контенту — звідси ефект "виходить за рамки" сусіднього
+    // екрана. Перерахунок після повного завантаження й ще раз за секунду (коли шрифти
+    // і відео-метадані вже точно готові) прибирає цей дрейф.
+    window.addEventListener('load', () => {
+      ScrollTrigger.refresh();
+      setTimeout(() => ScrollTrigger.refresh(), 1000);
     });
   }
 
