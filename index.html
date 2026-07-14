@@ -847,18 +847,56 @@
     .g-item p{font-size:10.5px}
   }
 
-  /* ---------- OBJECTIONS TABLE (block 7) ---------- */
-  .table-wrap{margin-top:44px;overflow-x:auto}
+  /* ---------- BLOCK 8 — ЗАПЕРЕЧЕННЯ / ТАБЛИЦЯ ПОРІВНЯННЯ (систематизовано під загальну
+     кольорову базу і шрифти: gold-акцент замість окремого червоного, картка-обгортка
+     з тінню замість "голої" таблиці, мобільна підказка про горизонтальний скрол) ---------- */
+  /* заголовок-цитата у формі бабла коміксу — премій-версія: без товстих чорних контурів
+     і півтонових крапок з референсу, тільки форма (заокруглена картка + гострий хвостик)
+     у власній кольоровій мові сайту (тінь замість обводки, як і решта карток) */
+  /* два шари тіні замість однієї — тісна чітка (дає окреслення форми, як легкий контур,
+     без справжньої обводки) + широка м'яка (глибина) — разом читається як вагоміший,
+     преміальніший акцент */
+  .obj-bubble{
+    position:relative;display:inline-block;background:var(--white);
+    border-radius:26px;padding:36px 42px;margin-bottom:26px;
+    box-shadow:
+      0 2px 0 rgba(19,32,24,.06),
+      0 10px 20px -10px rgba(19,32,24,.28),
+      0 34px 64px -30px rgba(19,32,24,.34);
+  }
+  .obj-bubble::after{
+    content:"";position:absolute;left:64px;bottom:-16px;width:0;height:0;
+    border-left:15px solid transparent;border-right:5px solid transparent;
+    border-top:20px solid var(--white);
+    filter:drop-shadow(3px 5px 4px rgba(19,32,24,.12));
+  }
+  .obj-bubble .h-title{margin:0}
+  @media(max-width:640px){
+    .obj-bubble{padding:26px 24px;border-radius:20px}
+    .obj-bubble::after{left:40px}
+  }
+  .table-card{
+    position:relative;margin-top:44px;border-radius:var(--radius);
+    background:var(--white);box-shadow:0 22px 48px -28px rgba(19,32,24,.2);
+    overflow:hidden;
+  }
+  .table-wrap{overflow-x:auto}
   table{width:100%;border-collapse:collapse;min-width:920px}
   th,td{padding:18px 20px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line);transition:background .2s ease}
+  /* та сама причина, що й з лейблами рядків: довгі описові фрази в Mono виглядають чужорідно
+     поруч з рештою сайту (Mono тут лишень для коротких uppercase-тегів) — тепер Inter */
   thead th{
-    font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--muted);
-    font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    font-family:'Inter',sans-serif;font-weight:700;color:var(--forest-800);
+    font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;
     border-bottom:1.5px solid var(--forest-800);padding-bottom:16px;
   }
+  /* раніше було JetBrains Mono 11.5px — менше й іншим шрифтом, ніж сусіднє значення (13.5px
+     Inter), тому рядок "випадав" (лейбл виглядав дрібнішим і чужорідним у своєму ж рядку).
+     Mono в цій системі призначений тільки для коротких uppercase-тегів, не для повних фраз —
+     тепер той самий Inter, той самий кегль, просто жирніше й темніше для ролі лейбла. */
   tbody td:first-child{
-    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
-    letter-spacing:.01em;line-height:1.5;
+    font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:var(--forest-800);
+    letter-spacing:0;line-height:1.5;
   }
   tbody tr:last-child td{border-bottom:none}
   tbody tr:hover td{background:var(--cream)}
@@ -867,9 +905,28 @@
     font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;
     border-left:2px solid var(--gold);background:rgba(205,191,157,.08);
   }
-  thead th.wood-col{font-family:'JetBrains Mono',monospace;color:var(--gold-dark);font-weight:600}
+  thead th.wood-col{font-family:'Inter',sans-serif;color:var(--gold-dark);font-weight:700}
   tbody tr:hover td.wood-col{background:rgba(205,191,157,.16)}
 
+  /* підказка про горизонтальний скрол — тільки на мобайлі, де таблиця не влазить у ширину.
+     Тепер над таблицею (а не під), тому відступ знизу, а не зверху */
+  .table-hint{
+    display:none;align-items:center;justify-content:center;gap:7px;margin:34px 0 4px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--gold-dark);
+  }
+  .table-hint svg{width:14px;height:14px;animation:tableHintNudge 1.6s ease-in-out infinite}
+  @keyframes tableHintNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+  @media(max-width:960px){
+    .table-hint{display:flex}
+    /* легке затемнення-градієнт з правого краю — сигналізує, що контент триває далі за екран */
+    .table-card::after{
+      content:"";position:absolute;top:0;right:0;bottom:0;width:32px;z-index:2;pointer-events:none;
+      background:linear-gradient(90deg, transparent, var(--white));
+    }
+  }
+
+  /* верідикт-картка — той самий gold-акцент, що й в решті сайту, замість окремого червоного */
   .obj-verdict{
     position:relative;overflow:hidden;margin-top:36px;background:var(--forest-900);
     border-radius:var(--radius);padding:64px 40px;text-align:center;color:var(--white);
@@ -877,15 +934,28 @@
   .obj-verdict::before{
     content:"";position:absolute;left:50%;top:50%;width:520px;height:520px;
     transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
-    background:radial-gradient(circle, rgba(164,72,59,.35), transparent 70%);
+    background:radial-gradient(circle, rgba(205,191,157,.28), transparent 70%);
   }
-  .obj-verdict .kicker{position:relative;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#c3ccc0;font-weight:700}
+  .obj-verdict .kicker{position:relative;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-light);font-weight:700}
+  /* більше вузьких світлих/темних смуг (як справжнє відбиття світла на металі, а не плоский
+     градієнт), плюс повільний рух самого градієнта — імітація "переливу" білого золота під
+     кутом до світла. Це єдиний рух в цьому блоці (single motion accent), цикл навмисно
+     повільний (6с) і плавний, щоб не виглядало як дешевий "блиск кнопки" */
   .obj-verdict .big{
     position:relative;font-family:'Bricolage Grotesque',sans-serif;
     font-size:clamp(56px,10vw,116px);letter-spacing:-.03em;line-height:.95;
-    background:linear-gradient(100deg,#e8907f,var(--red) 55%,#c85d4a);
+    background:linear-gradient(100deg,
+      var(--gold-dark) 0%, var(--gold) 12%, var(--gold-light) 24%, #fffaf0 34%,
+      var(--gold-light) 44%, var(--gold) 56%, var(--gold-dark) 68%, var(--gold) 80%,
+      var(--gold-light) 90%, var(--gold-dark) 100%);
+    background-size:220% 100%;
     -webkit-background-clip:text;background-clip:text;color:transparent;
     margin:18px 0;font-weight:800;
+    animation:metalShine 6s ease-in-out infinite;
+  }
+  @keyframes metalShine{
+    0%,100%{background-position:0% 50%}
+    50%{background-position:100% 50%}
   }
   .obj-verdict p{position:relative;max-width:640px;margin:0 auto;font-size:14.5px;color:#c3ccc0;line-height:1.7}
 
@@ -1613,40 +1683,49 @@
     </div>
   </section>
 
-  <!-- BLOCK 7 — OBJECTIONS -->
-  <section class="section-pad">
+  <!-- BLOCK 8 — ЗАПЕРЕЧЕННЯ / ТАБЛИЦЯ ПОРІВНЯННЯ -->
+  <section class="section-pad" style="background:var(--cream)">
     <div class="bg-orb gold" style="width:360px;height:360px;top:-100px;right:-140px"></div>
     <div class="container">
-      <div class="reveal" style="max-width:760px">
-        <h2 class="h-title">«А що якщо купити 1–2 номери дешевше в іншому комплексі?»</h2>
-        <p class="h-sub">Порівняємо три сценарії чесно — без округлень на нашу користь.</p>
+      <div class="center reveal" style="max-width:720px">
+        <!-- заголовок — "пряма мова" скептичного інвестора, тому оформлений як бабл коміксу:
+             біла картка-бабл на кремовому фоні секції + гострий "хвостик" знизу зліва -->
+        <div class="obj-bubble">
+          <h2 class="h-title center">«А що якщо купити 1–2 номери дешевше в іншому комплексі?»</h2>
+        </div>
+        <p class="h-sub center">Порівняємо три сценарії чесно — без округлень на нашу користь.</p>
       </div>
 
-      <div class="table-wrap reveal">
-        <table>
-          <thead>
-            <tr>
-              <th>Критерій</th>
-              <th>1 номер 25 м² в іншому комплексі на етапі будівництва (~62 500$)*</th>
-              <th>1 номер 25 м² в іншому комплексі (~93 750$)</th>
-              <th>2 номери 25 м² в іншому комплексі (~187 500$)</th>
-              <th class="wood-col">Апартамент 60 м² Wood Hotel</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Сума входу</td><td>~62 500$</td><td>~93 750$</td><td>~187 500$</td><td class="wood-col">240 000$</td></tr>
-            <tr><td>Дохід з першого місяця</td><td>Немає — 3–4 роки очікування</td><td>Немає — 2–3 роки очікування</td><td>Немає — 2–3 роки очікування</td><td class="wood-col">Так — з місяця оплати</td></tr>
-            <tr><td>Дохід за перші 2 роки (поки альтернативи ще будуються)</td><td>0$</td><td>0$</td><td>0$</td><td class="wood-col">21 600$–43 200$</td></tr>
-            <tr><td>Гарантований мінімум</td><td>Немає</td><td>індивідуально</td><td>Індивідуально</td><td class="wood-col">~900$/міс · 4,5% річних</td></tr>
-            <tr><td>Гарантований швидкий вихід</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">3 місяці від КК</td></tr>
-            <tr><td>Цільова дохідність</td><td>індивідуальна</td><td>індивідуальна</td><td>Індивідуальна</td><td class="wood-col">До 12% річних</td></tr>
-            <tr><td>Дохід за 5 років</td><td>~1 500$ (лише 1-й рік роботи)*</td><td>~8 060$ (з 3-го року)</td><td>~16 125$ (з 3-го року)</td><td class="wood-col">54 000$–108 000$</td></tr>
-            <tr><td>Wood Investor Care</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">Включено</td></tr>
-            <tr><td>Оновлення після 5 років</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td class="wood-col">За рахунок компанії</td></tr>
-          </tbody>
-        </table>
+      <div class="table-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        Гортайте таблицю вбік
       </div>
-      <p style="margin-top:12px;font-size:11.5px;color:var(--muted-2)">*Орієнтовні цифри для комплексу на ранній стадії будівництва — уточнити перед публікацією.</p>
+      <div class="table-card reveal">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Критерій</th>
+                <th>1 номер 25 м² в іншому комплексі на етапі котловану (~62 500$)</th>
+                <th>1 номер 25 м² в іншому комплексі, що відкриється через ~1 рік (~93 750$)</th>
+                <th>2 номери 25 м² в іншому комплексі, що відкриється через ~1 рік (~187 500$)</th>
+                <th class="wood-col">Апартамент 60 м² у Wood Hotel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Сума входу</td><td>~62 500$</td><td>~93 750$</td><td>~187 500$</td><td class="wood-col">240 000$</td></tr>
+              <tr><td>Дохід з першого місяця</td><td>Немає — 3–5 років очікування</td><td>Немає — до 3 років очікування</td><td>Немає — до 3 років очікування</td><td class="wood-col">Дивіденди нараховуються з 1 місяця після оплати</td></tr>
+              <tr><td>Дохід за перші 2 роки (поки альтернативи ще будуються)</td><td>0$ — ще котлован</td><td>0$ — ще не напрацював дохід, щоб вийти на окупність</td><td>0$ — ще не напрацював дохід, щоб вийти на окупність</td><td class="wood-col">21 600$–43 200$</td></tr>
+              <tr><td>Гарантований мінімум</td><td>Немає</td><td>індивідуально</td><td>Індивідуально</td><td class="wood-col">~900$/міс · 4,5% річних</td></tr>
+              <tr><td>Гарантований швидкий вихід</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">3 місяці від КК</td></tr>
+              <tr><td>Цільова дохідність</td><td>індивідуальна середньоринкова</td><td>індивідуальна середньоринкова</td><td>індивідуальна середньоринкова</td><td class="wood-col">До 12% річних</td></tr>
+              <tr><td>Дохід за 5 років</td><td>~1 500$ (лише десь на 5-й рік після вкладень)</td><td>~8 060$ (з 3-го року)</td><td>~16 125$ (з 3-го року)</td><td class="wood-col">54 000$–108 000$</td></tr>
+              <tr><td>Гарантії</td><td>Немає</td><td>Немає</td><td>Немає</td><td class="wood-col">Зафіксовані програмою Wood Investor Care</td></tr>
+              <tr><td>Оновлення та реновації після 5 років</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td>За ваш рахунок</td><td class="wood-col">За рахунок КК</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div class="obj-verdict reveal">
         <div class="kicker">Гроші мають працювати з 1 хвилини</div>
