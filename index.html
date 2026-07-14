@@ -562,21 +562,52 @@
     .care-card p{font-size:12.5px}
   }
 
-  /* ---------- SCENARIOS 5y (block 5) ---------- */
+  /* ---------- BLOCK 7 — ПОРІВНЯННЯ СЦЕНАРІЇВ (візуальний апдейт під систему екранів 1-6:
+     glow-картки, градієнтні бейджі, gold-dark акцент на підсумкових цифрах — сама структура,
+     дані й логіка блоку не змінені) ---------- */
   .scn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
-  .scn-card{border:1px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--white);display:flex;flex-direction:column;transition:border-color .3s ease, background .3s ease}
-  .scn-card:hover{border-color:var(--gold-dark);background:var(--cream)}
-  .scn-card.featured:hover{background:#fffdf9}
-  .scn-card.featured{border-color:var(--gold);border-width:1.5px;position:relative}
-  .scn-badge,.scn-badge-alt{
-    display:inline-block;max-width:100%;font-size:11px;font-weight:800;
+  /* без контуру — картка тримається виключно на тіні (об'єм), контур на світлому фоні
+     виглядав як дешева "рамка". Кожен варіант відрізняється кольором/інтенсивністю
+     власної тіні, а не кольором рамки. */
+  .scn-card{
+    position:relative;overflow:hidden;
+    border:none;border-radius:var(--radius);padding:28px;background:var(--white);
+    display:flex;flex-direction:column;
+    box-shadow:0 22px 46px -26px rgba(19,32,24,.22);
+    transition:background .3s ease, box-shadow .3s ease, transform .3s ease;
+  }
+  .scn-card:hover{background:#fff;transform:translateY(-4px);box-shadow:0 30px 58px -24px rgba(19,32,24,.3)}
+  /* картка 1 ("інший комплекс") — світло-сірий нейтральний фон, щоб одразу читалось
+     як менш бажаний варіант порівняно з золотисто-темними Wood-картками. На ховері
+     стає світлішою (яскравішою), а не темнішою */
+  .scn-card.other{background:#eef0ec}
+  .scn-card.other:hover{background:#f7f8f5;box-shadow:0 26px 50px -24px rgba(19,32,24,.2)}
+  .scn-card.featured{box-shadow:0 26px 52px -24px rgba(168,152,119,.45)}
+  .scn-card.featured:hover{background:#fffdf9;box-shadow:0 32px 60px -22px rgba(168,152,119,.55)}
+  /* точна копія світіння-в-кутку з .care-card::before (блок 5) — той самий розмір,
+     колір і прозорість, не наближений варіант */
+  .scn-card.featured::before{
+    content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle, rgba(241,234,216,.16), transparent 70%);
+    pointer-events:none;
+  }
+  .scn-badge,.scn-badge-alt,.scn-badge-neutral{
+    position:relative;display:inline-block;max-width:100%;font-size:11px;font-weight:800;
     padding:7px 13px;border-radius:8px;text-transform:uppercase;letter-spacing:.02em;
     line-height:1.35;margin-bottom:14px;
   }
-  .scn-badge{background:var(--gold);color:var(--forest-900)}
-  .scn-badge-alt{background:var(--forest-700);color:#fff}
-  .scn-card.featured-alt{border-color:var(--forest-600);border-width:1.5px}
-  .scn-card.featured-alt:hover{background:#f6f8f6}
+  /* та сама формула, що й .btn-gold (плоский --gold + м'яке світіння-тінь) —
+     це вже усталений "преміальний CTA/акцент" сайту, а не новий вигаданий градієнт */
+  .scn-badge{
+    background:var(--gold);color:var(--forest-900);
+    box-shadow:0 6px 16px -6px rgba(0,0,0,.25), 0 0 0 1px rgba(241,234,216,.3), 0 0 20px 4px rgba(241,234,216,.3);
+  }
+  .scn-badge-alt{background:var(--forest-800);color:#fff;box-shadow:0 6px 16px -8px rgba(19,32,24,.5)}
+  /* нейтральний сірий бейдж для картки 1 — той самий формат, що й у 2/3, але без
+     золота/темно-зеленого, щоб одразу читалось як "без гарантій Wood" */
+  .scn-badge-neutral{background:#dcdfd9;color:var(--forest-800);box-shadow:0 6px 14px -8px rgba(19,32,24,.2)}
+  .scn-card.featured-alt{box-shadow:0 24px 50px -26px rgba(42,67,53,.38)}
+  .scn-card.featured-alt:hover{background:#f6f8f6;box-shadow:0 30px 56px -24px rgba(42,67,53,.45)}
   .scn-card.featured-alt .chart-fill{background:linear-gradient(90deg,var(--forest-700),var(--forest-500))}
   .scn-tag{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;display:block}
   .scn-name{font-size:15px;font-weight:700;color:var(--forest-800);min-height:44px}
@@ -593,14 +624,34 @@
   .chart-fill.split .fill-bonus{width:22%;height:100%;background:linear-gradient(90deg,#fdfbf6,var(--gold-light));border-radius:0 8px 8px 0;box-shadow:inset 0 0 0 1.5px var(--gold-dark)}
   .chart-row .val{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700;color:var(--forest-800);text-align:right}
   .scn-total{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
-  .scn-total-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:27px;color:var(--forest-800);font-weight:800;letter-spacing:-.01em}
+  /* акцент gold-dark замість плаского forest-800 — той самий тон, що вже читається
+     у .scn-tag/.gantt-label вище по сайту, узгоджена система кольорів */
+  .scn-total-num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:29px;color:var(--gold-dark);font-weight:800;letter-spacing:-.01em}
   .scn-total-label{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
   .scn-note{font-size:12.5px;color:var(--muted-2);margin-top:10px;line-height:1.5}
   .scn-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  /* градієнтні pill-теги перків замість плоского forest-100 */
+  .scn-perk{
+    background:linear-gradient(155deg,var(--cream) 0%,var(--cream-2) 100%);
+    border:1px solid var(--line);
+    color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px;
+  }
   @media(max-width:900px){.scn-grid{grid-template-columns:1fr}}
 
-  .scn4-standalone{margin-top:36px;border:1.5px solid var(--gold);background:#fbf3e4;border-radius:var(--radius);padding:22px 26px;font-size:14px;color:var(--gold-dark);text-align:center;line-height:1.6}
-  .scn4-standalone b{color:var(--gold-dark)}
+  /* той самий принцип, що й у .scn-card вище: без контуру, тримається на тіні.
+     Фон — "біле золото" (справжні --gold токени, не бліде наближення кремовим),
+     текст темний для контрасту, на ховері — яскравіше (filter:brightness) */
+  .scn4-standalone{
+    margin-top:36px;border:none;border-radius:var(--radius);
+    background:linear-gradient(155deg, var(--gold-light) 0%, var(--gold) 65%, var(--gold-dark) 100%);
+    box-shadow:0 22px 46px -26px rgba(168,152,119,.5);
+    padding:22px 26px;font-size:14px;color:var(--forest-900);text-align:center;line-height:1.6;
+    transition:box-shadow .3s ease, transform .3s ease, filter .3s ease;
+  }
+  .scn4-standalone:hover{
+    box-shadow:0 28px 54px -22px rgba(168,152,119,.6);transform:translateY(-2px);filter:brightness(1.08);
+  }
+  .scn4-standalone b{color:var(--forest-900)}
 
   /* ---------- BLOCK 6 — ДВА СЦЕНАРІЇ v2 (Gantt) ---------- */
   /* Плавний перехід із сусідніми екранами: попередній (Investor Care) і наступний (Порівняння)
@@ -608,9 +659,12 @@
      ЗАКІНЧУЄТЬСЯ білим, а кремовий відтінок лишається тільки в середині секції (де і має бути
      "своя" ідентичність блоку). Так шва немає з жодного боку, на відміну від оригінального
      файлу, де секція одразу починалась з кремового кольору. */
+  /* фіксовані px-відступи (а не %) — на короткій мобільній секції відсоткові зупинки
+     не встигали доходити до чистого білого біля самого краю, і на стику з екраном 7
+     (теж білий) лишався помітний перепад */
   #two-scenarios.section-pad{
     padding:110px 0;position:relative;overflow:clip;
-    background:linear-gradient(180deg, var(--white) 0%, var(--cream) 18%, var(--cream) 82%, var(--white) 100%);
+    background:linear-gradient(180deg, var(--white) 0, var(--white) 48px, var(--cream) 110px, var(--cream) calc(100% - 110px), var(--white) calc(100% - 48px), var(--white) 100%);
   }
   #two-scenarios.section-pad::before{
     content:"";position:absolute;inset:0;z-index:0;opacity:.035;mix-blend-mode:multiply;pointer-events:none;
@@ -1484,7 +1538,8 @@
       </div>
 
       <div class="scn-grid">
-        <div class="scn-card reveal">
+        <div class="scn-card other reveal">
+          <span class="scn-badge-neutral">Стандартний сценарій в інших комплексах</span>
           <span class="scn-tag">Сценарій 1</span>
           <div class="scn-name">2 номери по 25 м² в іншому комплексі, що відкриється впродовж 1 року</div>
           <div class="scn-entry">Вхід: ~187 500$ (2 × 25 м² × 3 750$/м²)</div>
@@ -1547,9 +1602,9 @@
           <div class="scn-note">+ капіталізація ~36 000$ + 20 діб відпочинку щороку</div>
           <p class="scn-desc">Поточна дохідність комплексу — 9%/рік з 1-го місяця. Капіталізація ~36 000$ = 15% від суми входу після завершення інфраструктури Wood Hotel + капіталізація + гарантія виходу за 3 місяці + додаткові бонуси.</p>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
-            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">−50% на послуги в готелі*</span>
-            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">20 діб відпочинку щороку</span>
-            <span style="background:var(--forest-100);color:var(--forest-800);font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:100px">Ремонт після 5 років — за рахунок КК</span>
+            <span class="scn-perk">−50% на послуги в готелі*</span>
+            <span class="scn-perk">20 діб відпочинку щороку</span>
+            <span class="scn-perk">Ремонт після 5 років — за рахунок КК</span>
           </div>
         </div>
       </div>
