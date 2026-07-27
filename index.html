@@ -8,8 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,300;0,12..96,400;0,12..96,500;0,12..96,600;0,12..96,700;0,12..96,800;1,12..96,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- GSAP/ScrollTrigger прибрано разом із переробкою екрана 2: горизонтальний scroll-pin
+     замінено на звичайну вертикальну стрічку з IntersectionObserver-reveal, GSAP більше
+     ніде на сайті не використовувався -->
 <style>
   :root{
     --forest-900:#132018;
@@ -171,7 +172,9 @@
   .mini-burger.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
   @media(max-width:900px){ .mini-burger{display:flex} }
 
-  /* ---------- HERO v3 (device-mockup, scroll-scale interaction) ---------- */
+  /* ---------- HERO v4 (двоколонковий: текст ліворуч, device-мокап праворуч,
+     "рідке скло" замість непрозорого корпусу, одноразова анімація появи замість
+     постійного scroll-масштабування) ---------- */
   .hero{
     background:var(--forest-900);
     color:var(--white);
@@ -188,17 +191,19 @@
   .hero-bg-media{width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7)}
   .hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(15,22,18,.45) 0%, rgba(15,22,18,.6) 45%, rgba(13,18,15,.88) 100%),radial-gradient(circle at 50% 22%, rgba(20,23,20,.05), rgba(13,18,15,.75) 78%)}
   .hero-grid{
-    display:flex;flex-direction:column;align-items:center;text-align:center;
-    padding:132px 24px 0;position:relative;z-index:2;
+    display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:48px;
+    max-width:1320px;margin:0 auto;
+    padding:56px 24px;position:relative;z-index:2;text-align:left;
   }
+  .hero-copy{max-width:560px}
   .hero h1{
     margin-top:0;font-weight:700;text-transform:uppercase;
-    font-size:clamp(34px,5.6vw,72px);line-height:1.12;letter-spacing:-.01em;
-    color:#fff;max-width:960px;
+    font-size:clamp(26px,2.8vw,42px);line-height:1.16;letter-spacing:-.01em;
+    color:#fff;max-width:560px;
   }
   .hero h1 .accent{color:#f1ead8}
-  .hero-sub{margin:26px auto 0;font-size:20px;font-weight:400;color:#a7b5a3;max-width:560px;line-height:1.5}
-  .hero-actions{margin-top:38px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .hero-sub{margin:16px 0 0;font-size:15.5px;font-weight:400;color:#a7b5a3;max-width:460px;line-height:1.5}
+  .hero-actions{margin-top:22px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
   .hero-microtext{font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;color:#8a9a8d}
   .btn-halo-wrap{position:relative;display:inline-flex}
   .btn-halo-wrap::before{
@@ -209,104 +214,122 @@
   .hero .btn-gold{position:relative;z-index:1;background:linear-gradient(100deg,#a89877,#cdbf9d 45%,#f1ead8 60%,#a89877);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.3), 0 0 0 1px rgba(241,234,216,.3)}
   .hero .btn-gold:hover{box-shadow:0 8px 26px rgba(0,0,0,.35), 0 0 0 1px rgba(241,234,216,.4), 0 0 44px 10px rgba(241,234,216,.6)}
 
-  /* ---- device mockup (продукт-мокап замість плоскої картки) ---- */
-  .wh-device-mock{position:relative;margin:64px auto 0;max-width:760px;width:100%;perspective:1400px}
+  /* ---- device mockup (продукт-мокап праворуч від тексту, статичний) ---- */
+  .wh-device-mock{position:relative;width:100%;max-width:440px;margin:0 auto;perspective:1300px}
   .wh-device-mock::before{
-    content:"";position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);
-    width:86%;height:78%;z-index:0;pointer-events:none;
-    background:radial-gradient(circle, rgba(160,164,159,.30), rgba(160,164,159,.07) 45%, transparent 70%);
-    filter:blur(75px);
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:120%;height:110%;z-index:0;pointer-events:none;
+    background:radial-gradient(circle, rgba(160,164,159,.32), rgba(160,164,159,.08) 45%, transparent 70%);
+    filter:blur(60px);
   }
-  .device-scale{will-change:transform, opacity;transform-origin:center top}
-  .device-float{position:relative;z-index:1;will-change:transform}
-  .device-crop{position:relative;overflow:hidden;max-height:540px;border-radius:34px 34px 0 0}
-  .device-fade{
-    position:absolute;left:0;right:0;bottom:0;height:56px;z-index:6;pointer-events:none;
-    background:linear-gradient(180deg, rgba(10,19,14,0) 0%, rgba(10,19,14,.25) 55%, var(--forest-900) 100%);
+  .device-float{position:relative;z-index:1}
+  @keyframes deviceSettle{
+    0%{transform:rotateY(-13deg) rotateX(4deg) scale(.94);opacity:.65}
+    100%{transform:rotateY(0deg) rotateX(0deg) scale(1);opacity:1}
   }
+  /* корпус мокапу — рідке скло (liquid glass): напівпрозорий, розмиває
+     відео фону крізь себе, з тонким світлим краєм для визначення форми.
+     Внутрішні картки (screen/mock-price/trigger-badge) лишаються
+     щільними/контрастними — саме там читається текст. */
   .device-frame{
     position:relative;
-    background:linear-gradient(165deg,#3d3c3a 0%,#232220 55%,#131211 100%);
-    border-radius:34px;padding:14px;
+    background:linear-gradient(165deg, rgba(255,255,255,.14), rgba(255,255,255,.03) 40%, rgba(20,30,24,.22) 100%);
+    backdrop-filter:blur(22px) saturate(150%);
+    -webkit-backdrop-filter:blur(22px) saturate(150%);
+    border-radius:26px;padding:12px;
+    animation:deviceSettle 1.15s cubic-bezier(.19,1,.22,1) .2s both;
     box-shadow:
-      0 60px 100px -30px rgba(0,0,0,.65),
-      0 16px 40px -14px rgba(0,0,0,.55),
-      0 0 0 1px rgba(241,234,216,.14),
-      inset 0 1px 0 rgba(255,255,255,.1),
-      inset 0 -1px 0 rgba(0,0,0,.35);
-    transition:transform .35s cubic-bezier(.22,.9,.3,1);
+      30px 50px 90px -30px rgba(0,0,0,.5),
+      0 0 0 1px rgba(255,255,255,.22),
+      inset 0 1px 0 rgba(255,255,255,.35),
+      inset 0 -1px 0 rgba(0,0,0,.2);
     transform-style:preserve-3d;
   }
   .device-frame::before{
-    content:"";position:absolute;top:0;left:40px;right:40px;height:1px;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+    content:"";position:absolute;top:0;left:28px;right:28px;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
   }
   .device-frame::after{
     content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);
-    width:4px;height:4px;border-radius:50%;background:#0a0a0a;box-shadow:0 0 0 1px rgba(255,255,255,.05);
+    width:4px;height:4px;border-radius:50%;background:rgba(10,10,10,.5);box-shadow:0 0 0 1px rgba(255,255,255,.15);
   }
-  .screen{position:relative;background:var(--cream);border-radius:22px;overflow:hidden;text-align:left;box-shadow:inset 0 1px 3px rgba(0,0,0,.28), inset 0 0 0 1px rgba(0,0,0,.05)}
+  .screen{position:relative;background:rgba(234,237,233,.82);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-radius:18px;overflow:hidden;text-align:left;box-shadow:inset 0 1px 3px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.4)}
   .screen::after{
     content:"";position:absolute;inset:0;z-index:20;pointer-events:none;
-    background:linear-gradient(115deg, rgba(255,255,255,.06) 0%, transparent 22%, transparent 80%, rgba(255,255,255,.03) 100%);
+    background:linear-gradient(115deg, rgba(255,255,255,.08) 0%, transparent 24%, transparent 78%, rgba(255,255,255,.04) 100%);
     mix-blend-mode:overlay;
   }
   .app{display:flex}
-  .sidebar{width:56px;flex:none;background:var(--forest-900);display:flex;flex-direction:column;align-items:center;padding:18px 0;gap:10px}
-  .sidebar .logo-dot{width:26px;height:26px;border-radius:7px;background:transparent;border:1px solid #f1ead8;margin-bottom:18px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:600;color:#f1ead8}
-  .sidebar .icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#93a695;transition:background .2s ease, color .2s ease}
-  .sidebar .icon svg{width:15px;height:15px}
-  .sidebar .icon.active{background:rgba(241,234,216,.14);color:#f1ead8;box-shadow:inset 0 0 0 1px rgba(241,234,216,.35)}
-  .content{flex:1;min-width:0;padding:24px 26px 28px;background:var(--cream)}
-  .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px}
-  .content-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--forest-900);margin:0}
+  .content{flex:1;min-width:0;padding:18px 20px 20px;background:transparent}
+  .content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+  .content-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em;color:var(--forest-900);margin:0;line-height:1.25}
   .header-actions{display:flex;gap:8px}
-  .btn-dark{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--forest-800);background:transparent;border:1px solid var(--forest-700);padding:7px 13px;border-radius:9px;flex:none}
-  .btn-dark svg{width:12px;height:12px}
-  .room-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px}
-  .room-image{position:relative;border-radius:14px;overflow:hidden;background:#2a332c;box-shadow:0 18px 36px -22px rgba(19,32,24,.45)}
+  .btn-dark{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--forest-800);background:transparent;border:1px solid var(--forest-700);padding:6px 11px;border-radius:8px;flex:none}
+  .btn-dark svg{width:11px;height:11px}
+  /* фото на всю ширину зверху, опис+інфо суцільним блоком нижче — вертикальний стек замість двох колонок */
+  .room-row{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+  .room-image{position:relative;border-radius:12px;overflow:hidden;background:#2a332c;box-shadow:0 18px 36px -22px rgba(19,32,24,.45);aspect-ratio:16/7}
   .room-image img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.04) contrast(1.02)}
   .room-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, transparent 52%, rgba(9,15,11,.7))}
   .room-image .tag{
-    position:absolute;top:12px;left:12px;z-index:2;
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
-    color:#f2f0e8;border:1px solid rgba(255,255,255,.4);padding:5px 10px;border-radius:3px;backdrop-filter:blur(3px);
+    position:absolute;top:10px;left:10px;z-index:2;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+    color:#f2f0e8;border:1px solid rgba(255,255,255,.4);padding:4px 8px;border-radius:3px;backdrop-filter:blur(3px);
   }
-  .mock-price{background:#fff;border-radius:14px;padding:24px;display:flex;flex-direction:column;justify-content:flex-start;box-shadow:0 18px 36px -22px rgba(19,32,24,.3), 0 0 0 1px rgba(19,32,24,.04)}
-  .mock-price .label{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px;line-height:1.35}
-  .mock-price .price{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--forest-900);line-height:1;margin-bottom:16px;display:flex;align-items:baseline;gap:6px}
+  .mock-price{background:#fff;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;justify-content:flex-start;box-shadow:0 18px 36px -22px rgba(19,32,24,.3), 0 0 0 1px rgba(19,32,24,.04)}
+  .mock-price .label{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px;line-height:1.3}
+  .mock-price .price{font-family:'Bricolage Grotesque',sans-serif;font-size:27px;font-weight:800;letter-spacing:-.02em;color:var(--forest-900);line-height:1;margin-bottom:10px;display:flex;align-items:baseline;gap:5px}
   .mock-price .price .num{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:-.02em}
-  .mock-price .price span.per{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;color:var(--muted)}
-  .mock-price .divider{height:1.5px;background:linear-gradient(90deg, transparent, rgba(205,191,157,.65) 15%, rgba(205,191,157,.65) 85%, transparent);margin:14px 0}
-  .mock-price .row{display:flex;flex-direction:column;gap:4px;padding:8px 0}
-  .mock-price .row .k{font-size:11px;letter-spacing:.02em;color:var(--muted)}
-  .mock-price .row .v{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:14.5px;font-weight:700;letter-spacing:-.005em;color:var(--forest-800)}
-  .check-list{margin-top:4px}
-  .check-row{display:flex;align-items:flex-start;gap:9px;padding:5px 0;font-size:12.5px;color:var(--forest-900);font-weight:600}
-  .check-row .ico{width:16px;height:16px;border-radius:50%;background:rgba(205,191,157,.13);display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
-  .check-row .ico svg{width:9px;height:9px;color:var(--gold-dark)}
-  .trigger-badge{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid var(--gold);color:var(--forest-800);border-radius:10px;padding:12px 16px;font-size:12.5px;font-weight:600;box-shadow:0 12px 26px -18px rgba(19,32,24,.28)}
+  .mock-price .price span.per{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .mock-price .divider{height:1.5px;background:linear-gradient(90deg, transparent, rgba(205,191,157,.65) 15%, rgba(205,191,157,.65) 85%, transparent);margin:10px 0}
+  /* дві строки показника йдуть поруч в одному рядку — тепер є горизонтальний простір (повна ширина) */
+  .row-group{display:flex;gap:20px}
+  .mock-price .row{display:flex;flex-direction:column;gap:3px;padding:5px 0;flex:1}
+  .mock-price .row .k{font-size:10px;letter-spacing:.02em;color:var(--muted)}
+  .mock-price .row .v{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:700;letter-spacing:-.005em;color:var(--forest-800)}
+  .check-list{margin-top:2px}
+  .check-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:11.5px;color:var(--forest-900);font-weight:600}
+  .check-row .ico{width:15px;height:15px;border-radius:50%;background:rgba(205,191,157,.13);display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+  .check-row .ico svg{width:8px;height:8px;color:var(--gold-dark)}
+  /* тригер — тепер помітний акцентний банер на всю ширину, а не тиха картка з тонкою рамкою */
+  .trigger-badge{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:linear-gradient(155deg,var(--forest-800),var(--forest-900));color:#fff;
+    border-radius:11px;padding:12px 16px;font-size:12.5px;font-weight:700;
+    box-shadow:0 16px 32px -18px rgba(19,32,24,.5), inset 0 1px 0 rgba(255,255,255,.08);
+  }
   .trigger-badge .left{display:flex;align-items:center;gap:9px}
-  .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);position:relative;flex:none}
-  .dot-pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.3px solid var(--gold);animation:heroPulse 2.2s ease-out infinite}
+  .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--gold-light);position:relative;flex:none}
+  .dot-pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.3px solid var(--gold-light);animation:heroPulse 2.2s ease-out infinite}
   @keyframes heroPulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.8);opacity:0}}
   .unit-dots{display:inline-flex;gap:4px}
   .unit-dots i{width:6px;height:6px;border-radius:2px;background:var(--gold);opacity:.9;display:inline-block}
-  .next-hint{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted-2);font-weight:500}
-  @media(max-width:900px){.hero-grid{padding:96px 20px 0}}
-  @media(max-width:640px){
-    .room-row{grid-template-columns:1fr}
-    .room-image{aspect-ratio:16/10}
-    .content{padding:18px 18px 22px}
-    .mock-price .price{font-size:30px}
-    .mock-price .divider{margin:8px 0}
-    .mock-price .row{padding:5px 0}
-    .device-crop{max-height:1000px;border-radius:24px 24px 0 0}
-    .device-frame{border-radius:24px;padding:11px}
-    .device-frame::before{left:22px;right:22px}
-    .screen{border-radius:15px}
+  /* до цієї ширини — двоколонковий hero (текст | мокап). Нижче — стек в один стовпець */
+  @media(max-width:1000px){
+    .hero-grid{grid-template-columns:1fr;text-align:center;padding:96px 20px 0;gap:8px}
+    .hero-copy{max-width:640px;margin:0 auto}
+    .hero h1{max-width:640px;margin-left:auto;margin-right:auto}
+    .hero-sub{max-width:560px;margin-left:auto;margin-right:auto}
+    .hero-actions{align-items:center;margin-top:32px}
+    .wh-device-mock{max-width:620px;margin:56px auto 0}
   }
-  @media(max-width:400px){.wh-device-mock{margin-top:44px}}
+  @media(max-width:640px){
+    .content{padding:18px 18px 22px}
+    .mock-price .price{font-size:24px}
+    .mock-price .divider{margin:8px 0}
+    .row-group{flex-direction:column;gap:0}
+    .mock-price .row{padding:5px 0}
+    .device-frame{border-radius:22px;padding:11px}
+    .device-frame::before{left:20px;right:20px}
+    .screen{border-radius:14px}
+  }
+  @media(max-width:400px){.wh-device-mock{margin-top:40px}}
+
+  /* accessibility: користувачам із системною настройкою "менше руху" —
+     мокап одразу в кінцевому рівному положенні, без анімації появи */
+  @media(prefers-reduced-motion: reduce){
+    .device-frame{animation:none;transform:rotateY(0deg) rotateX(0deg) scale(1);opacity:1}
+  }
 
 
   /* ---------- VIDEO BLOCK ---------- */
@@ -347,46 +370,51 @@
     padding:7px 12px;border-radius:100px;
   }
 
-  /* ---------- PROOF (block 2) ---------- */
-  /* ---------- BLOCK 2 — CINE RIBBON (заміна .proof) ---------- */
+  /* ---------- BLOCK 2 — CINE VERTICAL (заміна горизонтальної scroll-pin стрічки) ---------- */
+  /* Партнери відзначили, що GSAP scroll-hijack пін "тупить і йде ривками". Замінено на звичайний
+     вертикальний скрол без pin/GSAP — картки плавно проявляються по мірі прокрутки через
+     IntersectionObserver, без залежності від зовнішніх бібліотек. Заразом це прибирає й "зайвий
+     простір" на високих моніторах: секція росте разом із контентом (padding), а не тримає
+     фіксовану 100vh з центруванням. */
   .cine{
-    position:relative;height:100vh;overflow:hidden;
+    position:relative;overflow:hidden;
     background:
-      linear-gradient(180deg, rgba(11,15,13,.35) 0%, rgba(11,15,13,.5) 55%, rgba(11,15,13,.8) 100%),
+      linear-gradient(180deg, rgba(11,15,13,.35) 0%, rgba(11,15,13,.5) 45%, rgba(11,15,13,.85) 100%),
       url('cine-bg.jpg') center 38%/cover no-repeat;
     color:#fff;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:110px 24px 100px;
   }
-  .cine-head{position:relative;z-index:3;text-align:center;max-width:640px;padding:0 24px;margin-bottom:56px}
-  .cine .eyebrow{
-    display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px;
-    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--gold-light);
-  }
-  .cine .eyebrow::before,.cine .eyebrow::after{content:"";width:26px;height:1px;background:var(--gold-light)}
+  .cine-head{position:relative;z-index:2;text-align:center;max-width:760px;margin:0 auto 64px}
   .cine .h-title{
     font-weight:700;font-size:clamp(26px,3.2vw,40px);line-height:1.22;letter-spacing:-.01em;color:#fff;
-    text-shadow:0 2px 16px rgba(0,0,0,.4);max-width:none;
+    text-shadow:0 2px 16px rgba(0,0,0,.4);
   }
   .cine .title-break{display:none}
   @media(min-width:721px){.cine .title-break{display:inline}}
 
-  .cine-stage{position:relative;z-index:2;width:100%;max-width:1400px;height:330px;overflow:hidden}
-  .cine-track{position:relative;display:flex;align-items:center;gap:32px;height:100%;will-change:transform}
+  /* 5 портретних карток в один ряд на десктопі */
+  .cine-list{
+    position:relative;z-index:2;max-width:1300px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(5, 1fr);align-items:start;gap:18px;
+  }
   .cine-card{
-    position:relative;flex:none;width:420px;height:240px;
-    border-radius:18px;
+    position:relative;border-radius:18px;
     background:linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), #101a14;
     border:1px solid rgba(241,234,216,.16);
     box-shadow:0 30px 60px -24px rgba(0,0,0,.6);
-    padding:0 28px 24px;
-    display:flex;flex-direction:column;justify-content:flex-end;
-    will-change:transform, opacity;
+    padding:56px 20px 26px;min-height:280px;
+    display:flex;flex-direction:column;justify-content:flex-start;
+    /* reveal-стан за замовчуванням — приховано, JS додає .in по мірі скролу, з невеликою
+       затримкою по індексу картки (--i), тому вони "читаються" одна за одною */
+    opacity:0;transform:translateY(28px);
+    transition:opacity .7s cubic-bezier(.22,.9,.3,1), transform .7s cubic-bezier(.22,.9,.3,1);
+    transition-delay:calc(var(--i, 0) * 0.1s);
   }
+  .cine-card.in{opacity:1;transform:translateY(0)}
   .cine-num{
-    position:absolute;top:-22px;left:22px;z-index:2;
+    position:absolute;top:-16px;left:20px;z-index:2;
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-    font-size:147px;line-height:.86;letter-spacing:-.03em;
+    font-size:64px;line-height:.86;letter-spacing:-.03em;
     background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
     -webkit-background-clip:text;background-clip:text;color:transparent;
     text-shadow:0 4px 24px rgba(0,0,0,.4);
@@ -395,37 +423,27 @@
   .cine-num .unit-letter{
     font-size:.75em;background:inherit;-webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .cine-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;margin-bottom:8px;letter-spacing:-.005em}
-  .cine-desc{font-size:13px;line-height:1.5;color:rgba(230,232,226,.72);font-weight:400}
+  .cine-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14.5px;color:#fff;margin-bottom:7px;letter-spacing:-.005em;line-height:1.3}
+  .cine-desc{font-size:11.5px;line-height:1.5;color:rgba(230,232,226,.72);font-weight:400}
 
-  .cine-hint{
-    position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
-    color:rgba(241,234,216,.45);display:flex;align-items:center;gap:8px;
+  @media(max-width:960px){
+    .cine-list{grid-template-columns:repeat(2, 1fr);max-width:520px;gap:20px}
+    .cine-num{font-size:72px}
+    .cine-title{font-size:16px}
+    .cine-desc{font-size:13px}
   }
-  .cine-hint svg{width:12px;height:12px;animation:hintBounce 1.8s ease-in-out infinite}
-  @keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+  @media(max-width:640px){
+    .cine{padding:72px 20px 72px}
+    .cine-head{margin-bottom:44px}
+    .cine-list{grid-template-columns:1fr;gap:16px;max-width:420px}
+    .cine-card{min-height:auto;padding:40px 22px 22px;border-radius:16px;transition-delay:0s}
+    .cine-num{font-size:60px;top:-14px;left:18px}
+    .cine-title{font-size:16px}
+  }
 
-  /* МОБІЛЬНА ВЕРСІЯ — без GSAP-піну й горизонтального scroll-hijack (на тачскріні це відчувається
-     ривками й конфліктує з нативним скролом). Замість цього — проста вертикальна стрічка карток,
-     той самий принцип, що й у блоці 4 (.bp-mobile). */
-  .cine-mobile{display:none;flex-direction:column;gap:14px;width:100%;max-width:480px;padding:0 24px;position:relative;z-index:2}
-  .cine-mobile-card{
-    position:relative;border-radius:16px;padding:20px 22px 18px;
-    background:linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), #101a14;
-    border:1px solid rgba(241,234,216,.16);
-    box-shadow:0 16px 32px -20px rgba(0,0,0,.6);
+  @media(prefers-reduced-motion: reduce){
+    .cine-card{transition:none;opacity:1;transform:none}
   }
-  .cine-mobile-card .cine-num{position:static;font-size:52px;text-shadow:none}
-  .cine-mobile-card .cine-title{margin-top:6px}
-
-  @media(max-width:900px){
-    .cine{height:auto;padding:64px 0}
-    .cine-stage,.cine-hint{display:none}
-    .cine-mobile{display:flex}
-  }
-  @media(max-width:900px){.proof-grid{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b b" "c d"}}
-  @media(max-width:560px){.proof-grid{grid-template-columns:1fr;grid-template-areas:"a" "b" "c" "d"}}
 
   /* ---------- ADVANTAGES (block 3) ---------- */
   .adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
@@ -440,80 +458,47 @@
   .adv-stat{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;color:var(--forest-800);letter-spacing:-.02em}
   .adv-num{font-family:'Bricolage Grotesque',sans-serif;color:var(--gold);font-size:20px;font-weight:700;margin-bottom:14px}
 
-  /* ---------- BLOCK 4 — FORMAT 60 M² v3: blueprint схема будинку ---------- */
-  #format-60{
-    --bp-muted:#a9b5a5;
-    --bp-line-soft:rgba(241,234,216,.85);
-  }
+  /* ---------- BLOCK 4 — FORMAT 60 M² v5: реальний план номера (з фотографії БТІ) + ряд карток умов ---------- */
+  /* Замінено абстрактну схему-«будиночок» на справжній контур флагманського номера (санвузол
+     4,70 м², вітальня 23,76 м², дві спальні 14,60 і 15,77 м²), скопійований з реального
+     планування. 4 гарантії тепер подаються не floating leader-line підказками збоку (які на
+     вузьких екранах доводилось ховати й дублювати мобільним списком), а рядом карток у тій самій
+     мові, що й .cine-card — тому працює однаково на будь-якій ширині екрана, без окремої
+     мобільної версії. */
+  #format-60{--bp-muted:#a9b5a5}
   #format-60 .h-title{color:#fff}
   #format-60 .h-sub{color:var(--bp-muted)}
 
-  .blueprint{position:relative;width:100%;max-width:1100px;margin:48px auto 0;aspect-ratio:1200/720}
-  .blueprint svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-
-  /* невидима зона наведення точно по силуету будинку (не по всьому широкому блоку з текстом) */
-  .house-hover-zone{position:absolute;left:31%;top:9%;width:38%;height:67%;z-index:5;cursor:default}
-  .house-hover-zone:hover ~ svg #houseContent{transform:scale(1.05);filter:brightness(1.18)}
-  .house-hover-zone:hover ~ .bp-node .stat{filter:brightness(1.4)}
-  #houseContent{transform-box:fill-box;transform-origin:center;transition:transform .35s ease, filter .35s ease}
-
-  /* окрема іконка-вузол і leader-лінія підсвічуються разом при ховері на відповідний текстовий блок.
-     transform-origin заданий точними SVG-координатами центру рамки (а не fill-box:center) —
-     fill-box на вкладених <g> з власним transform="translate() scale()" рахується по-різному
-     в Safari/Chrome і може зсувати або спотворювати іконку при ховері. */
-  .house-node{transition:transform .3s ease, filter .3s ease}
-  .house-node.is-active{transform:scale(1.4);filter:brightness(1.3)}
-  #node-tl{transform-box:view-box;transform-origin:515px 331px}
-  #node-tr{transform-box:view-box;transform-origin:685px 331px}
-  #node-bl{transform-box:view-box;transform-origin:515px 471px}
-  #node-br{transform-box:view-box;transform-origin:685px 471px}
-  .lead-line{transition:opacity .3s ease, stroke-width .3s ease}
-  .lead-line.is-active{opacity:1;stroke-width:2.2px}
-
-  .bp-node{position:absolute;width:250px;cursor:default;font-size:13.5px;line-height:1.55;color:var(--bp-muted);transition:transform .3s ease, filter .3s ease}
-  .bp-node:hover{filter:brightness(1.12);z-index:10}
-  .bp-node.tl:hover{transform:translate(0,-50%) scale(1.15);transform-origin:right center}
-  .bp-node.tr:hover{transform:translate(-100%,-50%) scale(1.15);transform-origin:left center}
-  .bp-node.bl:hover{transform:translate(0,-50%) scale(1.15);transform-origin:right center}
-  .bp-node.br:hover{transform:translate(-100%,-50%) scale(1.15);transform-origin:left center}
-  .bp-node h4{font-size:15.5px;color:#fff;margin-bottom:6px}
-  .bp-node .stat{
-    display:inline-block;margin-bottom:8px;
-    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;
+  /* ряд з 4 карток-умов — та сама мова карток, що й у .cine-card (екран 2) */
+  .cond-list{display:grid;grid-template-columns:repeat(4, 1fr);align-items:start;gap:18px;max-width:1100px;margin:0 auto}
+  .cond-card{
+    position:relative;border-radius:18px;
+    background:linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), #101a14;
+    border:1px solid rgba(241,234,216,.16);
+    box-shadow:0 30px 60px -24px rgba(0,0,0,.6);
+    padding:52px 22px 24px;min-height:230px;
+    display:flex;flex-direction:column;justify-content:flex-start;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .cond-card:hover{transform:translateY(-4px);box-shadow:0 36px 70px -24px rgba(0,0,0,.7)}
+  .cond-num{
+    position:absolute;top:-14px;left:20px;z-index:2;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:42px;line-height:.9;letter-spacing:-.02em;
     background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    transition:filter .35s ease;
+    text-shadow:0 4px 20px rgba(0,0,0,.4);
   }
-  .bp-node:hover .stat{filter:brightness(1.4)}
-  .bp-node.tl{left:0%;top:17%;transform:translate(0,-50%);text-align:right}
-  .bp-node.tr{left:100%;top:17%;transform:translate(-100%,-50%);text-align:left}
-  .bp-node.bl{left:0%;top:83%;transform:translate(0,-50%);text-align:right}
-  .bp-node.br{left:100%;top:83%;transform:translate(-100%,-50%);text-align:left}
+  .cond-title{font-size:14.5px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3}
+  .cond-desc{font-size:12px;line-height:1.5;color:rgba(230,232,226,.7)}
 
   @media(max-width:900px){
-    .blueprint{display:none}
-    .bp-mobile{display:flex !important}
+    .cond-list{grid-template-columns:repeat(2, 1fr);max-width:520px}
   }
-  .bp-mobile{
-    display:none;flex-direction:column;gap:0;max-width:560px;margin:48px auto 0;
-    border-top:1px solid rgba(241,234,216,.16);
+  @media(max-width:560px){
+    .cond-list{grid-template-columns:1fr;max-width:400px;gap:14px}
+    .cond-card{min-height:auto;padding:38px 20px 20px}
   }
-  .bp-mobile-item{display:flex;align-items:flex-start;gap:20px;padding:26px 4px;border-bottom:1px solid rgba(241,234,216,.16)}
-  .bp-mobile-icon{position:relative;flex:none;width:44px;height:44px;color:var(--gold-light);display:flex;align-items:center;justify-content:center}
-  .bp-mobile-icon::before{
-    content:"";position:absolute;inset:-14px;z-index:-1;border-radius:50%;
-    background:radial-gradient(circle, rgba(241,234,216,.35), transparent 70%);
-    filter:blur(6px);
-  }
-  .bp-mobile-icon svg{width:26px;height:26px;position:relative}
-  .bp-mobile-text .stat{
-    display:block;margin-bottom:8px;
-    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;
-    background:linear-gradient(100deg,var(--gold-dark),var(--gold-light) 40%,var(--gold-light) 55%,var(--gold) 72%,var(--gold-dark));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .bp-mobile-text h4{font-size:15.5px;color:#fff;margin-bottom:6px}
-  .bp-mobile-text p{font-size:13.5px;color:var(--bp-muted);line-height:1.55}
   .adv-card h4{font-size:18px;color:var(--forest-800);margin-bottom:10px;line-height:1.3}
   .adv-card p{font-size:14.5px;color:var(--muted);line-height:1.6}
   @media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
@@ -959,26 +944,91 @@
   }
   .obj-verdict p{position:relative;max-width:640px;margin:0 auto;font-size:14.5px;color:#c3ccc0;line-height:1.7}
 
-  /* ---------- DEFICIT (block 8) ---------- */
-  .deficit{background:var(--cream)}
-  .deficit-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;margin-top:20px}
-  .deficit-text p{font-size:15.5px;color:var(--muted);line-height:1.7;margin-top:18px}
-  .deficit-cta{margin-top:30px}
-  .units{display:flex;flex-direction:column}
-  .unit-row{
-    display:flex;justify-content:space-between;align-items:center;background:transparent;
-    padding:20px 4px;border-bottom:1px solid var(--line);transition:padding-left .25s ease, border-color .25s ease;
+  /* ---------- БЛОК — "ЗАЛИШИЛОСЬ 4 АПАРТАМЕНТИ" v2 (галерея + компактний список юнітів,
+     той самий принцип "тінь замість контуру", що в блоках 7-8) ---------- */
+  /* плавний перехід у білий в самому низу секції (в межах нижнього паддінгу, під контентом) —
+     наступний блок "Готель у фото" білий, тому без цього на стику видно різку лінію,
+     як було раніше між екранами 3-4 і 6-7 */
+  .deficit{background:linear-gradient(180deg, var(--cream) 0, var(--cream) calc(100% - 50px), var(--white) 100%)}
+  .deficit-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:start;margin-top:44px}
+
+  .deficit-gallery{display:flex;flex-direction:column;gap:14px}
+
+  /* слайдер: виглядає як одне фото, всередині — горизонтальна стрічка з transform:translateX */
+  .dg-viewer{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;box-shadow:0 26px 52px -28px rgba(19,32,24,.24)}
+  .dg-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.22,.9,.3,1)}
+  .dg-slide{flex:0 0 100%;height:100%;padding:0;border:0;background:none;cursor:zoom-in;display:block}
+  .dg-slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .dg-nav{
+    position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;
+    background:rgba(19,32,24,.45);backdrop-filter:blur(4px);border:none;color:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s ease;
   }
-  .units .unit-row:first-child{border-top:1px solid var(--line)}
-  .unit-row:hover{padding-left:12px;border-color:var(--gold-dark)}
-  .unit-row .idx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted-2);margin-right:14px}
-  .unit-row .name{font-weight:700;color:var(--forest-800);font-size:14.5px}
-  .status{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
-  .status::before{content:"";width:6px;height:6px;border-radius:50%;background:#3d7d4f}
-  @media(max-width:900px){.deficit-grid{grid-template-columns:1fr}}
+  .dg-nav:hover{background:rgba(19,32,24,.72)}
+  .dg-nav.prev{left:12px}
+  .dg-nav.next{right:12px}
+  .dg-nav svg{width:18px;height:18px}
+  .dg-zoom-hint{
+    position:absolute;bottom:12px;right:12px;display:flex;align-items:center;gap:6px;
+    background:rgba(19,32,24,.55);backdrop-filter:blur(4px);color:#fff;font-size:11px;
+    padding:6px 11px;border-radius:100px;pointer-events:none;
+  }
+  .dg-zoom-hint svg{width:12px;height:12px;flex:none}
+  @media(max-width:640px){.dg-zoom-hint{display:none}}
+
+  .dg-dots{display:flex;justify-content:center;gap:8px}
+  .dg-dot{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer;transition:background .2s ease, transform .2s ease}
+  .dg-dot.is-active{background:var(--gold-dark);transform:scale(1.35)}
+
+  /* лайтбокс на весь екран */
+  .dg-lightbox{
+    position:fixed;inset:0;z-index:200;background:rgba(10,15,12,.94);
+    display:none;align-items:center;justify-content:center;padding:60px 24px;
+  }
+  .dg-lightbox.is-open{display:flex}
+  .dg-lb-img{max-width:min(1100px,90vw);max-height:82vh;object-fit:contain;border-radius:10px;cursor:zoom-in;transition:transform .25s ease}
+  .dg-lb-img.is-zoomed{cursor:zoom-out;transform:scale(1.7)}
+  .dg-lb-close,.dg-lb-nav{
+    position:absolute;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:50%;cursor:pointer;transition:background .2s ease;
+  }
+  .dg-lb-close:hover,.dg-lb-nav:hover{background:rgba(255,255,255,.18)}
+  .dg-lb-close{top:24px;right:24px;width:44px;height:44px}
+  .dg-lb-close svg{width:18px;height:18px}
+  .dg-lb-nav{top:50%;transform:translateY(-50%);width:52px;height:52px}
+  .dg-lb-nav svg{width:22px;height:22px}
+  .dg-lb-nav.prev{left:24px}
+  .dg-lb-nav.next{right:24px}
+  @media(max-width:640px){
+    .dg-lightbox{padding:20px}
+    .dg-lb-nav{width:40px;height:40px}
+    .dg-lb-nav svg{width:18px;height:18px}
+    .dg-lb-close{width:36px;height:36px;top:14px;right:14px}
+  }
+
+  .deficit-side{display:flex;flex-direction:column;height:100%}
+  .units{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .unit-row{
+    position:relative;display:flex;flex-direction:column;gap:10px;align-items:flex-start;
+    padding:16px 18px;border-radius:var(--radius-sm);background:var(--white);
+    box-shadow:0 12px 26px -18px rgba(19,32,24,.16);
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .unit-row:hover{transform:translateY(-2px);box-shadow:0 18px 36px -18px rgba(19,32,24,.24)}
+  .unit-row .idx{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted-2)}
+  .unit-row .name{font-weight:700;color:var(--forest-800);font-size:14px}
+  .status{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.03em}
+  .status::before{content:"";width:6px;height:6px;border-radius:50%;background:#3d7d4f;flex:none}
+  .deficit-cta{margin-top:24px}
+  @media(max-width:900px){
+    .deficit-grid{grid-template-columns:1fr}
+    .units{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:480px){.units{grid-template-columns:1fr}}
 
   /* ---------- GALLERY (плейсхолдер-фото — замінити на реальні кадри) ---------- */
-  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
   .gallery-item{
     position:relative;border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:4/5;
     background:var(--cream-2);
@@ -1005,10 +1055,15 @@
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
     background:linear-gradient(180deg, rgba(15,25,19,.5) 0%, rgba(15,25,19,.38) 50%, rgba(15,25,19,.58) 100%);
   }
+  /* та сама елегантна "цитатна" подача, що й у verdict-блоці екрана 6 (курсив Bricolage
+     Grotesque + тонка золота риска-роздільник) — замість жирного sans-caption, який
+     виглядав як службовий підпис, а не частина преміальної подачі сайту */
+  .photo-band-divider{width:44px;height:1px;background:var(--gold-light);opacity:.8;margin:0 auto 18px}
   .photo-band-text{
-    color:#fff;font-size:clamp(20px,2.4vw,30px);font-weight:600;max-width:640px;
-    letter-spacing:-.02em;margin:0 auto;text-align:center;
-    text-shadow:0 2px 14px rgba(0,0,0,.4);
+    font-family:'Bricolage Grotesque',sans-serif;font-style:italic;font-weight:500;
+    color:#fff;font-size:clamp(19px,2.4vw,28px);max-width:620px;
+    letter-spacing:-.005em;line-height:1.35;margin:0 auto;text-align:center;
+    text-shadow:0 2px 14px rgba(0,0,0,.45);
   }
   @media(max-width:768px){.photo-band{height:260px}}
 
@@ -1156,38 +1211,22 @@
       <div class="hero-bg-overlay"></div>
     </div>
     <div class="container hero-grid">
-      <h1>Інвестиція, що вже <span class="accent">приносить прибуток</span><br><span style="white-space:nowrap">з&nbsp;1‑го&nbsp;місяця</span></h1>
-      <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
-      <div class="hero-actions">
-        <span class="btn-halo-wrap"><a href="#apply" class="btn btn-gold">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></span>
+      <div class="hero-copy">
+        <h1>Інвестиція, що вже <span class="accent">приносить прибуток</span><br><span style="white-space:nowrap">з&nbsp;1‑го&nbsp;місяця</span></h1>
+        <p class="hero-sub">Wood Hotel Resort &amp; Spa працює 3 роки, має впізнаваність, основну інфраструктуру та постійних гостей і вже виплачує дохід інвесторам.</p>
+        <div class="hero-actions">
+          <span class="btn-halo-wrap"><a href="#apply" class="btn btn-gold">Залишити заявку на розрахунок<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></span>
+        </div>
       </div>
 
       <div class="wh-device-mock">
-        <div class="device-scale" id="deviceScale">
         <div class="device-float" id="deviceFloat">
-          <div class="device-crop">
           <div class="device-frame" id="deviceFrame">
             <div class="screen">
               <div class="app">
-                <aside class="sidebar">
-                  <div class="logo-dot">W</div>
-                  <div class="icon active" title="Портфель">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
-                  </div>
-                  <div class="icon" title="Виплати">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
-                  </div>
-                  <div class="icon" title="Документи">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
-                  </div>
-                  <div class="icon" style="margin-top:auto;" title="Профіль">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                  </div>
-                </aside>
-
                 <main class="content">
                   <div class="content-header">
-                    <h2>Ваш апартамент</h2>
+                    <h2>Інвестиції у трикімнатний номер</h2>
                     <div class="header-actions">
                       <button class="btn-dark">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
@@ -1198,20 +1237,22 @@
 
                   <div class="room-row">
                     <div class="room-image">
-                      <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м²" loading="lazy">
-                      <span class="tag">Апартамент №2 · 60 м²</span>
+                      <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м²">
+                      <span class="tag">Площа апартаменту 60 м²</span>
                     </div>
                     <div class="mock-price">
                       <span class="label">Флагманські преміальні 3-кімнатні апартаменти</span>
                       <div class="price"><span class="num">900$</span><span class="per">/міс</span></div>
                       <div class="divider"></div>
-                      <div class="row">
-                        <span class="k">Цільовий дохід (після&nbsp;добудови)</span>
-                        <span class="v">до 12% річних</span>
-                      </div>
-                      <div class="row">
-                        <span class="k">Дохід нараховується</span>
-                        <span class="v">з&nbsp;1‑го&nbsp;місяця</span>
+                      <div class="row-group">
+                        <div class="row">
+                          <span class="k">Цільовий дохід (після&nbsp;добудови)</span>
+                          <span class="v">до 12% річних</span>
+                        </div>
+                        <div class="row">
+                          <span class="k">Дохід нараховується</span>
+                          <span class="v">з&nbsp;1‑го&nbsp;місяця</span>
+                        </div>
                       </div>
                       <div class="divider"></div>
                       <div class="check-list">
@@ -1230,81 +1271,51 @@
                   <div class="trigger-badge">
                     <span class="left">
                       <span class="dot-pulse"></span>
-                      4 апартаменти в наявності
+                      Тільки 4 апартаменти в наявності
                     </span>
                     <span class="unit-dots"><i></i><i></i><i></i><i></i></span>
                   </div>
-
-                  <div class="next-hint">Наступна виплата · 1 серпня</div>
                 </main>
               </div>
             </div>
           </div>
-          <div class="device-fade"></div>
-          </div>
-        </div>
         </div>
       </div>
     </div>
   </section>
 
 
-  <!-- BLOCK 2 — PROOF -->
+  <!-- BLOCK 2 — CINE VERTICAL -->
   <section class="cine" id="cineSection">
     <div class="cine-head">
       <h2 class="h-title">Ви інвестуєте не в обіцянку.<br class="title-break"> Ви інвестуєте в підтверджений бізнес</h2>
     </div>
 
-    <div class="cine-stage" id="stage">
-      <div class="cine-track" id="track">
-        <div class="cine-card">
-          <div class="cine-num">70%</div>
-          <div class="cine-title">Завантаженість 2025</div>
-          <div class="cine-desc">Не прогноз, підтверджений факт минулого року</div>
-        </div>
-        <div class="cine-card">
-          <div class="cine-num">55<span class="unit-letter">М</span>₴</div>
-          <div class="cine-title">Виплачено дивідендів</div>
-          <div class="cine-desc">Вже виплачено дивідендів інвесторам</div>
-        </div>
-        <div class="cine-card">
-          <div class="cine-num">70+</div>
-          <div class="cine-title">Команда і процеси</div>
-          <div class="cine-desc">З відлагодженою операційною моделлю</div>
-        </div>
-        <div class="cine-card">
-          <div class="cine-num">365</div>
-          <div class="cine-title">Днів на рік без сезонів</div>
-          <div class="cine-desc">SPA, ресторан, басейн і SKI room працюють цілий рік — стабільний дохід без сезонних провалів</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cine-hint">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-    </div>
-
-    <!-- МОБІЛЬНА ВЕРСІЯ: без scroll-pin, проста вертикальна стрічка -->
-    <div class="cine-mobile">
-      <div class="cine-mobile-card">
-        <div class="cine-num">70%</div>
-        <div class="cine-title">Завантаженість 2025</div>
-        <div class="cine-desc">Не прогноз, підтверджений факт минулого року</div>
-      </div>
-      <div class="cine-mobile-card">
+    <div class="cine-list" id="cineList">
+      <div class="cine-card" style="--i:0">
         <div class="cine-num">55<span class="unit-letter">М</span>₴</div>
         <div class="cine-title">Виплачено дивідендів</div>
-        <div class="cine-desc">Вже виплачено дивідендів інвесторам</div>
+        <div class="cine-desc">Вже виплачено дивідендів інвесторам. Ця сума зростає щороку разом із відкриттям нової інфраструктури.</div>
       </div>
-      <div class="cine-mobile-card">
-        <div class="cine-num">70+</div>
-        <div class="cine-title">Команда і процеси</div>
-        <div class="cine-desc">З відлагодженою операційною моделлю</div>
+      <div class="cine-card" style="--i:1">
+        <div class="cine-num">120+</div>
+        <div class="cine-title">Інвесторський склад</div>
+        <div class="cine-desc">Довірене коло інвесторів-партнерів, які повірили в проєкт ще на етапі котловану та пройшли з нами шлях відкриття і налагодження комплексу.</div>
       </div>
-      <div class="cine-mobile-card">
+      <div class="cine-card" style="--i:2">
         <div class="cine-num">365</div>
-        <div class="cine-title">Днів на рік без сезонів</div>
-        <div class="cine-desc">SPA, ресторан, басейн і SKI room працюють цілий рік — стабільний дохід без сезонних провалів</div>
+        <div class="cine-title">Днів на рік комплекс генерує прибуток</div>
+        <div class="cine-desc">SPA, підігрітий басейн, ресторан, дитяча кімната та SKI room працюють цілий рік — це і дає дохід без сезонних простоїв.</div>
+      </div>
+      <div class="cine-card" style="--i:3">
+        <div class="cine-num">2100+</div>
+        <div class="cine-title">Підтверджених відгуків гостей на Google та Booking</div>
+        <div class="cine-desc">Реальний рейтинг, а не обіцянка сервісу, — перевірити можна на офіційних платформах. Якість, що щодня перевершує очікування гостей.</div>
+      </div>
+      <div class="cine-card" style="--i:4">
+        <div class="cine-num">70%</div>
+        <div class="cine-title">Завантаженість 2025</div>
+        <div class="cine-desc">Не прогноз, а підтверджений факт минулого року — і цей рік вже демонструє ще кращу динаміку.</div>
       </div>
     </div>
   </section>
@@ -1323,159 +1334,6 @@
       </div>
     </div>
   </section>
-
-  <!-- BLOCK 3 — ADVANTAGES 60 M2 -->
-  <section id="format-60" class="section-pad grain deep-bg">
-    <div class="container">
-      <div class="center reveal" style="max-width:680px">
-        <h2 class="h-title center" style="color:#fff">Власники 60 м² отримуватимуть більше, тому що:</h2>
-        <p class="h-sub center">Флагманський формат — це не про метраж. Це про умови, які доступні тільки цьому формату і більше нікому на ринку.</p>
-      </div>
-
-      <!-- ДЕСКТОП: схема будинку -->
-      <div class="blueprint reveal">
-        <div class="house-hover-zone"></div>
-        <svg viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <filter id="iconGlow" x="-150%" y="-150%" width="400%" height="400%">
-              <feGaussianBlur stdDeviation="14"/>
-            </filter>
-            <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="var(--gold-dark)"/>
-              <stop offset="40%" stop-color="var(--gold-light)"/>
-              <stop offset="55%" stop-color="var(--gold-light)"/>
-              <stop offset="72%" stop-color="var(--gold)"/>
-              <stop offset="100%" stop-color="var(--gold-dark)"/>
-            </linearGradient>
-            <!-- окремий градієнт для самих іконок: userSpaceOnUse з фіксованими координатами (0,0 → 24,24),
-                 а не objectBoundingBox. Проблема була саме тут — у долара й "виходу" є одиночні прямі
-                 лінії (чисто вертикальна/горизонтальна), і objectBoundingBox для такого елемента має
-                 нульову ширину або висоту, через що градієнт "ламався" й лінія виглядала обрізаною/зіпсованою. -->
-            <linearGradient id="iconGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="var(--gold-dark)"/>
-              <stop offset="40%" stop-color="var(--gold-light)"/>
-              <stop offset="55%" stop-color="var(--gold-light)"/>
-              <stop offset="72%" stop-color="var(--gold)"/>
-              <stop offset="100%" stop-color="var(--gold-dark)"/>
-            </linearGradient>
-          </defs>
-
-          <!-- м'яке світіння позаду кожного значка -->
-          <circle cx="515" cy="331" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
-          <circle cx="685" cy="331" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
-          <circle cx="515" cy="471" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
-          <circle cx="685" cy="471" r="34" fill="var(--gold-light)" opacity=".38" filter="url(#iconGlow)"/>
-
-          <!-- силует будинку -->
-          <g id="houseContent">
-          <path d="M600 78 L815 262 L770 262 L770 540 L430 540 L430 262 L385 262 Z"
-                fill="none" stroke="var(--bp-line-soft)" stroke-width="6" stroke-linejoin="miter" stroke-linecap="square" opacity=".6"/>
-
-          <line x1="600" y1="262" x2="600" y2="540" stroke="var(--bp-line-soft)" stroke-width="2" opacity=".15"/>
-          <line x1="430" y1="401" x2="770" y2="401" stroke="var(--bp-line-soft)" stroke-width="2" opacity=".15"/>
-
-          <g id="node-tl" class="house-node">
-            <rect x="481" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(495,311) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23"/>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </g>
-          </g>
-
-          <g id="node-tr" class="house-node">
-            <rect x="651" y="297" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(665,311) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"/>
-              <path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"/>
-            </g>
-          </g>
-
-          <g id="node-bl" class="house-node">
-            <rect x="481" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(495,451) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </g>
-          </g>
-
-          <g id="node-br" class="house-node">
-            <rect x="651" y="437" width="68" height="68" rx="6" fill="none" stroke="url(#metalGrad)" stroke-width="1.4" opacity=".8"/>
-            <g transform="translate(665,451) scale(1.55)" stroke="url(#iconGrad)" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="14" height="6" rx="1.5"/>
-              <line x1="8" y1="10" x2="8" y2="13"/>
-              <path d="M8 13h5a2 2 0 0 1 2 2v5"/>
-            </g>
-          </g>
-
-          <!-- leader-лінії — тепер ортогональні (blueprint-стиль), кожна підсвічується окремо при ховері на свій текстовий блок -->
-          <path id="line-tl" class="lead-line" d="M420 331 L200 331 L200 281" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
-          <path id="line-tr" class="lead-line" d="M780 331 L1000 331 L1000 281" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
-          <path id="line-bl" class="lead-line" d="M420 471 L200 471 L200 521" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
-          <path id="line-br" class="lead-line" d="M780 471 L1000 471 L1000 521" stroke="var(--gold-light)" stroke-width="1.4" opacity=".85" fill="none" stroke-linejoin="miter"/>
-          </g><!-- /houseContent -->
-        </svg>
-
-        <div class="bp-node tl">
-          <span class="stat">900$/міс</span>
-          <h4>Гарантований дохід з першого місяця</h4>
-          <p>Фіксований мінімум незалежно від сезону і заповненості — виплачує керуюча компанія.</p>
-        </div>
-        <div class="bp-node tr">
-          <span class="stat">+1–2%</span>
-          <h4>Дохідність вища за інші номери</h4>
-          <p>Унікальні умови саме для цього формату, гарантовані додатково керуючою компанією.</p>
-        </div>
-        <div class="bp-node bl">
-          <span class="stat">3 міс.</span>
-          <h4>Гарантований вихід з активу</h4>
-          <p>КК зобов'язана продати або викупити ваш актив протягом 3 місяців на першу вимогу.</p>
-        </div>
-        <div class="bp-node br">
-          <span class="stat">0$</span>
-          <h4>Ремонт за рахунок компанії</h4>
-          <p>Після 5 років — преміальний ремонт повністю за рахунок КК і готовий номер. Ваші витрати нульові.</p>
-        </div>
-      </div>
-
-      <!-- МОБІЛЬНА ВЕРСІЯ: проста вертикальна стрічка -->
-      <div class="bp-mobile reveal">
-        <div class="bp-mobile-item">
-          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-          <div class="bp-mobile-text">
-            <span class="stat">900$/міс</span>
-            <h4>Гарантований дохід з першого місяця</h4>
-            <p>Фіксований мінімум незалежно від сезону і заповненості.</p>
-          </div>
-        </div>
-        <div class="bp-mobile-item">
-          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3.5 5.5L12 21 2.5 8.5 6 3z"/><path d="M2.5 8.5h19M9.5 3 7 8.5 12 21M14.5 3 17 8.5 12 21"/></svg></div>
-          <div class="bp-mobile-text">
-            <span class="stat">+1–2%</span>
-            <h4>Дохідність вища за інші номери</h4>
-            <p>Унікальні умови саме для цього формату.</p>
-          </div>
-        </div>
-        <div class="bp-mobile-item">
-          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
-          <div class="bp-mobile-text">
-            <span class="stat">3 міс.</span>
-            <h4>Гарантований вихід з активу</h4>
-            <p>КК зобов'язана продати або викупити актив протягом 3 місяців.</p>
-          </div>
-        </div>
-        <div class="bp-mobile-item">
-          <div class="bp-mobile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="6" rx="1.5"/><line x1="8" y1="10" x2="8" y2="13"/><path d="M8 13h5a2 2 0 0 1 2 2v5"/></svg></div>
-          <div class="bp-mobile-text">
-            <span class="stat">0$</span>
-            <h4>Ремонт за рахунок компанії</h4>
-            <p>Після 5 років — преміальний ремонт повністю за рахунок КК.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
 
   <!-- BLOCK 5 — WOOD INVESTOR CARE™ v3 (5 окремих карток) -->
   <section id="investor-care" class="section-pad grain" style="background:var(--white)">
@@ -1746,47 +1604,162 @@
     <img src="https://lh3.googleusercontent.com/d/1m8uRVf8-K9Vp74EHfDnXW_w7yQy59yjY=w1920" alt="Панорама комплексу Wood Hotel Resort &amp; Spa" loading="lazy">
     <div class="photo-band-overlay">
       <div class="container">
+        <div class="photo-band-divider"></div>
         <p class="photo-band-text">Карпати · Буковель — локація, що працює на дохідність цілий рік</p>
       </div>
     </div>
   </section>
 
-  <!-- BLOCK 8 — DEFICIT -->
-  <section class="deficit section-pad">
+  <!-- BLOCK 3 — ADVANTAGES 60 M2 (перенесено в кінець сайту — частково дублює BLOCK 5 Investor Care,
+       тепер працює як підсумкове нагадування гарантій перед фінальним "Залишилось 4 апартаменти") -->
+  <section id="format-60" class="section-pad grain deep-bg">
     <div class="container">
-      <div class="deficit-grid">
-        <div class="deficit-text reveal">
-          <h2 class="h-title">Залишилось 4 апартаменти на умовах Investor Care</h2>
-          <p>Флагманський формат 60 м² котрий відкриває нові можливості в інвестуванні — більше таких апартаментів у Wood Hotel не буде. Умови Investor Care діють тільки для власників цього формату і не поширюються на інші категорії номерів.</p>
-          <div class="deficit-cta">
-            <a href="#apply" class="btn btn-gold">Зафіксувати умови зараз</a>
-          </div>
+      <div class="center reveal" style="max-width:680px">
+        <h2 class="h-title center" style="color:#fff">Власники 60 м² отримуватимуть більше, тому що:</h2>
+        <p class="h-sub center">Флагманський формат — це не про метраж. Це про умови, які доступні тільки цьому формату і більше нікому на ринку.</p>
+      </div>
+
+      <!-- РЯД З 4 КАРТОК-УМОВ (план номера прибрано на прохання користувача) -->
+      <div class="cond-list reveal" style="margin-top:48px">
+        <div class="cond-card">
+          <div class="cond-num">900$<span style="font-size:.5em">/міс</span></div>
+          <div class="cond-title">Гарантований дохід з першого місяця</div>
+          <div class="cond-desc">Фіксований мінімум незалежно від сезону і заповненості — виплачує керуюча компанія.</div>
         </div>
-        <div class="units reveal">
-          <div class="unit-row"><span><span class="idx">01</span><span class="name">Апартамент 60 м² · №1</span></span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span><span class="idx">02</span><span class="name">Апартамент 60 м² · №2</span></span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span><span class="idx">03</span><span class="name">Апартамент 60 м² · №3</span></span><span class="status">Доступний</span></div>
-          <div class="unit-row"><span><span class="idx">04</span><span class="name">Апартамент 60 м² · №4</span></span><span class="status">Доступний</span></div>
+        <div class="cond-card">
+          <div class="cond-num">+1–2%</div>
+          <div class="cond-title">Дохідність вища за інші номери</div>
+          <div class="cond-desc">Унікальні умови саме для цього формату, гарантовані додатково керуючою компанією.</div>
+        </div>
+        <div class="cond-card">
+          <div class="cond-num">3 міс.</div>
+          <div class="cond-title">Гарантований вихід з активу</div>
+          <div class="cond-desc">КК зобов'язана продати або викупити ваш актив протягом 3 місяців на першу вимогу.</div>
+        </div>
+        <div class="cond-card">
+          <div class="cond-num">0$</div>
+          <div class="cond-title">Ремонт за рахунок компанії</div>
+          <div class="cond-desc">Після 5 років — преміальний ремонт повністю за рахунок КК і готовий номер.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- GALLERY placeholder (структурне доповнення — фото додасте пізніше) -->
+  <!-- BLOCK — "ЗАЛИШИЛОСЬ 4 АПАРТАМЕНТИ" (галерея + компактний список доступних юнітів) -->
+  <section class="deficit section-pad">
+    <div class="container">
+      <div class="center reveal" style="max-width:720px">
+        <h2 class="h-title center">Залишилось 4 апартаменти на умовах Investor Care</h2>
+        <p class="h-sub center">Флагманський формат 60 м² котрий відкриває нові можливості в інвестуванні — більше таких апартаментів у Wood Hotel не буде. Умови Investor Care діють тільки для власників цього формату і не поширюються на інші категорії номерів.</p>
+      </div>
+
+      <div class="deficit-grid">
+        <!-- слайдер-галерея: одне фото на екрані, стрілки/свайп для гортання, точки-індикатори,
+             клік — лайтбокс на весь екран з можливістю наблизити -->
+        <div class="deficit-gallery reveal">
+          <div class="dg-viewer" id="dgViewer">
+            <div class="dg-track" id="dgTrack">
+              <button class="dg-slide" type="button" data-i="0">
+                <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м² Wood Hotel — фото 1">
+              </button>
+              <button class="dg-slide" type="button" data-i="1">
+                <img src="https://lh3.googleusercontent.com/d/1pSvUpn0UE8r6OMhoPfbed5I-IRiGY9jt=w1200" alt="Апартамент 60 м² Wood Hotel — фото 2">
+              </button>
+              <button class="dg-slide" type="button" data-i="2">
+                <img src="https://lh3.googleusercontent.com/d/1kTiAn5sofu-7j0VGTs2OMGkktr-XhArm=w1200" alt="Апартамент 60 м² Wood Hotel — фото 3">
+              </button>
+              <button class="dg-slide" type="button" data-i="3">
+                <img src="https://lh3.googleusercontent.com/d/17AApwC_qpACVbz56ruK97FFjmqq2bQUP=w1200" alt="Апартамент 60 м² Wood Hotel — фото 4">
+              </button>
+              <button class="dg-slide" type="button" data-i="4">
+                <img src="https://lh3.googleusercontent.com/d/1txHCL4x75OAQVG21mypUiP2xj2dbSXM7=w1200" alt="Апартамент 60 м² Wood Hotel — фото 5">
+              </button>
+              <button class="dg-slide" type="button" data-i="5">
+                <img src="https://lh3.googleusercontent.com/d/1VgHWEcOYc9nw6jotEamv6n50xpzQ5iKs=w1200" alt="Апартамент 60 м² Wood Hotel — фото 6">
+              </button>
+              <button class="dg-slide" type="button" data-i="6">
+                <img src="https://lh3.googleusercontent.com/d/1IF5CHkTH8XQ1yyY247IKuFlAX3E5IHpk=w1200" alt="Апартамент 60 м² Wood Hotel — фото 7">
+              </button>
+              <button class="dg-slide" type="button" data-i="7">
+                <img src="https://lh3.googleusercontent.com/d/1_buAhKFOcj-ikA8Yhr7dwJKNpF429b0h=w1200" alt="Апартамент 60 м² Wood Hotel — фото 8">
+              </button>
+              <button class="dg-slide" type="button" data-i="8">
+                <img src="https://lh3.googleusercontent.com/d/10jcEqQu19lD5a0aSf17MFcULa0P3UPRi=w1200" alt="Апартамент 60 м² Wood Hotel — фото 9">
+              </button>
+              <button class="dg-slide" type="button" data-i="9">
+                <img src="https://lh3.googleusercontent.com/d/1gHn_xfgQtEif8hTCwP3v1XEc9D_B3mAP=w1200" alt="Апартамент 60 м² Wood Hotel — фото 10">
+              </button>
+            </div>
+            <button class="dg-nav prev" id="dgPrev" aria-label="Попереднє фото">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="dg-nav next" id="dgNext" aria-label="Наступне фото">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <span class="dg-zoom-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              Натисніть, щоб наблизити
+            </span>
+          </div>
+          <div class="dg-dots" id="dgDots">
+            <button class="dg-dot is-active" type="button" data-i="0" aria-label="Фото 1"></button>
+            <button class="dg-dot" type="button" data-i="1" aria-label="Фото 2"></button>
+            <button class="dg-dot" type="button" data-i="2" aria-label="Фото 3"></button>
+            <button class="dg-dot" type="button" data-i="3" aria-label="Фото 4"></button>
+            <button class="dg-dot" type="button" data-i="4" aria-label="Фото 5"></button>
+            <button class="dg-dot" type="button" data-i="5" aria-label="Фото 6"></button>
+            <button class="dg-dot" type="button" data-i="6" aria-label="Фото 7"></button>
+            <button class="dg-dot" type="button" data-i="7" aria-label="Фото 8"></button>
+            <button class="dg-dot" type="button" data-i="8" aria-label="Фото 9"></button>
+            <button class="dg-dot" type="button" data-i="9" aria-label="Фото 10"></button>
+          </div>
+        </div>
+
+        <div class="deficit-side reveal">
+          <div class="units">
+            <div class="unit-row"><span class="idx">01</span><span class="name">Апартамент №1</span><span class="status">Доступний</span></div>
+            <div class="unit-row"><span class="idx">02</span><span class="name">Апартамент №2</span><span class="status">Доступний</span></div>
+            <div class="unit-row"><span class="idx">03</span><span class="name">Апартамент №3</span><span class="status">Доступний</span></div>
+            <div class="unit-row"><span class="idx">04</span><span class="name">Апартамент №4</span><span class="status">Доступний</span></div>
+          </div>
+          <div class="deficit-cta">
+            <a href="#apply" class="btn btn-gold btn-block">Зафіксувати умови зараз</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- лайтбокс для галереї апартаменту — на весь екран, клік ще раз наближає/віддаляє -->
+  <div class="dg-lightbox" id="dgLightbox">
+    <button class="dg-lb-close" id="dgLbClose" aria-label="Закрити">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <button class="dg-lb-nav prev" id="dgLbPrev" aria-label="Попереднє фото">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <img class="dg-lb-img" id="dgLbImg" src="" alt="Апартамент 60 м² Wood Hotel">
+    <button class="dg-lb-nav next" id="dgLbNext" aria-label="Наступне фото">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+  <!-- GALLERY -->
   <section class="section-pad" style="background:var(--white);padding-top:0">
     <div class="container">
-      <div class="reveal">
-        <h2 class="h-title">Готель у фото — розділ під заміну на реальні кадри</h2>
+      <div class="center reveal" style="max-width:640px">
+        <h2 class="h-title center">Готель у фото</h2>
+        <p class="h-sub center">Погляньте, як виглядає комплекс, номери та інфраструктура наживо.</p>
       </div>
       <div class="gallery-grid reveal">
-        <div class="gallery-item"><img src="https://placehold.co/900x1400/132018/f1ead8?text=Фото+комплексу" alt="Фото комплексу" loading="lazy"><span class="gallery-cap">Фото комплексу</span></div>
-        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Номер" alt="Номер" loading="lazy"><span class="gallery-cap">Номер</span></div>
-        <div class="gallery-item"><img src="https://placehold.co/600x750/2a4335/f1ead8?text=SPA" alt="SPA" loading="lazy"><span class="gallery-cap">SPA</span></div>
-        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Ресторан" alt="Ресторан" loading="lazy"><span class="gallery-cap">Ресторан</span></div>
-        <div class="gallery-item"><img src="https://placehold.co/600x750/2a4335/f1ead8?text=Територія" alt="Територія" loading="lazy"><span class="gallery-cap">Територія</span></div>
-        <div class="gallery-item"><img src="https://placehold.co/600x750/1c2f24/f1ead8?text=Басейн" alt="Басейн" loading="lazy"><span class="gallery-cap">Басейн</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1FgxgCS1bncD0Bl8dbeAcXGyykB3HXZ-R=w1200" alt="Фото комплексу" loading="lazy"><span class="gallery-cap">Фото комплексу</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1BmS5Ja7AbjKf5laES-HQUopaaSc6GfYo=w900" alt="Номер" loading="lazy"><span class="gallery-cap">Номер</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1bj_rlIED4bY9_P6MuJOxlx_GoW7hW56W=w900" alt="SPA" loading="lazy"><span class="gallery-cap">SPA</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1Xq2ODXvd_aLKcdPLmxxw-yYF1O3bnzEA=w900" alt="Ресторан" loading="lazy"><span class="gallery-cap">Ресторан</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1i7In1r2uQ4jJ7V1B1KOpEQCwZdcuhc7I=w900" alt="Територія" loading="lazy"><span class="gallery-cap">Територія</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1XbCKMrSLDTK40at3VBcaHWwk3iLdHu4i=w900" alt="Басейн" loading="lazy"><span class="gallery-cap">Басейн</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1eYr8dMJAGQDDo24Dc1jlkTByu4Mx8XuQ=w900" alt="Конференц-зал" loading="lazy"><span class="gallery-cap">Конференц-зал</span></div>
       </div>
-      <p style="margin-top:16px;font-size:12px;color:var(--muted-2)">Фото — тимчасові приклади для макету, замінимо на реальні кадри комплексу.</p>
     </div>
   </section>
 
@@ -2059,53 +2032,8 @@
   const heroBgVideo = document.getElementById('heroBgVideo');
   if (heroBgVideo) { heroBgVideo.play().catch(() => {}); }
 
-  // Scroll-linked зростання device-мокапа — та сама оптимізація: IntersectionObserver
-  // вимикає обробник повністю, як тільки блок з мокапом виходить за межі (з запасом),
-  // замість того щоб рахувати getBoundingClientRect() і переписувати margin-bottom
-  // на кожен скрол по всій сторінці (це й "трясло" сусідні секції).
-  const deviceScale = document.getElementById('deviceScale');
-  if (deviceScale) {
-    const MIN_SCALE = 0.688;
-    const MAX_SCALE = 0.944;
-    let deviceTicking = false;
-    let deviceNearViewport = true;
-    let lastScale = null;
-    function updateDeviceScale() {
-      const rect = deviceScale.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const start = vh * 0.95;
-      const end = vh * 0.28;
-      let progress = (start - rect.top) / (start - end);
-      progress = Math.min(1, Math.max(0, progress));
-      const eased = progress * progress * (3 - 2 * progress);
-      const scale = MIN_SCALE + eased * (MAX_SCALE - MIN_SCALE);
-      deviceTicking = false;
-      // якщо масштаб не змінився з минулого кадру (найчастіше — крайні 0 або 1 стани),
-      // не чіпаємо стилі/розмітку взагалі — нема сенсу переписувати ті самі значення
-      if (lastScale !== null && Math.abs(scale - lastScale) < 0.0005) return;
-      lastScale = scale;
-      deviceScale.style.transform = `scale(${scale.toFixed(3)})`;
-      deviceScale.style.opacity = (0.85 + eased * 0.15).toFixed(3);
-      // offsetHeight не залежить від transform:scale (тільки від реальної розмітки),
-      // тому це стабільне значення на кожному кадрі — без цього компенсація "гуляла"
-      // й тремтіла (глюк), бо рахувалась рекурсивно від попереднього кадру.
-      const naturalHeight = deviceScale.offsetHeight;
-      const gap = naturalHeight * (1 - scale);
-      deviceScale.style.marginBottom = (-gap).toFixed(1) + 'px';
-    }
-    function onDeviceScroll() {
-      if (!deviceNearViewport || deviceTicking) return;
-      deviceTicking = true;
-      requestAnimationFrame(updateDeviceScale);
-    }
-    new IntersectionObserver((entries) => {
-      entries.forEach(e => { deviceNearViewport = e.isIntersecting; });
-    }, { rootMargin: '100% 0px 100% 0px' }).observe(deviceScale);
-    window.addEventListener('scroll', onDeviceScroll, { passive: true });
-    window.addEventListener('resize', onDeviceScroll, { passive: true });
-    updateDeviceScale();
-  }
-
+  // Мокап тепер статичний (одноразова CSS-анімація появи deviceSettle) — попередня
+  // scroll-linked логіка масштабування (#deviceScale) прибрана разом з елементом.
 
   // Count-up animation for key numbers
   function animateCount(el){
@@ -2131,87 +2059,89 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('.count').forEach(el => countIo.observe(el));
 
-  // ---------- БЛОК 2 — CINE RIBBON (горизонтальний скрол-пін ТІЛЬКИ на десктопі) ----------
-  // На мобайлі (<=900px) пін-скрол не активується взагалі — замість нього показується
-  // .cine-mobile (проста вертикальна стрічка, без залежності від GSAP). gsap.matchMedia
-  // сам коректно знімає ScrollTrigger/пін, якщо вікно перетне межу 900px (напр. поворот екрана
-  // або зміна розміру вікна на десктопі) — без цього пін міг лишитись "зависти" активним.
-  if (window.gsap && window.ScrollTrigger && document.getElementById('cineSection')) {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const stage = document.getElementById('stage');
-    const track = document.getElementById('track');
-    const cineCards = Array.from(document.querySelectorAll('.cine-card'));
-
-    let cardWidth, gap, stageWidth, maxTranslate;
-
-    function measureCine() {
-      cardWidth = cineCards[0].getBoundingClientRect().width;
-      gap = parseFloat(getComputedStyle(track).gap) || 0;
-      stageWidth = stage.getBoundingClientRect().width;
-      const sidePad = (stageWidth - cardWidth) / 2;
-      track.style.paddingLeft = sidePad + 'px';
-      track.style.paddingRight = sidePad + 'px';
-      maxTranslate = (cineCards.length - 1) * (cardWidth + gap);
-      updateRibbon(0);
-    }
-
-    function updateRibbon(progress) {
-      const translateX = -progress * maxTranslate;
-      gsap.set(track, { x: translateX });
-
-      const stageCenter = stageWidth / 2;
-      const sidePad = (stageWidth - cardWidth) / 2;
-
-      cineCards.forEach((card, i) => {
-        const cardCenter = sidePad + i * (cardWidth + gap) + cardWidth / 2 + translateX;
-        const dist = Math.abs(cardCenter - stageCenter);
-        const t = Math.min(1, dist / (cardWidth + gap));
-        const scale = 1 - 0.10 * t;
-        const opacity = 1 - 0.70 * t;
-        gsap.set(card, { scale, opacity });
-      });
-    }
-
-    const cineMM = gsap.matchMedia();
-    cineMM.add('(min-width: 901px)', () => {
-      measureCine();
-      window.addEventListener('resize', measureCine);
-
-      ScrollTrigger.create({
-        trigger: '#cineSection',
-        start: 'top top',
-        end: '+=250%',
-        pin: true,
-        scrub: 1,
-        onUpdate: (self) => updateRibbon(self.progress)
-      });
-
-      return () => window.removeEventListener('resize', measureCine);
-    });
-
-    // Позиція запіненої секції рахується один раз при ініціалізації GSAP. Якщо шрифти/фото/
-    // відео вище (в hero) довантажуються пізніше й трохи змінюють висоту сторінки, пін
-    // "з'їжджає" відносно фактичного контенту — звідси ефект "виходить за рамки" сусіднього
-    // екрана. Перерахунок після повного завантаження й ще раз за секунду (коли шрифти
-    // і відео-метадані вже точно готові) прибирає цей дрейф.
-    window.addEventListener('load', () => {
-      ScrollTrigger.refresh();
-      setTimeout(() => ScrollTrigger.refresh(), 1000);
-    });
-  }
-
-  // ---------- БЛОК 4 — BLUEPRINT: ховер на текстовий блок підсвічує його іконку і leader-лінію ----------
+  // ---------- БЛОК 2 — CINE VERTICAL: reveal-по-скролу без pin/GSAP ----------
+  // Замінено scroll-hijack пін (тупив і йшов ривками за відгуками партнерів) на звичайний
+  // вертикальний скрол: кожна картка плавно проявляється й трохи піднімається, коли доходить
+  // до неї скрол — без залежності від зовнішніх бібліотек і без затримки завантаження сторінки.
   (function () {
-    const map = { tl: 'node-tl', tr: 'node-tr', bl: 'node-bl', br: 'node-br' };
-    const lineMap = { tl: 'line-tl', tr: 'line-tr', bl: 'line-bl', br: 'line-br' };
-    document.querySelectorAll('.bp-node').forEach(node => {
-      const key = ['tl', 'tr', 'bl', 'br'].find(k => node.classList.contains(k));
-      if (!key) return;
-      const iconEl = document.getElementById(map[key]);
-      const lineEl = document.getElementById(lineMap[key]);
-      node.addEventListener('mouseenter', () => { if (iconEl) iconEl.classList.add('is-active'); if (lineEl) lineEl.classList.add('is-active'); });
-      node.addEventListener('mouseleave', () => { if (iconEl) iconEl.classList.remove('is-active'); if (lineEl) lineEl.classList.remove('is-active'); });
+    const cineCards = document.querySelectorAll('#cineList .cine-card');
+    if (!cineCards.length) return;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      cineCards.forEach((card) => io.observe(card));
+    } else {
+      cineCards.forEach((card) => card.classList.add('in'));
+    }
+  })();
+
+  // ---------- БЛОК "ЗАЛИШИЛОСЬ 4 АПАРТАМЕНТИ" — слайдер-галерея + лайтбокс із наближенням ----------
+  (function () {
+    const track = document.getElementById('dgTrack');
+    if (!track) return;
+    const slideEls = Array.from(track.querySelectorAll('.dg-slide'));
+    const dots = Array.from(document.querySelectorAll('#dgDots .dg-dot'));
+    const prevBtn = document.getElementById('dgPrev');
+    const nextBtn = document.getElementById('dgNext');
+    const total = slideEls.length;
+    // повнорозмірні джерела для лайтбоксу (ті самі фото, більший розмір де можливо)
+    const fullSrc = slideEls.map(el => el.querySelector('img').src.replace('=w1200', '=w1800'));
+    let idx = 0;
+
+    function goTo(i) {
+      idx = (i + total) % total;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === idx));
+    }
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(idx - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(idx + 1));
+    dots.forEach((d, di) => d.addEventListener('click', () => goTo(di)));
+
+    // свайп на тач-екранах
+    let touchStartX = null;
+    track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) goTo(idx + (dx < 0 ? 1 : -1));
+      touchStartX = null;
+    }, { passive: true });
+
+    // лайтбокс — клік на фото відкриває на весь екран, повторний клік наближає/віддаляє
+    const lightbox = document.getElementById('dgLightbox');
+    const lbImg = document.getElementById('dgLbImg');
+    const lbClose = document.getElementById('dgLbClose');
+    const lbPrev = document.getElementById('dgLbPrev');
+    const lbNext = document.getElementById('dgLbNext');
+
+    function openLightbox(i) {
+      idx = i;
+      lbImg.src = fullSrc[idx];
+      lbImg.classList.remove('is-zoomed');
+      lightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    slideEls.forEach((el, i) => el.addEventListener('click', () => openLightbox(i)));
+    if (lbClose) lbClose.addEventListener('click', closeLightbox);
+    if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    if (lbPrev) lbPrev.addEventListener('click', () => { idx = (idx - 1 + total) % total; lbImg.src = fullSrc[idx]; lbImg.classList.remove('is-zoomed'); goTo(idx); });
+    if (lbNext) lbNext.addEventListener('click', () => { idx = (idx + 1) % total; lbImg.src = fullSrc[idx]; lbImg.classList.remove('is-zoomed'); goTo(idx); });
+    if (lbImg) lbImg.addEventListener('click', () => lbImg.classList.toggle('is-zoomed'));
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox || !lightbox.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft' && lbPrev) lbPrev.click();
+      if (e.key === 'ArrowRight' && lbNext) lbNext.click();
     });
   })();
 </script>
