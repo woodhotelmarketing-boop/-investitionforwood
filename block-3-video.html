@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wood Hotel — Екран 3: Відео-тригер власника (окремо для перегляду/доопрацювання)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,400;0,12..96,600;0,12..96,700;0,12..96,800;0,12..96,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest-900:#132018;
+    --forest-800:#1c2f24;
+    --cream:#f8f4ec;
+    --gold:#cdbf9d;
+    --gold-light:#f1ead8;
+    --gold-dark:#a89877;
+    --muted:#5f6b62;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#fff;background:#0b120e;-webkit-font-smoothing:antialiased;line-height:1.5}
+  h2,h3{font-family:'Bricolage Grotesque',sans-serif;margin:0;font-weight:700;letter-spacing:-.03em}
+  p{margin:0}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  .center{text-align:center;margin-left:auto;margin-right:auto}
+  section{position:relative;overflow:clip}
+  .section-pad{padding:96px 0}
+  h2.h-title{font-size:clamp(28px,3.6vw,44px);max-width:760px}
+  .h-sub{font-size:17px;color:var(--muted);max-width:640px;margin-top:16px;line-height:1.6}
+  .center .h-sub{margin-left:auto;margin-right:auto}
+  .reveal{opacity:1;transform:none}
+  .accent-text{color:var(--gold-light);font-weight:700}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--gold-dark);margin-bottom:16px;
+  }
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--gold);display:inline-block;border-radius:2px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 30px;border-radius:100px;font-weight:700;font-size:14.5px;letter-spacing:.01em;border:1px solid transparent;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;white-space:nowrap;position:relative}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-gold{background:var(--gold);color:var(--forest-900);box-shadow:0 6px 20px rgba(0,0,0,.25), 0 0 0 1px rgba(241,234,216,.3), 0 0 30px 6px rgba(241,234,216,.35);overflow:hidden}
+  .btn-gold::before{content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;background:linear-gradient(115deg, transparent, rgba(255,255,255,.65), transparent);transform:skewX(-18deg);transition:left .65s cubic-bezier(.22,.9,.3,1);pointer-events:none}
+  .btn-gold:hover::before{left:130%}
+
+  /* той самий фон, що й на живих секціях 3-4 (.deep-bg) */
+  .deep-bg{
+    background:
+      radial-gradient(ellipse 900px 600px at 50% 42%, rgba(28,47,36,.9), transparent 68%),
+      radial-gradient(ellipse 1400px 900px at 50% 50%, #14201a 0%, #0b120e 55%, #060907 100%);
+    background-attachment:fixed, fixed;
+  }
+
+  /* ---------- BLOCK 3 — VIDEO-ТРИГЕР ВЛАСНИКА ---------- */
+  /* заголовок ламався на 4 рядки (глобальний clamp до 44px в вузькому 760px блоці) —
+     ширший блок + менший кегль дають 2 рядки на десктопі */
+  #video-owner h2.h-title{font-size:clamp(24px,2.6vw,34px);max-width:100%}
+
+  /* картка: заголовок "Подивіться це відео..." і "5 ФАКТІВ..." — два заголовки, кожен у своїй
+     колонці, на одному рядку "один напроти одного" (раніше заголовок висів окремим рядком
+     на всю ширину картки, лишаючи великий нерівний відступ справа, поки "5 ФАКТІВ" стартувало
+     нижче). align-items:start на .vt-body, щоб обидва заголовки стартували з однієї лінії. */
+  #video-owner .vt-card{
+    max-width:1080px;margin:44px auto 0;border-radius:22px;
+    padding:36px;
+    border:1px solid rgba(241,234,216,.22);
+    background:linear-gradient(155deg, rgba(255,255,255,.05), transparent 55%), var(--forest-800);
+    box-shadow:
+      0 0 0 1px rgba(205,191,157,.12),
+      0 0 90px -20px rgba(205,191,157,.4),
+      0 40px 80px -36px rgba(0,0,0,.65);
+  }
+
+  .vt-body{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:start}
+
+  .vt-heading{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;
+    font-size:20px;color:#fff;line-height:1.3;margin-bottom:16px;text-wrap:balance;
+  }
+
+  .vt-video{
+    position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0a120d;
+    border:none;padding:0;margin:0;cursor:pointer;font:inherit;border-radius:16px;
+    transition:filter .25s ease, transform .25s ease;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5);
+  }
+  .vt-video:hover{filter:brightness(1.06);transform:translateY(-2px)}
+  .vt-video img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .vt-content{padding:8px 4px}
+  .vt-eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--gold-dark);margin-bottom:14px;
+    padding-top:6px;
+  }
+  .vt-list{display:flex;flex-direction:column;gap:14px;margin-bottom:26px}
+  .vt-item{display:flex;align-items:flex-start;gap:12px}
+  .vt-item svg{flex:none;width:16px;height:16px;color:var(--gold-light);margin-top:3px}
+  /* var(--muted) — світло-фоновий сірий, на темній картці майже не читається; тут той самий
+     світлий приглушений відтінок, що й у .cine-desc (rgba(230,232,226,.72)) */
+  .vt-item p{font-size:13px;line-height:1.5;color:rgba(230,232,226,.78);margin:0}
+  .vt-item p b{color:#fff;font-weight:700}
+
+  @media(max-width:820px){
+    #video-owner .vt-card{padding:22px}
+    .vt-heading{font-size:19px;margin-bottom:20px}
+    .vt-body{grid-template-columns:1fr;gap:20px}
+    .vt-content{padding:4px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== ЕКРАН 3 — VIDEO-ТРИГЕР ВЛАСНИКА ===================== -->
+<!-- УВАГА: data-yt-id="BGlrXAA52rA" — тимчасово старий ID відео-огляду комплексу, як плейсхолдер,
+     щоб кнопка одразу працювала. Потрібно замінити на реальний YouTube ID відео власника. -->
+<section id="video-owner" class="section-pad grain deep-bg">
+  <div class="container">
+    <div class="center reveal" style="max-width:920px">
+      <h2 class="h-title center" style="color:#fff">Відкрито пояснюємо, як буде працювати ваш актив та генеруватися прибуток із <span class="accent-text">трикімнатних апартаментів</span></h2>
+      <p class="h-sub center" style="color:#c9d2c8">Перш ніж ви вкладетесь в актив, коротко і доступно один із засновників Wood Hotel розповість: чому варто обрати саме апартаменти 60 м², скільки конкретно можна заробити гарантовано, чому вхід вигідний саме зараз, і що станеться, якщо ви передумаєте.</p>
+    </div>
+
+    <div class="vt-card reveal">
+      <div class="vt-body">
+        <div class="vt-media">
+          <h3 class="vt-heading">Подивіться це відео, перш ніж подати заявку</h3>
+          <button class="vt-video" id="videoFrame" data-yt-id="BGlrXAA52rA" aria-label="Відтворити відео — власник Wood Hotel про апартамент 60 м²">
+            <img src="video-poster.jpg" alt="Власник Wood Hotel про апартамент 60 м² — +900$/міс доходу, як це працює" id="videoPoster">
+          </button>
+        </div>
+
+        <div class="vt-content">
+          <div class="vt-eyebrow">5 фактів, які ви дізнаєтесь за 7 хвилин</div>
+          <div class="vt-list">
+            <div class="vt-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <p><b>Скільки саме ви заробите</b> — точні цифри для номера 60 м², а не орієнтовний прогноз.</p>
+            </div>
+            <div class="vt-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <p><b>Чому вигідно саме зараз</b> — скільки апартаментів лишилось і як росте ціна далі.</p>
+            </div>
+            <div class="vt-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <p><b>Що входить в Investor Care</b> — гарантії, які отримає власник саме цього формату.</p>
+            </div>
+            <div class="vt-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <p><b>Що буде з грошима, якщо передумаєте</b> — реальні умови виходу з активу.</p>
+            </div>
+            <div class="vt-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <p><b>Відповіді на питання</b>, які зазвичай замовчують у рекламних матеріалах.</p>
+            </div>
+          </div>
+          <a href="#" class="btn btn-gold" id="ctaScroll">▶ Дивитись відео (7 хв)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== /ЕКРАН 3 ===================== -->
+
+<script>
+  (function () {
+    const videoPoster = document.getElementById('videoPoster');
+    const videoFrame = document.getElementById('videoFrame');
+    function startVideo() {
+      if (!videoFrame || videoFrame.disabled) return;
+      const ytId = videoFrame.dataset.ytId;
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1';
+      iframe.title = 'Wood Hotel — власник про апартамент 60 м²';
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'position:absolute;inset:0;z-index:5;width:100%;height:100%;border:0;display:block';
+      if (videoPoster) videoPoster.style.display = 'none';
+      videoFrame.appendChild(iframe);
+      videoFrame.disabled = true;
+      videoFrame.style.cursor = 'default';
+    }
+    if (videoFrame) videoFrame.addEventListener('click', startVideo);
+    const ctaScroll = document.getElementById('ctaScroll');
+    if (ctaScroll) ctaScroll.addEventListener('click', (e) => {
+      e.preventDefault();
+      startVideo();
+      videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  })();
+</script>
+
+</body>
+</html>
