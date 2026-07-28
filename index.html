@@ -585,7 +585,64 @@
   /* ---------- BLOCK 7 — ПОРІВНЯННЯ СЦЕНАРІЇВ (візуальний апдейт під систему екранів 1-6:
      glow-картки, градієнтні бейджі, gold-dark акцент на підсумкових цифрах — сама структура,
      дані й логіка блоку не змінені) ---------- */
-  .scn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+  /* сценарії 1 і 2 звужені, сценарій 3 (пріоритетний) розширений — перша спроба через самі
+     лише fr-пропорції (.9/.9/1.05) губилась через нормалізацію grid (різниця виходила
+     ледь 5% замість заявлених 10%/5%, і вужча картка через реф'лоу тексту навіть візуально
+     "росла" у висоту) — тому тепер сильніша різниця треків + додатково зменшено/збільшено
+     кегль і padding усередині карток, щоб ефект був виразним, а не тільки в ширині колонки. */
+  .scn-grid{display:grid;grid-template-columns:.88fr .88fr 1.24fr;gap:22px;margin-top:48px}
+  .scn-grid > .scn-card:nth-child(1),
+  .scn-grid > .scn-card:nth-child(2){padding:20px}
+  .scn-grid > .scn-card:nth-child(3){padding:36px}
+
+  .scn-grid > .scn-card:nth-child(1) .scn-name,
+  .scn-grid > .scn-card:nth-child(2) .scn-name{font-size:13.5px;min-height:auto}
+  .scn-grid > .scn-card:nth-child(3) .scn-name{font-size:16.5px}
+
+  .scn-grid > .scn-card:nth-child(1) .scn-tag,
+  .scn-grid > .scn-card:nth-child(2) .scn-tag{font-size:10px}
+  .scn-grid > .scn-card:nth-child(3) .scn-tag{font-size:12.5px}
+
+  .scn-grid > .scn-card:nth-child(1) .scn-badge-alt,
+  .scn-grid > .scn-card:nth-child(1) .scn-badge-neutral,
+  .scn-grid > .scn-card:nth-child(2) .scn-badge-alt,
+  .scn-grid > .scn-card:nth-child(2) .scn-badge-neutral{font-size:10px;padding:6px 11px}
+  .scn-grid > .scn-card:nth-child(3) .scn-badge{font-size:12px;padding:8px 15px}
+
+  .scn-grid > .scn-card:nth-child(1) .scn-total-num,
+  .scn-grid > .scn-card:nth-child(2) .scn-total-num{font-size:25px}
+  .scn-grid > .scn-card:nth-child(3) .scn-total-num{font-size:33px}
+
+  .scn-grid > .scn-card:nth-child(1) .scn-entry,
+  .scn-grid > .scn-card:nth-child(1) .scn-note,
+  .scn-grid > .scn-card:nth-child(1) .scn-desc,
+  .scn-grid > .scn-card:nth-child(2) .scn-entry,
+  .scn-grid > .scn-card:nth-child(2) .scn-note,
+  .scn-grid > .scn-card:nth-child(2) .scn-desc{font-size:12px}
+  .scn-grid > .scn-card:nth-child(3) .scn-entry,
+  .scn-grid > .scn-card:nth-child(3) .scn-note,
+  .scn-grid > .scn-card:nth-child(3) .scn-desc{font-size:14px}
+
+  .scn-grid > .scn-card:nth-child(1) .chart-row .val,
+  .scn-grid > .scn-card:nth-child(2) .chart-row .val{font-size:11px}
+  .scn-grid > .scn-card:nth-child(3) .chart-row .val{font-size:13px}
+  .scn-grid > .scn-card:nth-child(1) .chart-track,
+  .scn-grid > .scn-card:nth-child(2) .chart-track{height:8px}
+  .scn-grid > .scn-card:nth-child(3) .chart-track{height:11px}
+
+  @media(max-width:900px){
+    /* на мобайлі картки все одно стають 1fr в один стовпець нижче — різниця у кеглі/padding
+       там ні до чого, повертаємо однаковий розмір для читабельності */
+    .scn-grid > .scn-card:nth-child(1),
+    .scn-grid > .scn-card:nth-child(2),
+    .scn-grid > .scn-card:nth-child(3){padding:28px}
+    .scn-grid > .scn-card:nth-child(1) .scn-name,
+    .scn-grid > .scn-card:nth-child(2) .scn-name,
+    .scn-grid > .scn-card:nth-child(3) .scn-name{font-size:15px}
+    .scn-grid > .scn-card:nth-child(1) .scn-total-num,
+    .scn-grid > .scn-card:nth-child(2) .scn-total-num,
+    .scn-grid > .scn-card:nth-child(3) .scn-total-num{font-size:29px}
+  }
   /* без контуру — картка тримається виключно на тіні (об'єм), контур на світлому фоні
      виглядав як дешева "рамка". Кожен варіант відрізняється кольором/інтенсивністю
      власної тіні, а не кольором рамки. */
@@ -611,6 +668,16 @@
     background:radial-gradient(circle, rgba(241,234,216,.16), transparent 70%);
     pointer-events:none;
   }
+  /* легкий золотий імпульс від контурів картки — сигналізує, що це пріоритетний сценарій.
+     Анімується власний box-shadow картки (а не псевдоелемент), тому overflow:hidden на
+     .scn-card не обрізає світіння. Повільний, м'який цикл (2.8s) — не мигтить, а "дихає". */
+  @keyframes scnGoldPulse{
+    0%,100%{box-shadow:0 26px 52px -24px rgba(168,152,119,.45), 0 0 0 0 rgba(205,191,157,.55)}
+    50%{box-shadow:0 26px 52px -24px rgba(168,152,119,.45), 0 0 46px 11px rgba(205,191,157,.85)}
+  }
+  .scn-card.featured{animation:scnGoldPulse 2.8s ease-in-out infinite}
+  .scn-card.featured:hover{animation-play-state:paused}
+  @media(prefers-reduced-motion:reduce){.scn-card.featured{animation:none}}
   .scn-badge,.scn-badge-alt,.scn-badge-neutral{
     position:relative;display:inline-block;max-width:100%;font-size:11px;font-weight:800;
     padding:7px 13px;border-radius:8px;text-transform:uppercase;letter-spacing:.02em;
@@ -1490,8 +1557,8 @@
       </div>
 
       <div class="scn-grid">
-        <div class="scn-card other reveal">
-          <span class="scn-badge-neutral">Стандартний сценарій в інших комплексах</span>
+        <div class="scn-card featured-alt reveal">
+          <span class="scn-badge-alt">Стандартний сценарій в інших комплексах</span>
           <span class="scn-tag">Сценарій 1</span>
           <div class="scn-name">2 номери по 25 м² в іншому комплексі, що відкриється впродовж 1 року</div>
           <div class="scn-entry">Вхід: ~187 500$ (2 × 25 м² × 3 750$/м²)</div>
@@ -1511,8 +1578,8 @@
           <p style="margin-top:10px;font-size:11.5px;color:var(--muted-2);line-height:1.5">*Середня дохідність порахована за 3 роки з моменту відкриття комплексу (роки 1–2 — період будівництва, коли доходу ще немає).</p>
         </div>
 
-        <div class="scn-card featured-alt reveal">
-          <span class="scn-badge-alt">Гарантований сценарій з Wood Investor Care</span>
+        <div class="scn-card other reveal">
+          <span class="scn-badge-neutral">Гарантований сценарій з Wood Investor Care</span>
           <span class="scn-tag">Сценарій 2</span>
           <div class="scn-name">Апартамент 60 м² Wood Hotel · гарантований мінімум</div>
           <div class="scn-entry">Вхід: 240 000$</div>
