@@ -540,6 +540,82 @@
 
   /* ---------- BLOCK 5 — WOOD INVESTOR CARE™ v3 (5 окремих карток, світлий фон) ---------- */
   #investor-care .accent-text{color:var(--forest-800);font-weight:600}
+  /* стандартний верхній відступ секції (96px) + власний padding-top бирки (60px) разом
+     давали зайвий "порожній" простір над биркою, і нитка нібито обривалась у повітрі,
+     не доходячи до краю блока. Звужуємо верхній відступ саме цієї секції. */
+  #investor-care.section-pad{padding-top:36px}
+  @media(max-width:768px){#investor-care.section-pad{padding-top:28px}}
+
+  /* "бирка" з підвісним шнурком над заголовком — акцентує назву пакету гарантій */
+  .care-tag-wrap{
+    position:relative;width:300px;margin:0 auto 40px;padding-top:32px;
+    transform:rotate(-4deg);transform-origin:center;
+    clip-path:inset(0 -400px -400px -400px);
+  }
+  /* тінь-підкладка під усією конструкцією — дає відчуття, що бірка
+     фізично піднята над сторінкою, а не намальована плоско */
+  .care-tag-shadow{
+    position:absolute;left:4%;right:-4%;bottom:-8px;height:20px;z-index:0;
+    background:radial-gradient(ellipse 150px 9px at center, rgba(20,25,20,.4), transparent 78%);
+    filter:blur(5px);
+  }
+  .care-tag{
+    position:relative;display:block;width:100%;box-sizing:border-box;
+    padding:18px 50px 18px 24px;
+    background:linear-gradient(145deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-dark) 100%);
+    clip-path:polygon(0 0, 86% 0, 100% 50%, 86% 100%, 0 100%);
+    color:var(--forest-900);font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;
+    letter-spacing:.03em;text-transform:uppercase;line-height:1.4;
+    box-shadow:
+      0 20px 36px -12px rgba(90,72,38,.6),
+      inset 0 1px 0 rgba(255,255,255,.6),
+      inset 0 -8px 14px -8px rgba(90,68,30,.45),
+      inset 4px 0 10px -6px rgba(255,255,255,.35);
+    z-index:1;
+  }
+  /* фактура картону — ледь помітні діагональні волокна */
+  .care-tag::before{
+    content:"";position:absolute;inset:0;clip-path:inherit;pointer-events:none;z-index:1;
+    background:repeating-linear-gradient(115deg, rgba(255,255,255,.14) 0px, transparent 1.5px, transparent 5px);
+    mix-blend-mode:overlay;opacity:.5;
+  }
+  /* глянцевий блиск — діагональна світла смуга, що "ковзає" по фользі/металу */
+  .care-tag-sheen{
+    position:absolute;inset:0;clip-path:inherit;pointer-events:none;z-index:2;
+    background:linear-gradient(120deg, transparent 30%, rgba(255,255,255,.55) 46%, rgba(255,255,255,.15) 54%, transparent 68%);
+    mix-blend-mode:overlay;
+  }
+  /* металевий люверс замість плоского кружка — темний отвір + світлий обідок метал */
+  .care-tag-grommet{
+    position:absolute;right:34px;top:50%;transform:translateY(-50%);z-index:3;
+    width:16px;height:16px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #efe6d2 0%, #c9b78f 35%, #8a7550 65%, #5e4d30 100%);
+    box-shadow:0 1px 2px rgba(255,255,255,.5), 0 2px 4px rgba(0,0,0,.35);
+  }
+  .care-tag-grommet::after{
+    content:"";position:absolute;inset:3px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, #3a2f1c, #17130b 70%);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+  }
+  /* мотузка — продівається петлею крізь люверс. top зсунутий на ті самі -28px, на які
+     зменшили padding-top бирки (60→32px), інакше нитка "відʼїжджає" від люверса */
+  .care-tag-string{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:visible}
+  .care-tag-string svg{position:absolute;left:238px;top:-62.5px;width:170px;height:140px;overflow:visible}
+  .care-tag-glow{
+    position:absolute;left:150px;top:67.5px;width:280px;height:120px;
+    transform:translate(-50%,-50%);z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse, rgba(205,191,157,.55), rgba(241,234,216,.2) 45%, transparent 72%);
+    filter:blur(16px);
+    animation:careGoldFlicker 2.4s ease-in-out infinite;
+  }
+  @keyframes careGoldFlicker{
+    0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}
+    22%{opacity:.85;transform:translate(-50%,-50%) scale(1.06)}
+    48%{opacity:.65;transform:translate(-50%,-50%) scale(.97)}
+    70%{opacity:.95;transform:translate(-50%,-50%) scale(1.07)}
+    85%{opacity:.7;transform:translate(-50%,-50%) scale(1.02)}
+  }
+  @media(prefers-reduced-motion: reduce){.care-tag-glow{animation:none;opacity:.7}}
 
   .care-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:48px}
   .care-card{
@@ -568,6 +644,13 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   .care-stat .unit{font-size:.4em;font-weight:700;color:var(--muted-2);-webkit-text-fill-color:var(--muted-2);margin-left:6px}
+  /* короткий "до/після" рядок під цифрою — підсилює контраст із базовим сценарієм */
+  .care-real{
+    position:relative;font-size:12.5px;font-weight:700;color:var(--gold-light);
+    margin:-8px 0 14px;font-family:'Inter',sans-serif;letter-spacing:-.005em;opacity:.85;
+  }
+  .care-real .dim{opacity:.68}
+  .care-real .arrow{font-size:1.5em;vertical-align:middle;display:inline-block;margin:0 1px;position:relative;top:-2px}
   .care-card h4{position:relative;font-size:16px;color:#fff;margin-bottom:14px;line-height:1.35}
   .care-divider{position:relative;height:1px;margin-bottom:14px;background:linear-gradient(90deg, rgba(241,234,216,.4), transparent)}
   .care-card p{position:relative;font-size:13.5px;color:#c3ccc0;line-height:1.6}
@@ -1396,6 +1479,27 @@
   <section id="investor-care" class="section-pad grain" style="background:var(--white)">
     <div class="container">
       <div class="center reveal" style="max-width:720px">
+        <div class="care-tag-wrap">
+          <div class="care-tag-glow"></div>
+          <div class="care-tag-shadow"></div>
+          <div class="care-tag-string">
+            <svg viewBox="0 0 170 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- тінь від нитки на фоні -->
+              <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#2a2010" stroke-width="3" stroke-linecap="round" opacity=".15" filter="blur(1.5px)" transform="translate(2,3)"/>
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#2a2010" stroke-width="3" stroke-linecap="round" opacity=".13" filter="blur(1.5px)" transform="translate(2,3)"/>
+              <!-- вузол на люверсі — одне пасмо йде вгору (майже вертикально), інше йде далеко вправо, до краю блока -->
+              <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#3d2e18" stroke-width="2.8" stroke-linecap="round"/>
+              <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#6b5330" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#3d2e18" stroke-width="2.8" stroke-linecap="round"/>
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#6b5330" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
+            </svg>
+          </div>
+          <div class="care-tag">
+            <div class="care-tag-sheen"></div>
+            <div class="care-tag-grommet"></div>
+            Спеціальний пакет гарантій<br>Wood Investor Care
+          </div>
+        </div>
         <h2 class="h-title center">Гарантія, котру отримає власник 60&nbsp;м² — і не отримають інші</h2>
         <p class="h-sub center">Investor Care — це пакет закріплених зобов'язань керуючої компанії перед власником флагманського апартаменту. <span class="accent-text">Не бонуси. Не знижки.</span> Умови, за яких керуюча компанія на 5 років бере в управління актив під потреби комплексу і гарантовано надає максимально вигідні умови, прописані в договорі — і вони діють з першого місяця після оплати.</p>
       </div>
@@ -1403,6 +1507,7 @@
       <div class="care-grid">
         <div class="care-card reveal">
           <div class="care-stat">10 800$<span class="unit">/рік</span></div>
+          <div class="care-real">замість 0$</div>
           <h4>Гарантований мінімальний дохід</h4>
           <div class="care-divider"></div>
           <p>900$/міс незалежно від сезону і заповненості готелю.</p>
@@ -1410,6 +1515,7 @@
 
         <div class="care-card reveal">
           <div class="care-stat">+2<span class="unit">% річних</span></div>
+          <div class="care-real"><span class="dim">12%</span> <span class="arrow">→</span> 14% річних</div>
           <h4>Дохідність вища за інші номери</h4>
           <div class="care-divider"></div>
           <p>Окрема формула розподілу прибутку саме для формату 60 м².
@@ -1419,6 +1525,7 @@
 
         <div class="care-card reveal">
           <div class="care-stat">20<span class="unit">діб щороку</span></div>
+          <div class="care-real">20 базових + 7 додаткових</div>
           <h4>Безкоштовний відпочинок</h4>
           <div class="care-divider"></div>
           <p>Проживання в комплексі для власника та його родини — за рахунок керуючої компанії.</p>
@@ -1426,6 +1533,7 @@
 
         <div class="care-card reveal">
           <div class="care-stat">3<span class="unit">місяці макс.</span></div>
+          <div class="care-real">замість невизначеності</div>
           <h4>Гарантований вихід з активу</h4>
           <div class="care-divider"></div>
           <p>Капітал не заблокований — КК зобов'язана перепродати або викупити апартамент на першу вимогу.</p>
@@ -1433,6 +1541,7 @@
 
         <div class="care-card reveal">
           <div class="care-stat">5<span class="unit">років і ремонт</span></div>
+          <div class="care-real">ніяких додаткових $ витрат</div>
           <h4>Преміальне оновлення апартаменту</h4>
           <div class="care-divider"></div>
           <p>Повний ремонт за рахунок керуючої компанії, без додаткових витрат для власника.</p>
