@@ -550,7 +550,9 @@
   .care-tag-wrap{
     position:relative;width:300px;margin:0 auto 40px;padding-top:32px;
     transform:rotate(-4deg);transform-origin:center;
-    clip-path:inset(0 -400px -400px -400px);
+    /* верхній inset попущено (-55px замість 0), щоб продовжена нитка не обрізалась
+       раніше, ніж досягне верхнього краю секції */
+    clip-path:inset(-55px -400px -400px -400px);
   }
   /* тінь-підкладка під усією конструкцією — дає відчуття, що бірка
      фізично піднята над сторінкою, а не намальована плоско */
@@ -600,7 +602,7 @@
   /* мотузка — продівається петлею крізь люверс. top зсунутий на ті самі -28px, на які
      зменшили padding-top бирки (60→32px), інакше нитка "відʼїжджає" від люверса */
   .care-tag-string{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:visible}
-  .care-tag-string svg{position:absolute;left:238px;top:-62.5px;width:170px;height:140px;overflow:visible}
+  .care-tag-string svg{position:absolute;left:238px;top:-62.5px;width:200px;height:150px;overflow:visible}
   .care-tag-glow{
     position:absolute;left:150px;top:67.5px;width:280px;height:120px;
     transform:translate(-50%,-50%);z-index:0;pointer-events:none;
@@ -1483,15 +1485,15 @@
           <div class="care-tag-glow"></div>
           <div class="care-tag-shadow"></div>
           <div class="care-tag-string">
-            <svg viewBox="0 0 170 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
               <!-- тінь від нитки на фоні -->
               <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#2a2010" stroke-width="3" stroke-linecap="round" opacity=".15" filter="blur(1.5px)" transform="translate(2,3)"/>
-              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#2a2010" stroke-width="3" stroke-linecap="round" opacity=".13" filter="blur(1.5px)" transform="translate(2,3)"/>
-              <!-- вузол на люверсі — одне пасмо йде вгору (майже вертикально), інше йде далеко вправо, до краю блока -->
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35 C172 26 177 20 180 12" stroke="#2a2010" stroke-width="3" stroke-linecap="round" opacity=".13" filter="blur(1.5px)" transform="translate(2,3)"/>
+              <!-- вузол на люверсі — одне пасмо йде вгору (майже вертикально), інше йде далеко вправо, продовжене ближче до краю блока -->
               <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#3d2e18" stroke-width="2.8" stroke-linecap="round"/>
               <path d="M20 130 C26 100 32 75 40 40 C46 15 50 0 54 -20" stroke="#6b5330" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
-              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#3d2e18" stroke-width="2.8" stroke-linecap="round"/>
-              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35" stroke="#6b5330" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35 C172 26 177 20 180 12" stroke="#3d2e18" stroke-width="2.8" stroke-linecap="round"/>
+              <path d="M20 130 C40 110 70 95 100 82 C130 68 150 55 165 35 C172 26 177 20 180 12" stroke="#6b5330" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
             </svg>
           </div>
           <div class="care-tag">
