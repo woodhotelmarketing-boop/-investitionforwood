@@ -188,7 +188,11 @@
     background-size:140px 140px;
   }
   .hero-bg{position:absolute;top:-140px;left:0;right:0;bottom:-140px;z-index:0;overflow:hidden;background:var(--forest-900);will-change:transform}
-  .hero-bg-media{width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7)}
+  .hero-bg-media{
+    width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:saturate(.85) brightness(.7);
+    opacity:0;transition:opacity .6s ease;
+  }
+  .hero-bg-media.is-playing{opacity:1}
   .hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(15,22,18,.45) 0%, rgba(15,22,18,.6) 45%, rgba(13,18,15,.88) 100%),radial-gradient(circle at 50% 22%, rgba(20,23,20,.05), rgba(13,18,15,.75) 78%)}
   .hero-grid{
     display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:48px;
@@ -793,8 +797,8 @@
   .scn-card.featured .chart-fill{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
   .chart-fill.split{display:flex;background:none}
   .chart-fill.split .fill-base{width:78%;height:100%;background:var(--gold-dark);border-radius:8px 0 0 8px}
-  /* бонусний сегмент "+2% від КК" — той самий зелений метал, що й у значка ✓ (.ts-verdict.good)
-     в екрані "два сценарії", тільки трохи темніший/насиченіший тон за проханням */
+  /* бонусний сегмент "+2% від КК" — насичений темно-зелений акцент (без змін, не входило
+     в цю правку — торкались тільки іконок ✕/✓ в екрані "два сценарії") */
   .chart-fill.split .fill-bonus{width:22%;height:100%;background:linear-gradient(100deg,#254a2a,#a9cf9c 45%,#a9cf9c 58%,#5c9c56 75%,#254a2a);border-radius:0 8px 8px 0;box-shadow:inset 0 0 0 1.5px #1c3320}
   .chart-row .val{font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700;color:var(--forest-800);text-align:right}
   .scn-total{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
@@ -864,20 +868,22 @@
   .ts-card.other .ts-card-title{color:var(--forest-800)}
   .ts-card.wood .ts-card-title{color:#fff}
 
-  .ts-verdict{
-    flex:none;width:40px;height:40px;border-radius:50%;position:relative;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 8px 18px -8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.55), inset 0 -3px 5px -2px rgba(0,0,0,.2);
-  }
-  .ts-verdict svg{width:19px;height:19px;position:relative}
-  .ts-verdict.bad{
-    background:linear-gradient(100deg,#5c2018,#eecdc4 40%,#eecdc4 55%,#b5453a 72%,#5c2018);
-  }
-  .ts-verdict.bad svg{stroke:#4a1810}
-  .ts-verdict.good{
-    background:linear-gradient(100deg,#254a2a,#d9ecd0 40%,#d9ecd0 55%,#5c9c56 72%,#254a2a);
-  }
-  .ts-verdict.good svg{stroke:#1c3320}
+  /* повернуто до референсу партнерів: прості плоскі кольорові іконки (без металевої текстури).
+     Товщина штриха й розмір збільшені — раніше виглядало занадто тонко/розмито */
+  .ts-verdict{flex:none;display:flex;align-items:center;justify-content:center}
+  .ts-verdict svg{width:34px;height:34px}
+  .ts-verdict.bad svg{stroke:#e0453a}
+  .ts-verdict.good svg{stroke:#3d9950}
+
+  /* ✕/✓ усередині самої плашки-бейджа (де названо сценарій), а не окремою іконкою в кутку
+     картки. display:flex (не inline-flex) розтягує бейдж на всю доступну ширину картки,
+     а justify-content:space-between притискає іконку до правого краю плашки, текст — зліва.
+     Іконка +20% за розміром (14→17px) для чіткості. */
+  .scn-badge-alt,.scn-badge-neutral,.scn-badge{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .scn-verdict-inline{flex:none;display:inline-flex}
+  .scn-verdict-inline svg{width:17px;height:17px}
+  .scn-verdict-inline.bad svg{stroke:#ff8a80}
+  .scn-verdict-inline.good svg{stroke:#2f7d3a}
 
   /* вертикальна лінія-таймлайн всередині кожної картки окремо (а не спільна вісь між ними) */
   .ts-timeline{position:relative}
@@ -913,8 +919,7 @@
     .ts-card{padding:32px 24px 28px;border-radius:20px}
     .ts-card-head{margin-bottom:28px}
     .ts-card-title{font-size:19px;margin-bottom:0}
-    .ts-verdict{width:34px;height:34px}
-    .ts-verdict svg{width:16px;height:16px}
+    .ts-verdict svg{width:24px;height:24px}
     .ts-timeline::before{left:19px}
     .ts-num{width:38px;height:38px;font-size:13px}
     .ts-body h5{font-size:14px}
@@ -1002,10 +1007,14 @@
   th,td{padding:18px 20px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line);transition:background .2s ease}
   /* та сама причина, що й з лейблами рядків: довгі описові фрази в Mono виглядають чужорідно
      поруч з рештою сайту (Mono тут лишень для коротких uppercase-тегів) — тепер Inter */
+  /* зафіксовані перша строка (шапка) і перший стовпчик (лейбли рядків) — під час
+     горизонтального гортання таблиці (особливо на мобайлі) завжди видно, який це рядок
+     і до яких колонок він належить, без потреби прокручувати назад для звірки */
   thead th{
     font-family:'Inter',sans-serif;font-weight:700;color:var(--forest-800);
     font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;
     border-bottom:1.5px solid var(--forest-800);padding-bottom:16px;
+    position:sticky;top:0;z-index:2;background:var(--white);
   }
   /* раніше було JetBrains Mono 11.5px — менше й іншим шрифтом, ніж сусіднє значення (13.5px
      Inter), тому рядок "випадав" (лейбл виглядав дрібнішим і чужорідним у своєму ж рядку).
@@ -1014,7 +1023,11 @@
   tbody td:first-child{
     font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:var(--forest-800);
     letter-spacing:0;line-height:1.5;
+    position:sticky;left:0;z-index:1;background:var(--white);
   }
+  /* кутова клітинка "Критерій" фіксується і зверху, і зліва одночасно — тому найвищий z-index */
+  thead th:first-child{position:sticky;left:0;z-index:3}
+  tbody tr:hover td:first-child{background:var(--cream)}
   tbody tr:last-child td{border-bottom:none}
   tbody tr:hover td{background:var(--cream)}
   td.wood-col,th.wood-col{
@@ -1593,7 +1606,7 @@
           <div class="ts-card-head">
             <h3 class="ts-card-title">Інвестиція в інший комплекс</h3>
             <span class="ts-verdict bad" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
             </span>
           </div>
           <div class="ts-timeline">
@@ -1639,7 +1652,7 @@
           <div class="ts-card-head">
             <h3 class="ts-card-title">Інвестиція у Wood Hotel</h3>
             <span class="ts-verdict good" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 13 9 18 20 6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 13 9 18 20 6"/></svg>
             </span>
           </div>
           <div class="ts-timeline">
@@ -1705,7 +1718,12 @@
 
       <div class="scn-grid">
         <div class="scn-card featured-alt reveal">
-          <span class="scn-badge-alt">Стандартний сценарій в інших комплексах</span>
+          <span class="scn-badge-alt">
+            Стандартний сценарій в інших комплексах
+            <span class="scn-verdict-inline bad" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+            </span>
+          </span>
           <span class="scn-tag">Сценарій 1</span>
           <div class="scn-name">2 номери по 25 м² в іншому комплексі, що відкриється впродовж 1 року</div>
           <div class="scn-entry">Вхід: ~187 500$ (2 × 25 м² × 3 750$/м²)</div>
@@ -1726,7 +1744,12 @@
         </div>
 
         <div class="scn-card other reveal">
-          <span class="scn-badge-neutral">Гарантований сценарій з Wood Investor Care</span>
+          <span class="scn-badge-neutral">
+            Гарантований сценарій з Wood Investor Care
+            <span class="scn-verdict-inline good" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 13 9 18 20 6"/></svg>
+            </span>
+          </span>
           <span class="scn-tag">Сценарій 2</span>
           <div class="scn-name">Апартамент 60 м² Wood Hotel · гарантований мінімум</div>
           <div class="scn-entry">Вхід: 240 000$</div>
@@ -1746,7 +1769,12 @@
         </div>
 
         <div class="scn-card featured reveal">
-          <span class="scn-badge">Реалістичний сценарій з Wood Investor Care</span>
+          <span class="scn-badge">
+            Реалістичний сценарій з Wood Investor Care
+            <span class="scn-verdict-inline good" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 13 9 18 20 6"/></svg>
+            </span>
+          </span>
           <span class="scn-tag">Сценарій 3</span>
           <div class="scn-name">Апартамент 60 м² Wood Hotel · з середньою дохідністю 9%</div>
           <div class="scn-entry">Вхід: 240 000$</div>
@@ -2270,8 +2298,15 @@
     }, { rootMargin: '100% 0px 100% 0px' }).observe(heroSection);
     window.addEventListener('scroll', onHeroScroll, { passive: true });
   }
+  // Відео ховається (opacity:0, CSS) і плавно проявляється тільки після події "playing" —
+  // маскує будь-який негладкий/сіпаний старт перших кадрів замість показу цього глядачу напряму.
   const heroBgVideo = document.getElementById('heroBgVideo');
-  if (heroBgVideo) { heroBgVideo.play().catch(() => {}); }
+  if (heroBgVideo) {
+    const revealHeroVideo = () => heroBgVideo.classList.add('is-playing');
+    if (!heroBgVideo.paused) { revealHeroVideo(); }
+    heroBgVideo.addEventListener('playing', revealHeroVideo, { once: true });
+    heroBgVideo.play().catch(() => {});
+  }
 
   // Мокап тепер статичний (одноразова CSS-анімація появи deviceSettle) — попередня
   // scroll-linked логіка масштабування (#deviceScale) прибрана разом з елементом.
