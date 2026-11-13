@@ -7,6 +7,9 @@
 <meta name="description" content="Wood Hotel Resort & Spa працює 3 роки та виплачує дохід інвесторам. Флагманський формат 60 м² з гарантованим мінімумом Wood Investor Care™.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Пріоритет першого екрана: постер hero і хост фото починають вантажитись одразу -->
+<link rel="preload" as="image" href="wood-bg-poster.jpg" fetchpriority="high">
+<link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:ital,opsz,wght@0,12..96,300;0,12..96,400;0,12..96,500;0,12..96,600;0,12..96,700;0,12..96,800;1,12..96,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- GSAP/ScrollTrigger прибрано разом із переробкою екрана 2: горизонтальний scroll-pin
      замінено на звичайну вертикальну стрічку з IntersectionObserver-reveal, GSAP більше
@@ -1337,7 +1340,7 @@
     <div class="container">Карпати · Буковель · Діючий готельний комплекс</div>
   </div>
   <div class="container nav-row">
-    <a href="#top" class="logo"><img src="logo-black.png" alt="Wood Hotel Resort &amp; Spa" width="110" height="23"></a>
+    <a href="#top" class="logo"><img src="logo-black.png" alt="Wood Hotel Resort &amp; Spa" width="110" height="23" fetchpriority="high"></a>
     <nav class="nav-links" id="navLinks">
       <a href="#investor-care">Wood Investor Care</a>
       <a href="#format-60">Гарантії</a>
@@ -1395,7 +1398,7 @@
 
                   <div class="room-row">
                     <div class="room-image">
-                      <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м²">
+                      <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м²" fetchpriority="high" decoding="async">
                       <span class="tag">Площа апартаменту 60 м²</span>
                     </div>
                     <div class="mock-price">
@@ -1493,7 +1496,7 @@
           <div class="vt-media">
             <h3 class="vt-heading">Подивіться це відео, перш ніж подати заявку</h3>
             <button class="vt-video" id="videoFrame" aria-haspopup="dialog" aria-label="Відтворити відео — власник Wood Hotel про апартамент 60 м²">
-              <img src="video-poster.jpg.png" alt="Власник Wood Hotel про апартамент 60 м² — +900$/міс доходу, як це працює" id="videoPoster">
+              <img src="video-poster.jpg.png" alt="Власник Wood Hotel про апартамент 60 м² — +900$/міс доходу, як це працює" id="videoPoster" loading="lazy" decoding="async">
             </button>
           </div>
 
@@ -1934,34 +1937,34 @@
           <div class="dg-viewer" id="dgViewer">
             <div class="dg-track" id="dgTrack">
               <button class="dg-slide" type="button" data-i="0">
-                <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" alt="Апартамент 60 м² Wood Hotel — фото 1">
+                <img src="https://lh3.googleusercontent.com/d/1cEGByKz6y3wp4Rga7IB8QGBb5PICqfkq=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 1">
               </button>
               <button class="dg-slide" type="button" data-i="1">
-                <img src="https://lh3.googleusercontent.com/d/1pSvUpn0UE8r6OMhoPfbed5I-IRiGY9jt=w1200" alt="Апартамент 60 м² Wood Hotel — фото 2">
+                <img src="https://lh3.googleusercontent.com/d/1pSvUpn0UE8r6OMhoPfbed5I-IRiGY9jt=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 2">
               </button>
               <button class="dg-slide" type="button" data-i="2">
-                <img src="https://lh3.googleusercontent.com/d/1kTiAn5sofu-7j0VGTs2OMGkktr-XhArm=w1200" alt="Апартамент 60 м² Wood Hotel — фото 3">
+                <img src="https://lh3.googleusercontent.com/d/1kTiAn5sofu-7j0VGTs2OMGkktr-XhArm=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 3">
               </button>
               <button class="dg-slide" type="button" data-i="3">
-                <img src="https://lh3.googleusercontent.com/d/17AApwC_qpACVbz56ruK97FFjmqq2bQUP=w1200" alt="Апартамент 60 м² Wood Hotel — фото 4">
+                <img src="https://lh3.googleusercontent.com/d/17AApwC_qpACVbz56ruK97FFjmqq2bQUP=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 4">
               </button>
               <button class="dg-slide" type="button" data-i="4">
-                <img src="https://lh3.googleusercontent.com/d/1txHCL4x75OAQVG21mypUiP2xj2dbSXM7=w1200" alt="Апартамент 60 м² Wood Hotel — фото 5">
+                <img src="https://lh3.googleusercontent.com/d/1txHCL4x75OAQVG21mypUiP2xj2dbSXM7=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 5">
               </button>
               <button class="dg-slide" type="button" data-i="5">
-                <img src="https://lh3.googleusercontent.com/d/1VgHWEcOYc9nw6jotEamv6n50xpzQ5iKs=w1200" alt="Апартамент 60 м² Wood Hotel — фото 6">
+                <img src="https://lh3.googleusercontent.com/d/1VgHWEcOYc9nw6jotEamv6n50xpzQ5iKs=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 6">
               </button>
               <button class="dg-slide" type="button" data-i="6">
-                <img src="https://lh3.googleusercontent.com/d/1IF5CHkTH8XQ1yyY247IKuFlAX3E5IHpk=w1200" alt="Апартамент 60 м² Wood Hotel — фото 7">
+                <img src="https://lh3.googleusercontent.com/d/1IF5CHkTH8XQ1yyY247IKuFlAX3E5IHpk=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 7">
               </button>
               <button class="dg-slide" type="button" data-i="7">
-                <img src="https://lh3.googleusercontent.com/d/1_buAhKFOcj-ikA8Yhr7dwJKNpF429b0h=w1200" alt="Апартамент 60 м² Wood Hotel — фото 8">
+                <img src="https://lh3.googleusercontent.com/d/1_buAhKFOcj-ikA8Yhr7dwJKNpF429b0h=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 8">
               </button>
               <button class="dg-slide" type="button" data-i="8">
-                <img src="https://lh3.googleusercontent.com/d/10jcEqQu19lD5a0aSf17MFcULa0P3UPRi=w1200" alt="Апартамент 60 м² Wood Hotel — фото 9">
+                <img src="https://lh3.googleusercontent.com/d/10jcEqQu19lD5a0aSf17MFcULa0P3UPRi=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 9">
               </button>
               <button class="dg-slide" type="button" data-i="9">
-                <img src="https://lh3.googleusercontent.com/d/1gHn_xfgQtEif8hTCwP3v1XEc9D_B3mAP=w1200" alt="Апартамент 60 м² Wood Hotel — фото 10">
+                <img src="https://lh3.googleusercontent.com/d/1gHn_xfgQtEif8hTCwP3v1XEc9D_B3mAP=w1200" loading="lazy" decoding="async" alt="Апартамент 60 м² Wood Hotel — фото 10">
               </button>
             </div>
             <button class="dg-nav prev" id="dgPrev" aria-label="Попереднє фото">
@@ -2026,13 +2029,13 @@
         <p class="h-sub center">Погляньте, як виглядає комплекс, номери та інфраструктура наживо.</p>
       </div>
       <div class="gallery-grid reveal">
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1FgxgCS1bncD0Bl8dbeAcXGyykB3HXZ-R=w1200" alt="Фото комплексу" loading="lazy"><span class="gallery-cap">Фото комплексу</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1BmS5Ja7AbjKf5laES-HQUopaaSc6GfYo=w900" alt="Номер" loading="lazy"><span class="gallery-cap">Номер</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1bj_rlIED4bY9_P6MuJOxlx_GoW7hW56W=w900" alt="SPA" loading="lazy"><span class="gallery-cap">SPA</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1Xq2ODXvd_aLKcdPLmxxw-yYF1O3bnzEA=w900" alt="Ресторан" loading="lazy"><span class="gallery-cap">Ресторан</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1i7In1r2uQ4jJ7V1B1KOpEQCwZdcuhc7I=w900" alt="Територія" loading="lazy"><span class="gallery-cap">Територія</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1XbCKMrSLDTK40at3VBcaHWwk3iLdHu4i=w900" alt="Басейн" loading="lazy"><span class="gallery-cap">Басейн</span></div>
-        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1eYr8dMJAGQDDo24Dc1jlkTByu4Mx8XuQ=w900" alt="Конференц-зал" loading="lazy"><span class="gallery-cap">Конференц-зал</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1FgxgCS1bncD0Bl8dbeAcXGyykB3HXZ-R=w1200" alt="Фото комплексу" loading="lazy" decoding="async"><span class="gallery-cap">Фото комплексу</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1BmS5Ja7AbjKf5laES-HQUopaaSc6GfYo=w900" alt="Номер" loading="lazy" decoding="async"><span class="gallery-cap">Номер</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1bj_rlIED4bY9_P6MuJOxlx_GoW7hW56W=w900" alt="SPA" loading="lazy" decoding="async"><span class="gallery-cap">SPA</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1Xq2ODXvd_aLKcdPLmxxw-yYF1O3bnzEA=w900" alt="Ресторан" loading="lazy" decoding="async"><span class="gallery-cap">Ресторан</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1i7In1r2uQ4jJ7V1B1KOpEQCwZdcuhc7I=w900" alt="Територія" loading="lazy" decoding="async"><span class="gallery-cap">Територія</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1XbCKMrSLDTK40at3VBcaHWwk3iLdHu4i=w900" alt="Басейн" loading="lazy" decoding="async"><span class="gallery-cap">Басейн</span></div>
+        <div class="gallery-item"><img src="https://lh3.googleusercontent.com/d/1eYr8dMJAGQDDo24Dc1jlkTByu4Mx8XuQ=w900" alt="Конференц-зал" loading="lazy" decoding="async"><span class="gallery-cap">Конференц-зал</span></div>
       </div>
     </div>
   </section>
@@ -2530,6 +2533,37 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !vp.hidden && !document.fullscreenElement) closePlayer();
   });
+})();
+</script>
+
+<script>
+// Поетапне підвантаження: перший екран вантажиться першим (preload + fetchpriority у <head>/<img>),
+// усі решта важких елементів мають loading="lazy". Коли сторінка вже відкрилась і браузер вільний,
+// решту фото й мапу підтягуємо у фоні по черзі, у порядку блоків зверху вниз, щоб до моменту
+// прокрутки все вже було в кеші. На економії трафіку / повільному інтернеті цього не робимо.
+(function () {
+  const conn = navigator.connection || {};
+  if (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '')) return;
+
+  const idle = window.requestIdleCallback || (cb => setTimeout(cb, 1200));
+
+  function warmUp() {
+    const queue = Array.from(document.querySelectorAll('img[loading="lazy"], iframe[loading="lazy"]'));
+    (function next() {
+      const el = queue.shift();
+      if (!el) return;
+      if (el.tagName === 'IMG' && el.complete && el.naturalWidth) return next();
+      let done = false;
+      const step = () => { if (done) return; done = true; idle(next, { timeout: 2000 }); };
+      el.addEventListener('load', step, { once: true });
+      el.addEventListener('error', step, { once: true });
+      setTimeout(step, 4000); // не чекаємо повільний файл довше 4 с
+      el.loading = 'eager';   // знімає "ледачий" режим — браузер починає завантаження зараз
+    })();
+  }
+
+  if (document.readyState === 'complete') idle(warmUp, { timeout: 3000 });
+  else window.addEventListener('load', () => idle(warmUp, { timeout: 3000 }), { once: true });
 })();
 </script>
 
